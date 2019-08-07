@@ -21,50 +21,38 @@ source=(
   60-linux.hook  # pacman hook for depmod
   90-linux.hook  # pacman hook for initramfs regeneration
   linux.preset   # standard config files for mkinitcpio ramdisk
-  0051-fpga-dfl-fme-mgr-fix-FME_PR_INTFC_ID-register-addres.patch
-  0052-fpga-dfl-fme-remove-copy_to_user-in-ioctl-for-PR.patch
-  0053-fpga-dfl-fme-align-PR-buffer-size-per-PR-datawidth.patch
-  0054-fpga-dfl-fme-support-512bit-data-width-PR.patch
-  0055-fpga-dfl-fme-add-DFL_FPGA_FME_PORT_RELEASE-ASSIGN-io.patch
-  0056-fpga-dfl-pci-enable-SRIOV-support.patch
-  0057-fpga-dfl-afu-add-AFU-state-related-sysfs-interfaces.patch
-  0058-fpga-dfl-afu-add-userclock-sysfs-interfaces.patch
-  0059-fpga-dfl-add-id_table-for-dfl-private-feature-driver.patch
-  0060-fpga-dfl-afu-export-__port_enable-disable-function.patch
-  0061-fpga-dfl-afu-add-error-reporting-support.patch
-  0062-fpga-dfl-afu-add-STP-SignalTap-support.patch
-  0063-fpga-dfl-fme-add-capability-sysfs-interfaces.patch
-  0064-fpga-dfl-fme-add-global-error-reporting-support.patch
-  0065-fpga-dfl-fme-add-thermal-management-support.patch
-  0066-fpga-dfl-fme-add-power-management-support.patch
-  0067-fpga-dfl-fme-add-performance-reporting-support.patch
   0101-i8042-decrease-debug-message-level-to-info.patch
   0103-silence-rapl.patch
   0104-pci-pme-wakeups.patch
   0106-intel_idle-tweak-cpuidle-cstates.patch
   0107-bootstats-add-printk-s-to-measure-boot-time-in-more-.patch
   0108-smpboot-reuse-timer-calibration.patch
+  0109-raid6-add-Kconfig-option-to-skip-raid6-benchmarking.patch
+  0110-Initialize-ata-before-graphics.patch
   0111-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
   0112-give-rdrand-some-credit.patch
   0113-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
-  0116-kernel-time-reduce-ntp-wakeups.patch
-  0117-init-wait-for-partition-and-retry-scan.patch
-  0124-use-lfence-instead-of-rep-and-nop.patch
+  0114-e1000e-increase-pause-and-refresh-time.patch
+  0115-kernel-time-reduce-ntp-wakeups.patch
+  0116-init-wait-for-partition-and-retry-scan.patch
+  0117-print-fsync-count-for-bootchart.patch
+  0118-Add-boot-option-to-allow-unsigned-modules.patch
+  0119-Enable-stateless-firmware-loading.patch
+  0120-Migrate-some-systemd-defaults-to-the-kernel-defaults.patch
+  0121-xattr-allow-setting-user.-attributes-on-symlinks-by-.patch
+  0122-add-scheduler-turbo3-patch.patch
+  0123-use-lfence-instead-of-rep-and-nop.patch
+  0124-do-accept-in-LIFO-order-for-cache-efficiency.patch
   0125-do-accept-in-LIFO-order-for-cache-efficiency.patch
+  0126-locking-rwsem-spin-faster.patch
   0128-thp-fix.patch
   CVE-2019-12379.patch
   CVE-2019-12454.patch
   CVE-2019-12455.patch
   CVE-2019-12456.patch
   force-load-ucode.patch
-  force-with-reload2.patch
-  linux-051-ouya_controller_support.patch
-  linux-058.05-hid_sony-add_autorepeat_for_PS3_remotes.patch
-  linux-062-imon_pad_ignore_diagonal.patch
-  linux-999-no-lzma-in-x86-perf-build.patch
-  linux-999.02-0001-pm-disable-async-suspend-resume-by-default.patch
-  linux-999.20-i915-pm-Be-less-agressive-with-clockfreq-changes-on-Bay-Trail.patch
-  linux-999.21-intel_idle-Disable-C6N-and-C6S-on-Bay-Trail.patch)
+  force-with-reload2.patch)
+
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
   '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
