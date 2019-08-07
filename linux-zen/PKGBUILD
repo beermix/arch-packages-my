@@ -43,7 +43,6 @@ source=(
   0122-add-scheduler-turbo3-patch.patch
   0123-use-lfence-instead-of-rep-and-nop.patch
   0124-do-accept-in-LIFO-order-for-cache-efficiency.patch
-  0125-do-accept-in-LIFO-order-for-cache-efficiency.patch
   0126-locking-rwsem-spin-faster.patch
   0128-thp-fix.patch
   CVE-2019-12379.patch
