@@ -49,7 +49,6 @@ source=(
 0126-locking-rwsem-spin-faster.patch
 0127-thp-fix.patch
 0128-ata-libahci-ignore-staggered-spin-up.patch
-1001-WireGuard-fast-modern-secure-kernel-VPN-tunnel.patch
 CVE-2019-12379.patch
 CVE-2019-12454.patch
 CVE-2019-12455.patch
