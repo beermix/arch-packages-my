@@ -20,7 +20,8 @@ source=(
   config         # the main kernel config file
   60-linux.hook  # pacman hook for depmod
   90-linux.hook  # pacman hook for initramfs regeneration
-  linux.preset   # standard config files for mkinitcpio ramdisk)
+  linux.preset   # standard config files for mkinitcpio ramdisk
+)
 
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
