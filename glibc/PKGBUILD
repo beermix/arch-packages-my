@@ -6,14 +6,14 @@
 
 pkgbase=glibc
 pkgname=(glibc lib32-glibc)
-pkgver=2.29
-pkgrel=21
+pkgver=2.30
+pkgrel=30
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git gd lib32-gcc-libs python)
 options=(!strip staticlibs)
-_commit=cf274686024128f9fd75d4878211a018b2cfa5ac
+_commit=be9a328c93834648e0bec106a1f86357d1a8c7e1
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
@@ -52,11 +52,10 @@ build() {
       --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
       --enable-bind-now
+      --enable-cet
       --enable-lock-elision
       --enable-multi-arch
-      --enable-stack-protector=strong
-      --enable-stackguard-randomization
-      --enable-kernel=4.4.0
+      --enable-kernel=5.2.0
       --enable-static-pie
       --disable-profile
       --disable-werror
@@ -80,7 +79,6 @@ build() {
   "$srcdir/glibc/configure" \
       --libdir=/usr/lib \
       --libexecdir=/usr/lib \
-      --enable-cet \
       ${_configure_flags[@]}
 
   # build libraries with fortify disabled
