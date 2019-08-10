@@ -17,7 +17,22 @@ _commit=be9a328c93834648e0bec106a1f86357d1a8c7e1
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
-        lib32-glibc.conf)
+        lib32-glibc.conf
+        alternate_trim.patch
+        c-utf8-locale.patch
+        gcc-8-fix.patch
+        glibc-fix-dns-with-broken-routers.patch
+        large-page-huge-page.patch
+        ldconfig-Os.patch
+        madvise-bss.patch
+        malloc_tune.patch
+        mathlto.patch
+        nostackshrink.patch
+        pause.patch
+        spin-smarter.patch
+        spinaphore.patch
+        use_madv_free.patch)
+
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 md5sums=('e6c279d5b2f0736f740216f152acf974'
@@ -55,7 +70,7 @@ build() {
       --enable-cet
       --enable-lock-elision
       --enable-multi-arch
-      --enable-kernel=5.2.0
+      --enable-kernel=4.4.0
       --enable-static-pie
       --disable-profile
       --disable-werror
