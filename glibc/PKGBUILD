@@ -67,7 +67,7 @@ build() {
       --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
       --enable-bind-now
-      --disable-cet
+      --enable-cet
       --enable-lock-elision
       --enable-multi-arch
       --enable-kernel=4.4.0
