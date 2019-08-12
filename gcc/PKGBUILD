@@ -20,9 +20,7 @@ options=(!emptydirs)
 source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
 #source=(gcc::svn://gcc.gnu.org/svn/gcc/branches/gcc-${_majorver}-branch
         http://isl.gforge.inria.fr/isl-${_islver}.tar.xz
-        c89 c99
-        bz90397.patch
-        bz90949.patch)
+        c89 c99)
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
               86CFFCA918CF3AF47147588051E8B148A9999C34  # evangelos@foutrelis.com
               13975A70E63C361C73AE69EF6EEB81F8981C74C7  # richard.guenther@gmail.com
@@ -60,12 +58,6 @@ snapshot() {
 prepare() {
   [[ ! -d gcc ]] && ln -s gcc-${pkgver/+/-} gcc
   cd gcc
-
-  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90397
-  patch -p0 -i "$srcdir/bz90397.patch"
-
-  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90949 
-  patch -p0 -i "$srcdir/bz90949.patch"
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
