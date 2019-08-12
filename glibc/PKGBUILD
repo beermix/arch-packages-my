@@ -67,11 +67,10 @@ build() {
       --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
       --enable-bind-now
-      --enable-cet
+      --disable-cet
       --enable-lock-elision
       --enable-multi-arch
       --enable-kernel=4.4.0
-      --enable-static-pie
       --disable-profile
       --disable-werror
   )
