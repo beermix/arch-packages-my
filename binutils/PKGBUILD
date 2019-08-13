@@ -1,0 +1,96 @@
+# Maintainer:  Bartłomiej Piotrowski <bpiotrowski@archlinux.org>
+# Contributor: Allan McRae <allan@archlinux.org>
+
+# toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
+
+pkgname=binutils
+pkgver=2.32
+pkgrel=22
+pkgdesc='A set of programs to assemble and manipulate binary and object files'
+arch=(x86_64)
+url='https://www.gnu.org/software/binutils/'
+license=(GPL)
+groups=(base-devel)
+depends=(glibc zlib)
+checkdepends=(dejagnu bc automake autoconf flex bison)
+conflicts=(binutils-multilib)
+replaces=(binutils-multilib)
+options=(staticlibs !distcc !ccache)
+source=(https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz{,.sig}
+         000-git32.patch
+         0003-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
+         0004-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
+         0005-xtensa-gas-put-.literal_position-at-section-start.patch
+         CVE-2019-9071.patch
+         CVE-2019-9074.patch
+         CVE-2019-9075.patch
+         CVE-2019-9076.patch
+         CVE-2019-9077.patch
+         CVE-2019-12972.patch
+         CVE-2019-14250.patch
+         CVE-2019-14444.patch)
+
+validpgpkeys=(3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F)
+md5sums=('0d174cdaf85721c5723bf52355be41e6'
+         'SKIP')
+
+prepare() {
+  mkdir -p binutils-build
+  #cd binutils-gdb
+  cd binutils-$pkgver
+
+  local i; for i in ${source[@]}; do
+    case ${i%::*} in
+      *.patch)
+        msg2 "Applying ${i}"
+        patch -p1 -i "$srcdir/${i}"
+        ;;
+    esac
+  done
+
+  # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
+  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
+}
+
+build() {
+  cd binutils-build
+
+  "$srcdir/binutils-$pkgver/configure" \
+    --prefix=/usr \
+    --with-lib-path=/usr/lib:/usr/local/lib \
+    --with-bugurl=https://bugs.archlinux.org/ \
+    --enable-deterministic-archives \
+    --enable-gold \
+    --enable-ld=default \
+    --enable-lto \
+    --enable-plugins \
+    --enable-shared \
+    --enable-targets=i386-linux,x86_64-linux \
+    --disable-gdb \
+    --disable-werror \
+    --with-system-zlib
+
+  make configure-host
+  make tooldir=/usr
+}
+
+check() {
+  cd binutils-build
+
+  # unset LDFLAGS as testsuite makes assumptions about which ones are active
+  # ignore failures in gold testsuite...
+  make -k LDFLAGS="" check || true
+}
+
+package() {
+  cd binutils-build
+  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
+
+  # Remove unwanted files
+  rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
+
+  # No shared linking to these files outside binutils
+  rm -f "$pkgdir"/usr/lib/lib{bfd,opcodes}.so
+  echo 'INPUT( /usr/lib/libbfd.a -liberty -lz -ldl )' > "$pkgdir/usr/lib/libbfd.so"
+  echo 'INPUT( /usr/lib/libopcodes.a -lbfd )' > "$pkgdir/usr/lib/libopcodes.so"
+}
