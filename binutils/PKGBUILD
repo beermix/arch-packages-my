@@ -64,13 +64,10 @@ build() {
     --enable-ld=default \
     --enable-lto \
     --enable-plugins \
-    --enable-relro \
     --enable-shared \
     --enable-targets=i386-linux,x86_64-linux \
-    --enable-threads \
     --disable-gdb \
     --disable-werror \
-    --with-pic \
     --with-system-zlib
 
   make configure-host
