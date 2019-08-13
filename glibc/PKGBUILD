@@ -13,7 +13,7 @@ url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git gd lib32-gcc-libs python automake autoconf flex bison)
 options=(!strip staticlibs)
-_commit=be9a328c93834648e0bec106a1f86357d1a8c7e1
+_commit=9b9670f
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
@@ -56,7 +56,7 @@ build() {
       --enable-cet
       --enable-lock-elision
       --enable-multi-arch
-      --enable-kernel=4.4.0
+      --enable-kernel=5.0
       --disable-profile
       --disable-werror
   )
