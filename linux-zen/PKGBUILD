@@ -4,9 +4,9 @@
 
 pkgbase=linux-zen           # Build stock -zen kernel
 #pkgbase=linux-custom       # Build kernel with a different name
-_srcver=5.2.8-lqx1
+_srcver=5.2.8-zen1
 pkgver=${_srcver//-/.}
-pkgrel=24
+pkgrel=30
 arch=(x86_64)
 url="https://github.com/zen-kernel/zen-kernel/commits/v$_srcver"
 license=(GPL2)
@@ -25,17 +25,12 @@ source=(
   0102-Increase-the-ext4-default-commit-age.patch
   0103-silence-rapl.patch
   0104-pci-pme-wakeups.patch
-  0105-ksm-wakeups.patch
-  0108-smpboot-reuse-timer-calibration.patch
   0110-Initialize-ata-before-graphics.patch
   0111-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
   0112-give-rdrand-some-credit.patch
   0113-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
   0114-e1000e-increase-pause-and-refresh-time.patch
   0115-kernel-time-reduce-ntp-wakeups.patch
-  0116-init-wait-for-partition-and-retry-scan.patch
-  0117-print-fsync-count-for-bootchart.patch
-  0120-Migrate-some-systemd-defaults-to-the-kernel-defaults.patch
   0121-xattr-allow-setting-user.-attributes-on-symlinks-by-.patch
   0123-use-lfence-instead-of-rep-and-nop.patch
   0124-do-accept-in-LIFO-order-for-cache-efficiency.patch
