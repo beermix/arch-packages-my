@@ -14,7 +14,7 @@ license=(GPL LGPL)
 makedepends=(git gd lib32-gcc-libs python)
 options=(!strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-_commit=34fb5f61d3c3f4b8fc616ea259fa19168b58ecd4
+_commit=6d8eaf4a25c09256b53efe57d3f77f2f0bd77ede
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
