@@ -4,7 +4,7 @@
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: libtool requires rebuilt with each new gcc version
 
-pkgname=(gcc gcc-libs lib32-gcc-libs)
+pkgname=(gcc gcc-libs gcc-objc lib32-gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 pkgrel=6
@@ -85,7 +85,7 @@ build() {
       --libdir=/usr/lib \
       --libexecdir=/usr/lib \
       --with-bugurl=https://bugs.archlinux.org/ \
-      --enable-languages=c,c++,lto \
+      --enable-languages=c,c++,lto,objc,obj-c++ \
       --enable-shared \
       --enable-threads=posix \
       --with-system-zlib \
@@ -247,8 +247,20 @@ package_lib32-gcc-libs() {
     make -C $CHOST/32/$lib DESTDIR="$pkgdir" install-toolexeclibLTLIBRARIES
   done
 
-  make -C $CHOST/32/libobjc DESTDIR="$pkgdir" install-libs
+#  make -C $CHOST/32/libobjc DESTDIR="$pkgdir" install-libs
 
   # remove files provided by gcc-libs
   rm -rf "$pkgdir"/usr/lib
+}
+
+package_gcc-objc() {
+  pkgdesc='Objective-C front-end for GCC'
+  depends=("gcc=$pkgver-$pkgrel")
+  provides=($pkgname-multilib)
+  replaces=($pkgname-multilib)
+
+  cd gcc-build
+  make DESTDIR="$pkgdir" -C $CHOST/libobjc install-headers
+  install -dm755 "$pkgdir/${_libdir}"
+  install -m755 gcc/cc1obj{,plus} "$pkgdir/${_libdir}/"
 }
