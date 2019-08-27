@@ -85,8 +85,6 @@ build() {
   "$srcdir/gcc/configure" --prefix=/usr \
       --libdir=/usr/lib \
       --libexecdir=/usr/lib \
-      --mandir=/usr/share/man \
-      --infodir=/usr/share/info \
       --with-bugurl=https://bugs.archlinux.org/ \
       --enable-languages=c,c++,ada,fortran,go,lto,objc,obj-c++ \
       --enable-shared \
@@ -114,7 +112,7 @@ build() {
   noti make
 
   # make documentation
-  #make -C $CHOST/libstdc++-v3/doc doc-man-doxygen
+  # make -C $CHOST/libstdc++-v3/doc doc-man-doxygen
 }
 
 check() {
@@ -225,7 +223,7 @@ package_gcc() {
   make -C libiberty DESTDIR="$pkgdir" install
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
 
-  make -C gcc DESTDIR="$pkgdir" install-man install-info
+  # make -C gcc DESTDIR="$pkgdir" install-man install-info
   rm "$pkgdir"/usr/share/man/man1/{gccgo,gfortran}.1
   rm "$pkgdir"/usr/share/info/{gccgo,gfortran,gnat-style,gnat_rm,gnat_ugn}.info
 
@@ -240,7 +238,7 @@ package_gcc() {
   install -Dm755 "$srcdir/c99" "$pkgdir/usr/bin/c99"
 
   # install the libstdc++ man pages
-  make -C $CHOST/libstdc++-v3/doc DESTDIR="$pkgdir" doc-install-man
+  # make -C $CHOST/libstdc++-v3/doc DESTDIR="$pkgdir" doc-install-man
 
   # remove files provided by lib32-gcc-libs
   rm -f "$pkgdir"/usr/lib32/lib{stdc++,gcc_s}.so
@@ -267,7 +265,7 @@ package_gcc-fortran() {
   make -C $CHOST/32/libgfortran DESTDIR=$pkgdir install-cafexeclibLTLIBRARIES \
     install-{toolexeclibDATA,nodist_fincludeHEADERS}
   make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_fincludeHEADERS
-  make -C gcc DESTDIR="$pkgdir" fortran.install-{common,man,info}
+  # make -C gcc DESTDIR="$pkgdir" fortran.install-{common,man,info}
   install -Dm755 gcc/f951 "$pkgdir/${_libdir}/f951"
 
   ln -s gfortran "$pkgdir/usr/bin/f95"
@@ -341,7 +339,7 @@ package_gcc-go() {
   make -C $CHOST/libgo DESTDIR="$pkgdir" install-exec-am
   make -C $CHOST/32/libgo DESTDIR="$pkgdir" install-exec-am
   make DESTDIR="$pkgdir" install-gotools
-  make -C gcc DESTDIR="$pkgdir" go.install-{common,man,info}
+  # make -C gcc DESTDIR="$pkgdir" go.install-{common,man,info}
 
   rm -f "$pkgdir"/usr/lib{,32}/libgo.so*
   install -Dm755 gcc/go1 "$pkgdir/${_libdir}/go1"
