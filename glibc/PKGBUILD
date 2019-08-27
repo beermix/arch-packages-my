@@ -7,13 +7,13 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.30
-pkgrel=40
+pkgrel=41
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git gd python automake autoconf flex bison)
 options=(!strip staticlibs)
-_commit=5a3afa9738f3dbbaf8c0a35665318c1af782111b
+_commit=1bced8cadc82077f0201801239e89eb24b68e9aa
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen)
