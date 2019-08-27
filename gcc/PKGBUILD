@@ -115,7 +115,7 @@ build() {
   noti make
 
   # make documentation
-  # make -C $CHOST/libstdc++-v3/doc doc-man-doxygen
+  noti make -C $CHOST/libstdc++-v3/doc doc-man-doxygen
 }
 
 check() {
