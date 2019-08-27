@@ -225,6 +225,18 @@ package_gcc() {
   python -O -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
 }
 
+package_gcc-objc() {
+  pkgdesc='Objective-C front-end for GCC'
+  depends=("gcc=$pkgver-$pkgrel")
+  provides=($pkgname-multilib)
+  replaces=($pkgname-multilib)
+
+  cd gcc-build
+  make DESTDIR="$pkgdir" -C $CHOST/libobjc install-headers
+  install -dm755 "$pkgdir/${_libdir}"
+  install -m755 gcc/cc1obj{,plus} "$pkgdir/${_libdir}/"
+}
+
 package_lib32-gcc-libs() {
   pkgdesc='32-bit runtime libraries shipped by GCC'
   depends=('lib32-glibc>=2.27')
@@ -247,20 +259,8 @@ package_lib32-gcc-libs() {
     make -C $CHOST/32/$lib DESTDIR="$pkgdir" install-toolexeclibLTLIBRARIES
   done
 
-#  make -C $CHOST/32/libobjc DESTDIR="$pkgdir" install-libs
+  make -C $CHOST/32/libobjc DESTDIR="$pkgdir" install-libs
 
   # remove files provided by gcc-libs
   rm -rf "$pkgdir"/usr/lib
-}
-
-package_gcc-objc() {
-  pkgdesc='Objective-C front-end for GCC'
-  depends=("gcc=$pkgver-$pkgrel")
-  provides=($pkgname-multilib)
-  replaces=($pkgname-multilib)
-
-  cd gcc-build
-  make DESTDIR="$pkgdir" -C $CHOST/libobjc install-headers
-  install -dm755 "$pkgdir/${_libdir}"
-  install -m755 gcc/cc1obj{,plus} "$pkgdir/${_libdir}/"
 }
