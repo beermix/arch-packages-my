@@ -13,7 +13,7 @@ pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
 url='https://gcc.gnu.org'
-makedepends=(binutils libmpc doxygen lib32-glibc lib32-gcc-libs python subversion automake autoconf flex bison0:58 28.08.2019)
+makedepends=(binutils libmpc doxygen lib32-glibc lib32-gcc-libs python subversion automake autoconf flex bison)
 checkdepends=(dejagnu inetutils)
 options=(!emptydirs)
 #source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
@@ -225,8 +225,8 @@ package_gcc() {
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
 
   make -C gcc DESTDIR="$pkgdir" install-man install-info
-  rm "$pkgdir"/usr/share/man/man1/{gccgo,gfortran}.1
-  rm "$pkgdir"/usr/share/info/{gccgo,gfortran,gnat-style,gnat_rm,gnat_ugn}.info
+  rm "$pkgdir"/usr/share/man/man1/{gfortran}.1
+  rm "$pkgdir"/usr/share/info/{gfortran,gnat-style,gnat_rm,gnat_ugn}.info
 
   make -C libcpp DESTDIR="$pkgdir" install
   make -C gcc DESTDIR="$pkgdir" install-po
