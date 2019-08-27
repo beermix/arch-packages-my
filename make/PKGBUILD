@@ -3,7 +3,7 @@
 
 pkgname=make
 pkgver=4.2.1
-pkgrel=10
+pkgrel=11
 pkgdesc="GNU make utility to maintain groups of programs"
 arch=('x86_64')
 url="https://www.gnu.org/software/make"
@@ -16,7 +16,9 @@ source=(https://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.bz2{,.sig}
         make-4.2.1-glob2.patch
         make-4.2.1-test-driver.patch
         make-3.82-011-noclock_gettime.patch
-        make-3.82-016-weird-shell.patch)
+        make-3.82-016-weird-shell.patch
+        make-4.2-j8k.patch
+        support-glob-interface-v2.patch)
 md5sums=('15b012617e7c44c0ed482721629577ac'
          'SKIP'
          '89bbbe3f806f208608e117665feb562b'
@@ -38,6 +40,8 @@ prepare() {
   
   patch -p1 -i ${srcdir}/make-3.82-011-noclock_gettime.patch
   patch -p1 -i ${srcdir}/make-3.82-016-weird-shell.patch
+  patch -p1 -i ${srcdir}/make-4.2-j8k.patch
+  patch -p1 -i ${srcdir}/support-glob-interface-v2.patch
 
   autoreconf -fi
 }
