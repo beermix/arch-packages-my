@@ -8,7 +8,7 @@ pkgname=(gcc gcc-libs gcc-fortran gcc-objc gcc-ada gcc-go lib32-gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 _islver=0.21
-pkgrel=3
+pkgrel=4
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -91,8 +91,7 @@ build() {
       --enable-languages=c,c++,ada,fortran,go,lto,objc,obj-c++ \
       --enable-shared \
       --enable-threads=posix \
-      --with-system-zlib \
-      --with-isl \
+      --with-isl=no \
       --enable-__cxa_atexit \
       --disable-libunwind-exceptions \
       --enable-clocale=gnu \
@@ -115,7 +114,7 @@ build() {
   noti make
 
   # make documentation
-  make -C $CHOST/libstdc++-v3/doc doc-man-doxygen
+  #make -C $CHOST/libstdc++-v3/doc doc-man-doxygen
 }
 
 check() {
