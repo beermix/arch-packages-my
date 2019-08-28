@@ -153,9 +153,6 @@ package_gcc-libs() {
              libquadmath; do
     make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
   done
-
-  # remove files provided by lib32-gcc-libs
-  # rm -rf "$pkgdir"/usr/lib32/
 }
 
 package_gcc() {
@@ -186,7 +183,7 @@ package_gcc() {
   install -d "$pkgdir/usr/share/gdb/auto-load/usr/lib"
   mv "$pkgdir"/usr/lib/libstdc++.so.6.*-gdb.py \
     "$pkgdir/usr/share/gdb/auto-load/usr/lib/"
-  rm "$pkgdir"/usr/lib{,32}/libstdc++.so*
+  rm "$pkgdir"/usr/lib/libstdc++.so*
 
   make DESTDIR="$pkgdir" install-fixincludes
   make -C gcc DESTDIR="$pkgdir" install-mkheaders
