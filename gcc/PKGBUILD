@@ -8,7 +8,7 @@ pkgname=(gcc gcc-libs lib32-gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 _islver=0.21
-pkgrel=9
+pkgrel=10
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -112,6 +112,12 @@ build() {
       --enable-checking=release \
       --with-tune=haswell \
       --with-arch=haswell \
+      --disable-libmpx \
+      --without-ppl \
+      --without-cloog \
+      --disable-libada \
+      --disable-libmudflap \
+      --with-default-libstdcxx-abi=gcc4-compatible \
       --disable-cet
 
   noti make
