@@ -11,9 +11,7 @@ arch=(x86_64)
 url="https://github.com/zen-kernel/zen-kernel/commits/v$_srcver"
 license=(GPL2)
 makedepends=(
-  xmlto kmod inetutils bc libelf git python-sphinx python-sphinx_rtd_theme
-  graphviz imagemagick
-)
+  kmod inetutils bc libelf git automake autoconf flex bison m4)
 options=('!strip')
 _srcname=zen-kernel
 source=(
@@ -22,7 +20,27 @@ source=(
   60-linux.hook  # pacman hook for depmod
   90-linux.hook  # pacman hook for initramfs regeneration
   linux.preset   # standard config files for mkinitcpio ramdisk
-)
+  0101-i8042-decrease-debug-message-level-to-info.patch
+  0102-Increase-the-ext4-default-commit-age.patch
+  0103-silence-rapl.patch
+  0104-pci-pme-wakeups.patch
+  0110-Initialize-ata-before-graphics.patch
+  0111-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
+  0112-give-rdrand-some-credit.patch
+  0113-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
+  0114-e1000e-increase-pause-and-refresh-time.patch
+  0115-kernel-time-reduce-ntp-wakeups.patch
+  0121-xattr-allow-setting-user.-attributes-on-symlinks-by-.patch
+  0123-use-lfence-instead-of-rep-and-nop.patch
+  0124-do-accept-in-LIFO-order-for-cache-efficiency.patch
+  0126-locking-rwsem-spin-faster.patch
+  0127-thp-fix.patch
+  0128-ata-libahci-ignore-staggered-spin-up.patch
+  CVE-2019-12379.patch
+  CVE-2019-12454.patch
+  CVE-2019-12455.patch
+  CVE-2019-12456.patch)
+
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
   '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
@@ -64,7 +82,7 @@ prepare() {
 
 build() {
   cd $_srcname
-  make bzImage modules htmldocs
+  noti make bzImage modules
 }
 
 _package() {
@@ -204,38 +222,7 @@ _package-headers() {
   chmod -Rc u=rwX,go=rX "$pkgdir"
 }
 
-_package-docs() {
-  pkgdesc="Kernel hackers manual - HTML documentation that comes with the ${pkgbase/linux/Linux} kernel"
-
-  local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
-
-  cd $_srcname
-
-  msg2 "Installing documentation..."
-  mkdir -p "$builddir"
-  cp -t "$builddir" -a Documentation
-
-  msg2 "Removing doctrees..."
-  rm -r "$builddir/Documentation/output/.doctrees"
-
-  msg2 "Moving HTML docs..."
-  local src dst
-  while read -rd '' src; do
-    dst="$builddir/Documentation/${src#$builddir/Documentation/output/}"
-    mkdir -p "${dst%/*}"
-    mv "$src" "$dst"
-    rmdir -p --ignore-fail-on-non-empty "${src%/*}"
-  done < <(find "$builddir/Documentation/output" -type f -print0)
-
-  msg2 "Adding symlink..."
-  mkdir -p "$pkgdir/usr/share/doc"
-  ln -sr "$builddir/Documentation" "$pkgdir/usr/share/doc/$pkgbase"
-
-  msg2 "Fixing permissions..."
-  chmod -Rc u=rwX,go=rX "$pkgdir"
-}
-
-pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-docs")
+pkgname=("$pkgbase" "$pkgbase-headers")
 for _p in "${pkgname[@]}"; do
   eval "package_$_p() {
     $(declare -f "_package${_p#$pkgbase}")
