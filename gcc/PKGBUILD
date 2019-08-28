@@ -84,7 +84,6 @@ prepare() {
   patch -p1 -i "$srcdir/openmp-vectorize-v2.patch"
   patch -p1 -i "$srcdir/optimize.patch"
   patch -p1 -i "$srcdir/optimize-at-least-some.patch"
-  patch -p1 -i "$srcdir/pow-optimization.patch"
   patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
 
   # link isl for in-tree build
@@ -97,7 +96,7 @@ prepare() {
   sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
 
   # hack! - some configure tests for header files using "$CPP $CPPFLAGS"
-  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
+  # sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
 
   mkdir -p "$srcdir/gcc-build"
 }
