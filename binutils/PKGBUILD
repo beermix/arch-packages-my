@@ -48,7 +48,7 @@ prepare() {
   patch -p1 -i "$srcdir/CVE-2019-14444.patch"
 
   # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
-  # sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
+  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
 }
 
 build() {
@@ -69,7 +69,8 @@ build() {
     --enable-threads \
     --disable-gdb \
     --disable-werror \
-    --with-pic
+    --with-pic \
+    --with-system-zlib
 
   make configure-host
   make tooldir=/usr
