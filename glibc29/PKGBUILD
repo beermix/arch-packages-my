@@ -7,11 +7,11 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.29
-pkgrel=15
+pkgrel=16
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
-makedepends=(git gd python automake autoconf flex bison m4)
+makedepends=(git python automake autoconf flex bison m4)
 options=(!strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
 _commit=6d8eaf4a25c09256b53efe57d3f77f2f0bd77ede
@@ -52,13 +52,19 @@ build() {
       --prefix=/usr
       --with-headers=/usr/include
       --with-bugurl=https://bugs.archlinux.org/
+      ac_cv_path_PERL=no 
+      ac_cv_prog_MAKEINFO=
       --enable-add-ons
       --enable-bind-now
+      --disable-sanity-checks
       --disable-cet
       --disable-multi-arch
       --enable-lock-elision
+      --without-cvs
+      --without-gd
       --disable-profile
-      --disable-profile
+      --enable-kernel=4.4.0
+      --enable-obsolete-rpc
       --disable-werror
   )
 
