@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.32
-pkgrel=30
+pkgrel=31
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='https://www.gnu.org/software/binutils/'
@@ -63,19 +63,16 @@ build() {
     --enable-ld=default \
     --enable-lto \
     --enable-plugins \
-    --enable-relro \
     --enable-shared \
     --without-ppl \
     --without-cloog \
     --enable-targets=x86_64-linux \
-    --enable-threads \
     --disable-gdb \
     --disable-werror \
-    --with-pic \
     --with-system-zlib
 
-  make configure-host
-  make tooldir=/usr
+  make MAKEINFO=true configure-host
+  make MAKEINFO=true tooldir=/usr
 }
 
 check() {
@@ -83,12 +80,12 @@ check() {
 
   # unset LDFLAGS as testsuite makes assumptions about which ones are active
   # ignore failures in gold testsuite...
-  make -k LDFLAGS="" check || true
+  make MAKEINFO=true -k LDFLAGS="" check || true
 }
 
 package() {
   cd binutils-build
-  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
+  make MAKEINFO=true prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
 
   # Remove unwanted files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
