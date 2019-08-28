@@ -6,12 +6,13 @@ pkgbase=linux-zen           # Build stock -zen kernel
 #pkgbase=linux-custom       # Build kernel with a different name
 _srcver=5.2.10-lqx3
 pkgver=${_srcver//-/.}
-pkgrel=35
+pkgrel=50
 arch=(x86_64)
 url="https://github.com/zen-kernel/zen-kernel/commits/v$_srcver"
 license=(GPL2)
 makedepends=(
-  kmod inetutils bc libelf git bison flex
+  xmlto kmod inetutils bc libelf git python-sphinx python-sphinx_rtd_theme
+  graphviz imagemagick
 )
 options=('!strip')
 _srcname=zen-kernel
@@ -21,34 +22,14 @@ source=(
   60-linux.hook  # pacman hook for depmod
   90-linux.hook  # pacman hook for initramfs regeneration
   linux.preset   # standard config files for mkinitcpio ramdisk
-  0101-i8042-decrease-debug-message-level-to-info.patch
-  0102-Increase-the-ext4-default-commit-age.patch
-  0103-silence-rapl.patch
-  0104-pci-pme-wakeups.patch
-  0110-Initialize-ata-before-graphics.patch
-  0111-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
-  0112-give-rdrand-some-credit.patch
-  0113-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
-  0114-e1000e-increase-pause-and-refresh-time.patch
-  0115-kernel-time-reduce-ntp-wakeups.patch
-  0121-xattr-allow-setting-user.-attributes-on-symlinks-by-.patch
-  0123-use-lfence-instead-of-rep-and-nop.patch
-  0124-do-accept-in-LIFO-order-for-cache-efficiency.patch
-  0126-locking-rwsem-spin-faster.patch
-  0127-thp-fix.patch
-  0128-ata-libahci-ignore-staggered-spin-up.patch
-  CVE-2019-12379.patch
-  CVE-2019-12454.patch
-  CVE-2019-12455.patch
-  CVE-2019-12456.patch)
-
+)
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
   '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
   '8218F88849AAC522E94CF470A5E9288C4FA415FA'  # Jan Alexander Steffens (heftig)
 )
 sha256sums=('SKIP'
-            '0641fbc5417332f43bc3eae7c52f106f682bd03231ab828627148cba8999e9c9'
+            '3650ffdd3e3f2b21c2abb28d1f9906e2b8a705ec283ad75ea04df34a6142cda9'
             'ae2e95db94ef7176207c690224169594d49445e04249d2499e9d2fbc117a0b21'
             'c043f3033bb781e2688794a59f6d1f7ed49ef9b13eb77ff9a425df33a244a636'
             'ad6344badc91ad0630caacde83f7f9b97276f80d26a20619a87952be65492c65')
@@ -83,7 +64,7 @@ prepare() {
 
 build() {
   cd $_srcname
-  noti make bzImage modules
+  make bzImage modules htmldocs
 }
 
 _package() {
@@ -223,7 +204,38 @@ _package-headers() {
   chmod -Rc u=rwX,go=rX "$pkgdir"
 }
 
-pkgname=("$pkgbase" "$pkgbase-headers")
+_package-docs() {
+  pkgdesc="Kernel hackers manual - HTML documentation that comes with the ${pkgbase/linux/Linux} kernel"
+
+  local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
+
+  cd $_srcname
+
+  msg2 "Installing documentation..."
+  mkdir -p "$builddir"
+  cp -t "$builddir" -a Documentation
+
+  msg2 "Removing doctrees..."
+  rm -r "$builddir/Documentation/output/.doctrees"
+
+  msg2 "Moving HTML docs..."
+  local src dst
+  while read -rd '' src; do
+    dst="$builddir/Documentation/${src#$builddir/Documentation/output/}"
+    mkdir -p "${dst%/*}"
+    mv "$src" "$dst"
+    rmdir -p --ignore-fail-on-non-empty "${src%/*}"
+  done < <(find "$builddir/Documentation/output" -type f -print0)
+
+  msg2 "Adding symlink..."
+  mkdir -p "$pkgdir/usr/share/doc"
+  ln -sr "$builddir/Documentation" "$pkgdir/usr/share/doc/$pkgbase"
+
+  msg2 "Fixing permissions..."
+  chmod -Rc u=rwX,go=rX "$pkgdir"
+}
+
+pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-docs")
 for _p in "${pkgname[@]}"; do
   eval "package_$_p() {
     $(declare -f "_package${_p#$pkgbase}")
