@@ -7,7 +7,7 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.29
-pkgrel=17
+pkgrel=18
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -18,7 +18,23 @@ _commit=6d8eaf4a25c09256b53efe57d3f77f2f0bd77ede
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
-        bz20338.patch)
+        bz20338.patch
+        0001-Revert-elf-Correct-absolute-SHN_ABS-symbol-run-time-.patch
+        file-truncated-while-reading-soname-after-patchelf.patch
+        alternate_trim.patch
+        c-utf8-locale.patch
+        gcc-8-fix.patch
+        glibc-fix-dns-with-broken-routers.patch
+        large-page-huge-page.patch
+        ldconfig-Os.patch
+        madvise-bss.patch
+        malloc_tune.patch
+        mathlto.patch
+        nostackshrink.patch
+        pause.patch
+        spin-smarter.patch
+        spinaphore.patch
+        use_madv_free.patch)
 
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
@@ -48,6 +64,11 @@ prepare() {
 }
 
 build() {
+
+  export CFLAGS="-O3 -march=haswell -mtune=haswell -g2 -m64  -Wl,-z,max-page-size=0x1000 -fPIC -falign-functions=32"
+  unset LDFLAGS
+  export LDFLAGS="-Wl,-z,max-page-size=0x1000 "
+
   local _configure_flags=(
       --prefix=/usr
       --with-headers=/usr/include
