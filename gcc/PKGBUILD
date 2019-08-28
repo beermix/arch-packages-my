@@ -8,7 +8,7 @@ pkgname=(gcc gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 _islver=0.21
-pkgrel=17
+pkgrel=18
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -21,7 +21,21 @@ source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
 #source=(gcc::svn://gcc.gnu.org/svn/gcc/branches/gcc-${_majorver}-branch
         http://isl.gforge.inria.fr/isl-${_islver}.tar.xz
         c89 c99
-        010-documentation.patch)
+        010-documentation.patch
+        0001-Always-use-z-now-when-linking-with-pie.patch
+        0001-Fix-stack-protection-issues.patch
+        0001-Ignore-Werror-if-GCC_IGNORE_WERROR-environment-varia.patch
+        010-documentation.patch
+        arch-native-override.patch
+        fortran-vector-v2.patch
+        gomp-relax.patch
+        ipa-cp.patch
+        openmp-vectorize-v2.patch
+        optimize.patch
+        optimize-at-least-some.patch
+        pow-optimization.patch
+        zero-regs-gcc8.patch)
+
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
               86CFFCA918CF3AF47147588051E8B148A9999C34  # evangelos@foutrelis.com
               13975A70E63C361C73AE69EF6EEB81F8981C74C7  # richard.guenther@gmail.com
@@ -62,6 +76,17 @@ prepare() {
 
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90397
   patch -p1 -i "$srcdir/010-documentation.patch"
+  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
+  patch -p1 -i "$srcdir/0001-Ignore-Werror-if-GCC_IGNORE_WERROR-environment-varia.patch"
+  patch -p1 -i "$srcdir/arch-native-override.patch"
+  patch -p1 -i "$srcdir/fortran-vector-v2.patch"
+  patch -p1 -i "$srcdir/gomp-relax.patch"
+  patch -p1 -i "$srcdir/ipa-cp.patch"
+  patch -p1 -i "$srcdir/openmp-vectorize-v2.patch"
+  patch -p1 -i "$srcdir/optimize.patch"
+  patch -p1 -i "$srcdir/optimize-at-least-some.patch"
+  patch -p1 -i "$srcdir/pow-optimization.patch"
+  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
