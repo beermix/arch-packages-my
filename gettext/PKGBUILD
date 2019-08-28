@@ -19,7 +19,7 @@ validpgpkeys=('462225C3B46F34879FC8496CD605848ED7E69871'  # Daiki Ueno
               '68D94D8AAEEAD48AE7DC5B904F494A942E4616C2') # Bruno Haible (Open Source Development)
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname-$pkgver/gettext-tools
   ./configure \
     --prefix=/usr \
     --enable-csharp \
@@ -27,19 +27,9 @@ build() {
     --with-xz \
     --without-included-gettext \
     --disable-shaed \
-    --enable-static \
-    --disable-rpath \
-    --with-gnu-ld \
-    --disable-java \
-    --disable-curses \
-    --with-included-libxml \
-    --with-included-libcroco \
-    --with-included-libunistring \
-    --with-included-glib \
-    --disable-native-java
+    --enable-static
 
-  sed -e 's/ -shared / -Wl,-O1,--as-needed\0/g' \
-      -i gettext-{tools,runtime,runtime/libasprintf}/libtool
+#  sed -e 's/ -shared / -Wl,-O1,--as-needed\0/g' -i gettext-{tools,runtime,runtime/libasprintf}/libtool
 
   make
 }
