@@ -4,11 +4,11 @@
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: libtool requires rebuilt with each new gcc version
 
-pkgname=(gcc gcc-libs gcc-objc lib32-gcc-libs)
+pkgname=(gcc gcc-libs lib32-gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 _islver=0.21
-pkgrel=6
+pkgrel=7
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -90,10 +90,9 @@ build() {
       --libdir=/usr/lib \
       --libexecdir=/usr/lib \
       --with-bugurl=https://bugs.archlinux.org/ \
-      --enable-languages=c,c++,lto,objc,obj-c++ \
+      --enable-languages=c,c++,lto \
       --enable-shared \
       --enable-threads=posix \
-      --with-system-zlib \
       --without-isl \
       --enable-__cxa_atexit \
       --disable-libunwind-exceptions \
@@ -140,7 +139,6 @@ package_gcc-libs() {
     make -C $CHOST/$lib DESTDIR="$pkgdir" install-toolexeclibLTLIBRARIES
   done
 
-  make -C $CHOST/libobjc DESTDIR="$pkgdir" install-libs
   make -C $CHOST/libstdc++-v3/po DESTDIR="$pkgdir" install
 
   for lib in libgomp \
@@ -229,18 +227,6 @@ package_gcc() {
   python -O -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
 }
 
-package_gcc-objc() {
-  pkgdesc='Objective-C front-end for GCC'
-  depends=("gcc=$pkgver-$pkgrel")
-  provides=($pkgname-multilib)
-  replaces=($pkgname-multilib)
-
-  cd gcc-build
-  make DESTDIR="$pkgdir" -C $CHOST/libobjc install-headers
-  install -dm755 "$pkgdir/${_libdir}"
-  install -m755 gcc/cc1obj{,plus} "$pkgdir/${_libdir}/"
-}
-
 package_lib32-gcc-libs() {
   pkgdesc='32-bit runtime libraries shipped by GCC'
   depends=('lib32-glibc>=2.27')
@@ -262,8 +248,6 @@ package_lib32-gcc-libs() {
              libvtv; do
     make -C $CHOST/32/$lib DESTDIR="$pkgdir" install-toolexeclibLTLIBRARIES
   done
-
-  make -C $CHOST/32/libobjc DESTDIR="$pkgdir" install-libs
 
   # remove files provided by gcc-libs
   rm -rf "$pkgdir"/usr/lib
