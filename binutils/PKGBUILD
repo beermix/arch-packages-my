@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.32
-pkgrel=27
+pkgrel=30
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='https://www.gnu.org/software/binutils/'
@@ -67,7 +67,7 @@ build() {
     --enable-shared \
     --without-ppl \
     --without-cloog \
-    --enable-targets=x86_64-pep \
+    --enable-targets=x86_64-linux \
     --enable-threads \
     --disable-gdb \
     --disable-werror \
