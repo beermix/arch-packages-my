@@ -18,8 +18,6 @@ _commit=35ffd20dbd76d3cb6b478c7a69bb40d8c827ed81
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
-        bz20338.patch
-        0001-Revert-elf-Correct-absolute-SHN_ABS-symbol-run-time-.patch
         file-truncated-while-reading-soname-after-patchelf.patch
         alternate_trim.patch
         c-utf8-locale.patch
