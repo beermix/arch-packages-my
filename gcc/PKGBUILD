@@ -153,9 +153,6 @@ build() {
       --enable-checking=release \
       --with-tune=haswell \
       --with-arch=haswell \
-      --without-ppl \
-      --without-cloog \
-      --disable-libada \
       --disable-libmpx \
       --enable-cet=no
 
@@ -167,27 +164,35 @@ package_gcc-libs() {
   groups=(base)
   depends=('glibc>=2.27')
   options+=(!strip)
- provides=(libubsan.so libasan.so libtsan.so liblsan.so)
-#  replaces=($pkgname-multilib)
+  provides=(libubsan.so libasan.so libtsan.so liblsan.so)
 
   cd gcc-build
   make -C $CHOST/libgcc DESTDIR="$pkgdir" install-shared
   rm -f "$pkgdir/$_libdir/libgcc_eh.a"
 
   for lib in libatomic \
+             libgomp \
+             libitm \
+             libquadmath \
+             libsanitizer/{a,l,ub,t}san \
              libstdc++-v3/src \
              libvtv; do
     make -C $CHOST/$lib DESTDIR="$pkgdir" install-toolexeclibLTLIBRARIES
   done
 
-# make -C $CHOST/libobjc DESTDIR="$pkgdir" install-libs
+  make -C $CHOST/libobjc DESTDIR="$pkgdir" install-libs
   make -C $CHOST/libstdc++-v3/po DESTDIR="$pkgdir" install
 
-#  for lib in libgomp \
-#             libitm \
-#             libquadmath; do
-#    make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
-#  done
+  for lib in libgomp \
+             libitm \
+             libquadmath; do
+    make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
+  done
+
+
+  # Install Runtime Library Exception
+  install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
+    "$pkgdir/usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION"
 }
 
 package_gcc() {
@@ -212,14 +217,14 @@ package_gcc() {
   make -C $CHOST/libstdc++-v3/libsupc++ DESTDIR="$pkgdir" install
   make -C $CHOST/libstdc++-v3/python DESTDIR="$pkgdir" install
 
-#make DESTDIR="$pkgdir" install-libcc1
+  make DESTDIR="$pkgdir" install-libcc1
   install -d "$pkgdir/usr/share/gdb/auto-load/usr/lib"
   mv "$pkgdir"/usr/lib/libstdc++.so.6.*-gdb.py \
     "$pkgdir/usr/share/gdb/auto-load/usr/lib/"
   rm "$pkgdir"/usr/lib/libstdc++.so*
   rm "$pkgdir"/usr/lib/libstdc++.a
 
-  #make DESTDIR="$pkgdir" install-fixincludes
+  make DESTDIR="$pkgdir" install-fixincludes
   make -C gcc DESTDIR="$pkgdir" install-mkheaders
 
   make -C lto-plugin DESTDIR="$pkgdir" install
@@ -249,6 +254,11 @@ package_gcc() {
   install -Dm755 "$srcdir/c99" "$pkgdir/usr/bin/c99"
 
   # byte-compile python libraries
-   python -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
-   python -O -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
+  python -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
+  python -O -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
+
+  # Install Runtime Library Exception
+  install -d "$pkgdir/usr/share/licenses/$pkgname/"
+  ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
+    "$pkgdir/usr/share/licenses/$pkgname/"
 }
