@@ -8,7 +8,7 @@ pkgname=(gcc gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 _islver=0.21
-pkgrel=16
+pkgrel=15
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -114,16 +114,8 @@ build() {
       --enable-checking=release \
       --with-tune=haswell \
       --with-arch=haswell \
-      --without-ppl \
-      --without-cloog \
-      --disable-libada \
-      --disable-libmudflap \
-      --disable-libitm \
-      --disable-libquadmath \
-      --disable-libgomp \
       --disable-libmpx \
-      --disable-libsanitizer \
-      --enable-cet=no
+      --enable-cet=auto
 
   noti make
 }
@@ -133,7 +125,8 @@ package_gcc-libs() {
   groups=(base)
   depends=('glibc>=2.27')
   options+=(!strip)
-# provides=($pkgname-multilib libubsan.so libasan.so libtsan.so liblsan.so)
+  provides=($pkgname-multilib libubsan.so libasan.so
+            libtsan.so liblsan.so)
   replaces=($pkgname-multilib)
 
   cd gcc-build
@@ -141,19 +134,23 @@ package_gcc-libs() {
   rm -f "$pkgdir/$_libdir/libgcc_eh.a"
 
   for lib in libatomic \
+             libgomp \
+             libitm \
+             libquadmath \
+             libsanitizer/{a,l,ub,t}san \
              libstdc++-v3/src \
              libvtv; do
     make -C $CHOST/$lib DESTDIR="$pkgdir" install-toolexeclibLTLIBRARIES
   done
 
-# make -C $CHOST/libobjc DESTDIR="$pkgdir" install-libs
+  make -C $CHOST/libobjc DESTDIR="$pkgdir" install-libs
   make -C $CHOST/libstdc++-v3/po DESTDIR="$pkgdir" install
 
-#  for lib in libgomp \
-#             libitm \
-#             libquadmath; do
-#    make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
-#  done
+  for lib in libgomp \
+             libitm \
+             libquadmath; do
+    make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
+  done
 }
 
 package_gcc() {
@@ -180,13 +177,13 @@ package_gcc() {
   make -C $CHOST/libstdc++-v3/libsupc++ DESTDIR="$pkgdir" install
   make -C $CHOST/libstdc++-v3/python DESTDIR="$pkgdir" install
 
-#make DESTDIR="$pkgdir" install-libcc1
+  make DESTDIR="$pkgdir" install-libcc1
   install -d "$pkgdir/usr/share/gdb/auto-load/usr/lib"
   mv "$pkgdir"/usr/lib/libstdc++.so.6.*-gdb.py \
     "$pkgdir/usr/share/gdb/auto-load/usr/lib/"
   rm "$pkgdir"/usr/lib/libstdc++.so*
 
-  #make DESTDIR="$pkgdir" install-fixincludes
+  make DESTDIR="$pkgdir" install-fixincludes
   make -C gcc DESTDIR="$pkgdir" install-mkheaders
 
   make -C lto-plugin DESTDIR="$pkgdir" install
@@ -194,13 +191,13 @@ package_gcc() {
   ln -s /${_libdir}/liblto_plugin.so \
     "$pkgdir/usr/lib/bfd-plugins/"
 
-#  make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_{libsubinclude,toolexeclib}HEADERS
-#  make -C $CHOST/libitm DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
-#  make -C $CHOST/libquadmath DESTDIR="$pkgdir" install-nodist_libsubincludeHEADERS
-#  make -C $CHOST/libsanitizer DESTDIR="$pkgdir" install-nodist_{saninclude,toolexeclib}HEADERS
-#  make -C $CHOST/libsanitizer/asan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
-#  make -C $CHOST/libsanitizer/tsan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
-#  make -C $CHOST/libsanitizer/lsan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
+  make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_{libsubinclude,toolexeclib}HEADERS
+  make -C $CHOST/libitm DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
+  make -C $CHOST/libquadmath DESTDIR="$pkgdir" install-nodist_libsubincludeHEADERS
+  make -C $CHOST/libsanitizer DESTDIR="$pkgdir" install-nodist_{saninclude,toolexeclib}HEADERS
+  make -C $CHOST/libsanitizer/asan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
+  make -C $CHOST/libsanitizer/tsan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
+  make -C $CHOST/libsanitizer/lsan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
 
   make -C libiberty DESTDIR="$pkgdir" install
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
@@ -216,6 +213,6 @@ package_gcc() {
   install -Dm755 "$srcdir/c99" "$pkgdir/usr/bin/c99"
 
   # byte-compile python libraries
-  # python -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
-  # python -O -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
+  python -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
+  python -O -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
 }
