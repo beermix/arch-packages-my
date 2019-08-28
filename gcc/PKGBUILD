@@ -118,7 +118,6 @@ build() {
       --without-cloog \
       --disable-libmpx \
       --disable-libmudflap \
-      --with-default-libstdcxx-abi=gcc4-compatible \
       --disable-cet
 
   noti make
