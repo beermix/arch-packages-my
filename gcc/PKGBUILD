@@ -79,17 +79,16 @@ prepare() {
   patch -p1 -i "$srcdir/010-documentation.patch"
   patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
   patch -p1 -i "$srcdir/0001-Ignore-Werror-if-GCC_IGNORE_WERROR-environment-varia.patch"
-  patch -p1 -i "$srcdir/arch-native-override.patch"
-  patch -p1 -i "$srcdir/fortran-vector-v2.patch"
+  #patch -p1 -i "$srcdir/arch-native-override.patch"
+  #patch -p1 -i "$srcdir/fortran-vector-v2.patch"
   patch -p1 -i "$srcdir/gomp-relax.patch"
   patch -p1 -i "$srcdir/ipa-cp.patch"
   patch -p1 -i "$srcdir/openmp-vectorize-v2.patch"
   patch -p1 -i "$srcdir/optimize.patch"
   patch -p1 -i "$srcdir/optimize-at-least-some.patch"
-  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
+  #patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
   patch -p1 -i "$srcdir/gcc-4.8.2-disable_multilib_i386_linux64.patch"
   patch -p1 -i "$srcdir/gcc-allow-newer-autoconf.patch"
-
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
