@@ -8,7 +8,7 @@ pkgname=(gcc gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 _islver=0.21
-pkgrel=11
+pkgrel=12
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -89,12 +89,14 @@ build() {
   "$srcdir/gcc/configure" --prefix=/usr \
       --libdir=/usr/lib \
       --libexecdir=/usr/lib \
+      --mandir=/usr/share/man \
+      --infodir=/usr/share/info \
       --with-bugurl=https://bugs.archlinux.org/ \
       --enable-languages=c,c++,lto \
       --enable-shared \
       --enable-threads=posix \
       --with-system-zlib \
-      --with-isl=no \
+      --without-isl \
       --enable-__cxa_atexit \
       --disable-libunwind-exceptions \
       --enable-clocale=gnu \
@@ -113,9 +115,6 @@ build() {
       --with-tune=haswell \
       --with-arch=haswell \
       --disable-libmpx \
-      --without-ppl \
-      --without-cloog \
-      --disable-libada \
       --disable-libmudflap \
       --with-default-libstdcxx-abi=gcc4-compatible \
       --disable-cet
@@ -186,6 +185,7 @@ package_gcc() {
   install -d "$pkgdir/usr/share/gdb/auto-load/usr/lib"
   mv "$pkgdir"/usr/lib/libstdc++.so.6.*-gdb.py \
     "$pkgdir/usr/share/gdb/auto-load/usr/lib/"
+  rm "$pkgdir"/usr/lib{,32}/libstdc++.so*
 
   make DESTDIR="$pkgdir" install-fixincludes
   make -C gcc DESTDIR="$pkgdir" install-mkheaders
@@ -205,6 +205,9 @@ package_gcc() {
 
   make -C libiberty DESTDIR="$pkgdir" install
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
+
+  rm "$pkgdir"/usr/share/man/man1/{gccgo,gfortran}.1
+  rm "$pkgdir"/usr/share/info/{gccgo,gfortran,gnat-style,gnat_rm,gnat_ugn}.info
 
   make -C libcpp DESTDIR="$pkgdir" install
   make -C gcc DESTDIR="$pkgdir" install-po
