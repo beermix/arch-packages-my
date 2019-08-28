@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.32
-pkgrel=23
+pkgrel=25
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='https://www.gnu.org/software/binutils/'
@@ -36,6 +36,16 @@ prepare() {
 
   #cd binutils-gdb
   cd binutils-$pkgver
+
+  patch -p1 -i "$srcdir/000-git32.patch"
+  patch -p1 -i "$srcdir/CVE-2019-9071.patch"
+  patch -p1 -i "$srcdir/CVE-2019-9074.patch"
+  patch -p1 -i "$srcdir/CVE-2019-9075.patch"
+  patch -p1 -i "$srcdir/CVE-2019-9076.patch"
+  patch -p1 -i "$srcdir/CVE-2019-9077.patch"
+  patch -p1 -i "$srcdir/CVE-2019-12972.patch"
+  patch -p1 -i "$srcdir/CVE-2019-14250.patch"
+  patch -p1 -i "$srcdir/CVE-2019-14444.patch"
 
   # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
   # sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
