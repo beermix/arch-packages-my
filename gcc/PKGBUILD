@@ -33,7 +33,6 @@ source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         openmp-vectorize-v2.patch
         optimize.patch
         optimize-at-least-some.patch
-        pow-optimization.patch
         zero-regs-gcc8.patch)
 
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
@@ -111,6 +110,14 @@ build() {
   CFLAGS=${CFLAGS/-pipe/}
   CXXFLAGS=${CXXFLAGS/-pipe/}
 
+  unset CFLAGS
+  unset CXXFLAGS
+  export CFLAGS="$CFLAGS-march=haswell -g1 -O3 -fstack-protector -Wl,-z -Wl,now -Wl,-z -Wl,relro  -Wl,-z,max-page-size=0x1000 -mtune=haswell"
+  export CXXFLAGS="$CXXFLAGS-march=haswell -g1 -O3  -Wl,-z,max-page-size=0x1000 -mtune=haswell"
+  export CFLAGS_FOR_TARGET="$CFLAGS"
+  export CXXFLAGS_FOR_TARGET="$CXXFLAGS"
+  export FFLAGS_FOR_TARGET="$FFLAGS"
+
   "$srcdir/gcc/configure" --prefix=/usr \
       --libdir=/usr/lib \
       --libexecdir=/usr/lib \
@@ -121,12 +128,16 @@ build() {
       --enable-shared \
       --enable-threads=posix \
       --with-isl \
+      --with-gnu-ld \
+      --with-system-zlib \
+      --enable-bootstrap \
       --enable-__cxa_atexit \
       --disable-libunwind-exceptions \
       --enable-clocale=gnu \
       --disable-libstdcxx-pch \
       --disable-libssp \
       --enable-gnu-unique-object \
+      --disable-vtable-verify \
       --enable-linker-build-id \
       --enable-lto \
       --enable-plugin \
