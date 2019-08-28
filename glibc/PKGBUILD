@@ -7,7 +7,7 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.30
-pkgrel=51
+pkgrel=52
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -16,7 +16,22 @@ options=(!strip staticlibs)
 _commit=1bced8cadc82077f0201801239e89eb24b68e9aa
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
-        locale-gen)
+        locale-gen
+        lib32-glibc.conf
+        alternate_trim.patch
+        c-utf8-locale.patch
+        gcc-8-fix.patch
+        glibc-fix-dns-with-broken-routers.patch
+        large-page-huge-page.patch
+        ldconfig-Os.patch
+        madvise-bss.patch
+        malloc_tune.patch
+        mathlto.patch
+        nostackshrink.patch
+        pause.patch
+        spin-smarter.patch
+        spinaphore.patch
+        use_madv_free.patch)
 
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
@@ -46,13 +61,18 @@ prepare() {
 }
 
 build() {
+
+  export CFLAGS="-O3 -march=haswell -mtune=haswell -g2 -m64  -Wl,-z,max-page-size=0x1000 -fPIC -falign-functions=32"
+  unset LDFLAGS
+  export LDFLAGS="-Wl,-z,max-page-size=0x1000 "
+
   local _configure_flags=(
       --prefix=/usr
       --with-headers=/usr/include
       --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
       --enable-bind-now
-      --enable-cet
+      --enable-cet=no
       --enable-lock-elision
       --enable-multi-arch
       --enable-kernel=5.0
