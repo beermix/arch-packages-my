@@ -7,7 +7,7 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.29
-pkgrel=16
+pkgrel=17
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -80,7 +80,6 @@ build() {
       --without-gd
       --disable-profile
       --enable-kernel=4.4.0
-      --enable-obsolete-rpc
       --disable-werror
   )
 
