@@ -70,10 +70,10 @@ build() {
       --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
       --enable-bind-now
-      --disable-sanity-checks
-      --disable-cet
+      --enable-cet=no
       --disable-multi-arch
       --enable-lock-elision
+      --enable-stack-protector=strong
       --without-cvs
       --without-gd
       --disable-profile
