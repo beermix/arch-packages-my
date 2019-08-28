@@ -107,7 +107,6 @@ build() {
       --enable-install-libiberty \
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
-      --with-default-libstdcxx-abi=gcc4-compatible \
       --enable-multilib \
       --disable-werror \
       --enable-checking=release \
