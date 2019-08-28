@@ -114,6 +114,8 @@ build() {
       --enable-checking=release \
       --with-tune=haswell \
       --with-arch=haswell \
+      --without-ppl \
+      --without-cloog \
       --disable-libmpx \
       --disable-libmudflap \
       --with-default-libstdcxx-abi=gcc4-compatible \
