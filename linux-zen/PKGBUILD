@@ -11,7 +11,7 @@ arch=(x86_64)
 url="https://github.com/zen-kernel/zen-kernel/commits/v$_srcver"
 license=(GPL2)
 makedepends=(
-  kmod inetutils bc libelf git automake autoconf flex bison m4)
+  kmod inetutils bc libelf git flex bison m4)
 options=('!strip')
 _srcname=zen-kernel
 source=(
