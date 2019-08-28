@@ -179,10 +179,10 @@ package_gcc() {
   make -C $CHOST/libstdc++-v3/libsupc++ DESTDIR="$pkgdir" install
   make -C $CHOST/libstdc++-v3/python DESTDIR="$pkgdir" install
 
-  make DESTDIR="$pkgdir" install-libcc1
-  install -d "$pkgdir/usr/share/gdb/auto-load/usr/lib"
-  mv "$pkgdir"/usr/lib/libstdc++.so.6.*-gdb.py \
-    "$pkgdir/usr/share/gdb/auto-load/usr/lib/"
+  #make DESTDIR="$pkgdir" install-libcc1
+  #install -d "$pkgdir/usr/share/gdb/auto-load/usr/lib"
+  #mv "$pkgdir"/usr/lib/libstdc++.so.6.*-gdb.py \
+  #  "$pkgdir/usr/share/gdb/auto-load/usr/lib/"
   rm "$pkgdir"/usr/lib/libstdc++.so*
 
   make DESTDIR="$pkgdir" install-fixincludes
@@ -203,9 +203,6 @@ package_gcc() {
 
   make -C libiberty DESTDIR="$pkgdir" install
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
-
-  rm "$pkgdir"/usr/share/man/man1/{gccgo,gfortran}.1
-  rm "$pkgdir"/usr/share/info/{gccgo,gfortran,gnat-style,gnat_rm,gnat_ugn}.info
 
   make -C libcpp DESTDIR="$pkgdir" install
   make -C gcc DESTDIR="$pkgdir" install-po
