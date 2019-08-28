@@ -68,8 +68,6 @@ build() {
       --prefix=/usr
       --with-headers=/usr/include
       --with-bugurl=https://bugs.archlinux.org/
-      ac_cv_path_PERL=no 
-      ac_cv_prog_MAKEINFO=
       --enable-add-ons
       --enable-bind-now
       --disable-sanity-checks
@@ -165,3 +163,4 @@ package_glibc() {
       -name '*-*.so' -type f -exec strip $STRIP_SHARED {} + 2> /dev/null || true
   fi
 }
+
