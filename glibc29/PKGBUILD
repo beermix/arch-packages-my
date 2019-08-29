@@ -7,14 +7,14 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.30
-pkgrel=18
+pkgrel=21
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
-makedepends=(git gd python automake autoconf flex bison)
+makedepends=(git python automake autoconf flex bison)
 options=(!strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-_commit=be9a328c93834648e0bec106a1f86357d1a8c7e1
+_commit=d74461fa348de4176894f98672cb9ce721e26676
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
@@ -73,11 +73,17 @@ build() {
       --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
       --enable-bind-now
-      --enable-cet=no
       --disable-multi-arch
       --enable-lock-elision
       --disable-profile
       --enable-kernel=5.0
+      --without-cvs
+      --disable-profile
+      --disable-debug
+      --without-gd 
+      --enable-clocale=gnu
+      --enable-add-ons
+      --without-selinux
       --disable-werror
   )
 

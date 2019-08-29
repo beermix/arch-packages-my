@@ -8,7 +8,7 @@ pkgname=(gcc gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 _islver=0.21
-pkgrel=20
+pkgrel=21
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -86,9 +86,9 @@ prepare() {
   patch -p1 -i "$srcdir/openmp-vectorize-v2.patch"
   patch -p1 -i "$srcdir/optimize.patch"
   patch -p1 -i "$srcdir/optimize-at-least-some.patch"
-  #patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
   patch -p1 -i "$srcdir/gcc-4.8.2-disable_multilib_i386_linux64.patch"
   patch -p1 -i "$srcdir/gcc-allow-newer-autoconf.patch"
+   patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
@@ -150,10 +150,10 @@ build() {
       --disable-multilib \
       --disable-werror \
       --enable-checking=release \
+      --enable-default-pie \
       --with-tune=haswell \
       --with-arch=haswell \
-      --disable-libmpx \
-      --enable-cet=no
+      --disable-libmpx
 
   noti make
 }
