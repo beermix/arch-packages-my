@@ -5,7 +5,7 @@
 
 pkgname=ncurses
 pkgver=6.0
-pkgrel=5
+pkgrel=10
 pkgdesc='System V Release 4.0 curses emulation library'
 arch=('i686' 'x86_64')
 url='http://invisible-island.net/ncurses/ncurses.html'
@@ -13,10 +13,28 @@ license=('MIT')
 depends=('glibc' 'gcc-libs')
 provides=('libncurses++w.so' 'libformw.so' 'libmenuw.so' 'libpanelw.so'
           'libncursesw.so')
-source=(http://invisible-mirror.net/archives/ncurses/ncurses-${pkgver/_/-}.tar.gz{,.asc})
+source=(http://invisible-mirror.net/archives/ncurses/ncurses-${pkgver/_/-}.tar.gz{,.asc}
+         ncurses-100-ncurses-5.6-20080112-urxvt.patch
+         ncurses-101-ncurses-5.6-20080628-kbs.patch
+         ncurses-102-ncurses-5.9-gcc-5.patch
+         ncurses-200-fix_missing_include.patch
+         ncurses-900-terminfo.patch)
+
 md5sums=('ee13d052e1ead260d7c28071f46eefb1'
          'SKIP')
 validpgpkeys=('C52048C0C0748FEE227D47A2702353E0F7E48EDB')  # Thomas Dickey
+
+prepare() {
+  mkdir -p ncurses-build
+
+  cd ncurses-$pkgver
+
+  patch -p1 -i "$srcdir/ncurses-100-ncurses-5.6-20080112-urxvt.patch"
+  patch -p1 -i "$srcdir/ncurses-101-ncurses-5.6-20080628-kbs.patch"
+  patch -p1 -i "$srcdir/ncurses-102-ncurses-5.9-gcc-5.patch"
+  patch -p1 -i "$srcdir/ncurses-200-fix_missing_include.patch"
+  patch -p1 -i "$srcdir/ncurses-900-terminfo.patch"
+}
 
 build() {
   cd $pkgname-${pkgver/_/-}
