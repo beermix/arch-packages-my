@@ -6,15 +6,15 @@
 
 pkgbase=glibc
 pkgname=(glibc)
-pkgver=2.30
-pkgrel=52
+pkgver=2.29
+pkgrel=55
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git gd python automake autoconf flex bison)
 options=(!strip staticlibs)
-_commit=1bced8cadc82077f0201801239e89eb24b68e9aa
-source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
+_commit=afbf970
+source=(git+https://github.com/bminor/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
         lib32-glibc.conf
@@ -31,7 +31,8 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         pause.patch
         spin-smarter.patch
         spinaphore.patch
-        use_madv_free.patch)
+        use_madv_free.patch
+        file-truncated-while-reading-soname-after-patchelf.patch)
 
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
@@ -72,10 +73,11 @@ build() {
       --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
       --enable-bind-now
-      --enable-cet=no
+      --enable-cet
       --enable-lock-elision
       --enable-multi-arch
       --enable-kernel=5.0
+      --enable-static-pie
       --disable-profile
       --disable-werror
   )
