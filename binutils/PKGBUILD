@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.32
-pkgrel=34
+pkgrel=35
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='https://www.gnu.org/software/binutils/'
@@ -55,15 +55,6 @@ prepare() {
 
 build() {
   cd binutils-build
-
-  export AR=gcc-ar
-  export RANLIB=gcc-ranlib
-  export NM=gcc-nm
-  export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
-  export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
-  export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
-  export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
-
   "$srcdir/binutils-$pkgver/configure" \
     --prefix=/usr \
     --with-lib-path=/usr/lib:/usr/local/lib \
