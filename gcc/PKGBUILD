@@ -9,7 +9,7 @@ pkgver=9.2.1
 _majorver=${pkgver:0:1}
 _islver=0.21
 _sourcedir=gcc-${_majorver}-${_snapshot}
-pkgrel=21
+pkgrel=22
 _snapshot=20190928
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
@@ -75,7 +75,7 @@ prepare() {
 
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90397
   patch -p1 -i "$srcdir/010-documentation.patch"
-  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
+#  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
 #  patch -p1 -i "$srcdir/0001-Ignore-Werror-if-GCC_IGNORE_WERROR-environment-varia.patch"
   #patch -p1 -i "$srcdir/arch-native-override.patch"
   #patch -p1 -i "$srcdir/fortran-vector-v2.patch"
@@ -137,11 +137,10 @@ build() {
       --disable-multilib \
       --disable-werror \
       --enable-checking=release \
-      --enable-default-pie \
       --with-tune=haswell \
       --with-arch=haswell \
       --disable-libmpx \
-      --enable-cet=auto
+      --enable-cet=no
 
   noti make
 }
