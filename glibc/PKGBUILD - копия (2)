@@ -18,6 +18,20 @@ source=(git+https://github.com/bminor/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
         lib32-glibc.conf
+        alternate_trim.patch
+        c-utf8-locale.patch
+        gcc-8-fix.patch
+        glibc-fix-dns-with-broken-routers.patch
+        large-page-huge-page.patch
+        ldconfig-Os.patch
+        madvise-bss.patch
+        malloc_tune.patch
+        mathlto.patch
+        nostackshrink.patch
+        pause.patch
+        spin-smarter.patch
+        spinaphore.patch
+        use_madv_free.patch
         file-truncated-while-reading-soname-after-patchelf.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
@@ -51,10 +65,10 @@ build() {
       --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
       --enable-bind-now
-      --disable-cet
-      --disable-lock-elision
+      --enable-cet
+      --enable-lock-elision
       --enable-multi-arch
-      --enable-kernel=5.1
+      --enable-kernel=5.2
       --disable-profile
       --disable-werror
   )
