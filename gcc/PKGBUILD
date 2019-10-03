@@ -41,13 +41,11 @@ validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.
               86CFFCA918CF3AF47147588051E8B148A9999C34  # evangelos@foutrelis.com
               13975A70E63C361C73AE69EF6EEB81F8981C74C7  # richard.guenther@gmail.com
               33C235A34C46AA3FFB293709A328C3A2C3C45C06) # Jakub Jelinek <jakub@redhat.com>
-sha256sums=('79a66834e96a6050d8fe78db2c3b32fb285b230b855d0a66288235bc04b327a0'
+sha256sums=('ea6ef08f121239da5695f76c9b33637a118dcf63e24164422231917fa61fb206'
             'SKIP'
             '777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960'
             'de48736f6e4153f03d0a5d38ceb6c6fdb7f054e8f47ddd6af0a3dbf14f27b931'
-            '2513c6d9984dd0a2058557bf00f06d8d5181734e41dcfe07be7ed86f2959622a'
-            'cc20d05bcc6cb35bf0944b391f0b0380af375f2a8a03ce1cd67835884bc41fac'
-            'c860819e730faf1621e1286ebe3a0179df6e25182b81a9ca0a3db02633982a14')
+            '2513c6d9984dd0a2058557bf00f06d8d5181734e41dcfe07be7ed86f2959622a')
 
 _svnrev=264010
 _svnurl=svn://gcc.gnu.org/svn/gcc/branches/gcc-${_majorver}-branch
@@ -78,17 +76,17 @@ prepare() {
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90397
   patch -p1 -i "$srcdir/010-documentation.patch"
   patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
-  patch -p1 -i "$srcdir/0001-Ignore-Werror-if-GCC_IGNORE_WERROR-environment-varia.patch"
+#  patch -p1 -i "$srcdir/0001-Ignore-Werror-if-GCC_IGNORE_WERROR-environment-varia.patch"
   #patch -p1 -i "$srcdir/arch-native-override.patch"
   #patch -p1 -i "$srcdir/fortran-vector-v2.patch"
-  patch -p1 -i "$srcdir/gomp-relax.patch"
+#  patch -p1 -i "$srcdir/gomp-relax.patch"
   patch -p1 -i "$srcdir/ipa-cp.patch"
   patch -p1 -i "$srcdir/openmp-vectorize-v2.patch"
   patch -p1 -i "$srcdir/optimize.patch"
   patch -p1 -i "$srcdir/optimize-at-least-some.patch"
   patch -p1 -i "$srcdir/gcc-4.8.2-disable_multilib_i386_linux64.patch"
   patch -p1 -i "$srcdir/gcc-allow-newer-autoconf.patch"
-   patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
+  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
@@ -113,14 +111,6 @@ build() {
   CFLAGS=${CFLAGS/-pipe/}
   CXXFLAGS=${CXXFLAGS/-pipe/}
 
-  unset CFLAGS
-  unset CXXFLAGS
-  export CFLAGS="$CFLAGS-march=haswell -g1 -O3 -fstack-protector -Wl,-z -Wl,now -Wl,-z -Wl,relro  -Wl,-z,max-page-size=0x1000 -mtune=haswell"
-  export CXXFLAGS="$CXXFLAGS-march=haswell -g1 -O3  -Wl,-z,max-page-size=0x1000 -mtune=haswell"
-  export CFLAGS_FOR_TARGET="$CFLAGS"
-  export CXXFLAGS_FOR_TARGET="$CXXFLAGS"
-  export FFLAGS_FOR_TARGET="$FFLAGS"
-
   "$srcdir/gcc/configure" --prefix=/usr \
       --libdir=/usr/lib \
       --libexecdir=/usr/lib \
@@ -130,17 +120,14 @@ build() {
       --enable-languages=c,c++,lto \
       --enable-shared \
       --enable-threads=posix \
-      --with-isl \
-      --with-gnu-ld \
       --with-system-zlib \
-      --enable-bootstrap \
+      --with-isl \
       --enable-__cxa_atexit \
       --disable-libunwind-exceptions \
       --enable-clocale=gnu \
       --disable-libstdcxx-pch \
       --disable-libssp \
       --enable-gnu-unique-object \
-      --disable-vtable-verify \
       --enable-linker-build-id \
       --enable-lto \
       --enable-plugin \
@@ -153,7 +140,8 @@ build() {
       --enable-default-pie \
       --with-tune=haswell \
       --with-arch=haswell \
-      --disable-libmpx
+      --disable-libmpx \
+      --enable-cet=auto
 
   noti make
 }
