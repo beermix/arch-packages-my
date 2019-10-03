@@ -5,10 +5,13 @@
 # NOTE: libtool requires rebuilt with each new gcc version
 
 pkgname=(gcc gcc-libs)
-pkgver=9.2.0
+_realname=gcc
+pkgver=9.2.1
 _majorver=${pkgver:0:1}
 _islver=0.21
+_sourcedir=${_realname}-${_majorver}-${_snapshot}
 pkgrel=21
+_snapshot=20190928
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -17,8 +20,7 @@ makedepends=(binutils libmpc python subversion automake autoconf flex bison m4)
 checkdepends=(dejagnu inetutils)
 options=(!emptydirs)
 #source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
-source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
-#source=(gcc::svn://gcc.gnu.org/svn/gcc/branches/gcc-${_majorver}-branch
+source=(ftp://gcc.gnu.org/pub/gcc/snapshots/LATEST-9/gcc-${_majorver}-${_snapshot}.tar.xz
         http://isl.gforge.inria.fr/isl-${_islver}.tar.xz
         c89 c99
         010-documentation.patch
@@ -70,8 +72,7 @@ snapshot() {
 }
 
 prepare() {
-  [[ ! -d gcc ]] && ln -s gcc-${pkgver/+/-} gcc
-  cd gcc
+ cd ${srcdir}/${_sourcedir}
 
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90397
   patch -p1 -i "$srcdir/010-documentation.patch"
