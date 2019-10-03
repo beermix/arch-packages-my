@@ -9,7 +9,7 @@ arch=('x86_64')
 url="https://www.gnu.org/software/make"
 license=('GPL3')
 groups=('base-devel')
-depends=('glibc' 'guile')
+depends=('glibc' 'guile' 'autoconf' 'automake' 'bison' 'flex' 'm4')
 source=(https://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.bz2{,.sig}
         guile-2.2.patch
         make-4.2.1-glob1.patch
@@ -41,7 +41,7 @@ prepare() {
 
   patch -p1 -i ${srcdir}/make-3.82-011-noclock_gettime.patch
 #  patch -p1 -i ${srcdir}/make-3.82-016-weird-shell.patch
-#  patch -p1 -i ${srcdir}/make-4.2-j8k.patch
+  patch -p1 -i ${srcdir}/make-4.2-j8k.patch
   patch -p1 -i ${srcdir}/make-4.0-newlines.patch
 
   autoreconf -fi
