@@ -5,11 +5,10 @@
 # NOTE: libtool requires rebuilt with each new gcc version
 
 pkgname=(gcc gcc-libs)
-_realname=gcc
 pkgver=9.2.1
 _majorver=${pkgver:0:1}
 _islver=0.21
-_sourcedir=${_realname}-${_majorver}-${_snapshot}
+_sourcedir=gcc-${_majorver}-${_snapshot}
 pkgrel=21
 _snapshot=20190928
 pkgdesc='The GNU Compiler Collection'
