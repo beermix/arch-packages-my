@@ -9,7 +9,7 @@ pkgver=9.2.1
 _majorver=${pkgver:0:1}
 _islver=0.21
 _sourcedir=gcc-${_majorver}-${_snapshot}
-pkgrel=23
+pkgrel=24
 _snapshot=20190928
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
@@ -75,7 +75,7 @@ prepare() {
 
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90397
   patch -p1 -i "$srcdir/010-documentation.patch"
-#  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
+  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
 #  patch -p1 -i "$srcdir/0001-Ignore-Werror-if-GCC_IGNORE_WERROR-environment-varia.patch"
   #patch -p1 -i "$srcdir/arch-native-override.patch"
   #patch -p1 -i "$srcdir/fortran-vector-v2.patch"
@@ -85,11 +85,11 @@ prepare() {
   patch -p1 -i "$srcdir/optimize.patch"
   patch -p1 -i "$srcdir/optimize-at-least-some.patch"
   patch -p1 -i "$srcdir/gcc-4.8.2-disable_multilib_i386_linux64.patch"
-  patch -p1 -i "$srcdir/gcc-allow-newer-autoconf.patch"
-  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
+  #patch -p1 -i "$srcdir/gcc-allow-newer-autoconf.patch"
+  #patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
 
   # link isl for in-tree build
-  ln -s ../isl-${_islver} isl
+  #ln -s ../isl-${_islver} isl
 
   # Do not run fixincludes
   sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
@@ -121,7 +121,7 @@ build() {
       --enable-shared \
       --enable-threads=posix \
       --with-system-zlib \
-      --with-isl \
+      --without-isl \
       --enable-__cxa_atexit \
       --disable-libunwind-exceptions \
       --enable-clocale=gnu \
@@ -134,6 +134,7 @@ build() {
       --enable-install-libiberty \
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
+      --disable-vtable-verify \
       --disable-multilib \
       --disable-werror \
       --enable-checking=release \
