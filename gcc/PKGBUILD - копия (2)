@@ -38,6 +38,7 @@ source=(ftp://gcc.gnu.org/pub/gcc/snapshots/LATEST-9/gcc-${_majorver}-${_snapsho
         gcc-4.8.2-disable_multilib_i386_linux64.patch
         gcc-allow-newer-autoconf.patch
         zero-regs-gcc8.patch)
+
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
               86CFFCA918CF3AF47147588051E8B148A9999C34  # evangelos@foutrelis.com
               13975A70E63C361C73AE69EF6EEB81F8981C74C7  # richard.guenther@gmail.com
@@ -71,8 +72,7 @@ snapshot() {
 }
 
 prepare() {
-  [[ ! -d gcc ]] && ln -s gcc-${_majorver}-${_snapshot} gcc
-  cd gcc
+ cd ${srcdir}/${_sourcedir}
 
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90397
   patch -p1 -i "$srcdir/010-documentation.patch"
