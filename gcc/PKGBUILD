@@ -9,7 +9,7 @@ pkgver=9.2.1
 _majorver=${pkgver:0:1}
 _islver=0.21
 _sourcedir=gcc-${_majorver}-${_snapshot}
-pkgrel=26
+pkgrel=28
 _snapshot=20190928
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
@@ -125,6 +125,7 @@ build() {
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
       --disable-vtable-verify \
+      --with-headers=/usr/include \
       --disable-multilib \
       --disable-werror \
       --enable-checking=release \
