@@ -9,7 +9,7 @@ pkgver=9.2.1
 _majorver=${pkgver:0:1}
 _islver=0.21
 _sourcedir=gcc-${_majorver}-${_snapshot}
-pkgrel=24
+pkgrel=25
 _snapshot=20190928
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
@@ -27,15 +27,17 @@ source=(ftp://gcc.gnu.org/pub/gcc/snapshots/LATEST-9/gcc-${_majorver}-${_snapsho
         0001-Fix-stack-protection-issues.patch
         0001-Ignore-Werror-if-GCC_IGNORE_WERROR-environment-varia.patch
         010-documentation.patch
-        arch-native-override.patch
-        fortran-vector-v2.patch
-        gomp-relax.patch
-        ipa-cp.patch
         openmp-vectorize-v2.patch
+        fortran-vector-v2.patch
         optimize.patch
+        ipa-cp.patch
         optimize-at-least-some.patch
-        gcc-4.8.2-disable_multilib_i386_linux64.patch
-        gcc-allow-newer-autoconf.patch
+        gomp-relax.patch
+        avx512-when-we-ask-for-it.patch
+        arch-native-override.patch
+        0001-Ignore-Werror-if-GCC_IGNORE_WERROR-environment-varia.patch
+        0001-Always-use-z-now-when-linking-with-pie.patch
+        icelake.patch
         zero-regs-gcc8.patch)
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
               86CFFCA918CF3AF47147588051E8B148A9999C34  # evangelos@foutrelis.com
@@ -75,18 +77,20 @@ prepare() {
 
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90397
   patch -p1 -i "$srcdir/010-documentation.patch"
-  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
-#  patch -p1 -i "$srcdir/0001-Ignore-Werror-if-GCC_IGNORE_WERROR-environment-varia.patch"
-  #patch -p1 -i "$srcdir/arch-native-override.patch"
-  #patch -p1 -i "$srcdir/fortran-vector-v2.patch"
-#  patch -p1 -i "$srcdir/gomp-relax.patch"
-  #patch -p1 -i "$srcdir/ipa-cp.patch"
-  #patch -p1 -i "$srcdir/openmp-vectorize-v2.patch"
+  patch -p1 -i "$srcdir/openmp-vectorize-v2.patch"
+  patch -p1 -i "$srcdir/fortran-vector-v2.patch"
   patch -p1 -i "$srcdir/optimize.patch"
+  patch -p1 -i "$srcdir/ipa-cp.patch"
   patch -p1 -i "$srcdir/optimize-at-least-some.patch"
+  patch -p1 -i "$srcdir/gomp-relax.patch"
+  patch -p1 -i "$srcdir/avx512-when-we-ask-for-it.patch"
+  patch -p1 -i "$srcdir/arch-native-override.patch"
+  patch -p1 -i "$srcdir/0001-Ignore-Werror-if-GCC_IGNORE_WERROR-environment-varia.patch"
+  patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
+  patch -p1 -i "$srcdir/icelake.patch"
+  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
   patch -p1 -i "$srcdir/gcc-4.8.2-disable_multilib_i386_linux64.patch"
-  #patch -p1 -i "$srcdir/gcc-allow-newer-autoconf.patch"
-  #patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
+
 
   # link isl for in-tree build
   #ln -s ../isl-${_islver} isl
@@ -98,7 +102,7 @@ prepare() {
   sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
 
   # hack! - some configure tests for header files using "$CPP $CPPFLAGS"
-  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
+  #sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
 
   mkdir -p "$srcdir/gcc-build"
 }
@@ -141,7 +145,8 @@ build() {
       --with-tune=haswell \
       --with-arch=haswell \
       --disable-libmpx \
-      --enable-cet=no
+      --with-diagnostics-color=always \
+      --disable-cet
 
   noti make
 }
