@@ -78,7 +78,7 @@ prepare() {
   [[ ! -d gcc ]] && ln -s gcc-${_majorver}-${_snapshot} gcc
   cd gcc
 
-#  patch -p1 -i "$srcdir/010-documentation.patch"
+  patch -p1 -i "$srcdir/010-documentation.patch"
 #  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
   patch -p1 -i "$srcdir/0018-isl-0.20.patch"
   patch -p1 -i "$srcdir/gcc-allow-newer-autoconf.patch"
@@ -137,12 +137,11 @@ build() {
       --enable-multilib \
       --disable-werror \
       --enable-checking=release \
-      --disable-libmpx \
       --with-tune=haswell \
       --with-arch=haswell \
       --with-diagnostics-color=always \
       --with-headers=/usr/include \
-      --enable-cet=auto
+      --disable-libmpx \
 
   noti nice -n 19 make V=1 all
 }
