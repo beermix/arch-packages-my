@@ -88,7 +88,7 @@ prepare() {
   sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
 
   # hack! - some configure tests for header files using "$CPP $CPPFLAGS"
-  # sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
+  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
 
   mkdir -p "$srcdir/gcc-build"
 }
@@ -125,7 +125,7 @@ build() {
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
       --disable-vtable-verify \
-      --enable-multilib \
+      --disable-multilib \
       --disable-werror \
       --enable-checking=release \
       --with-tune=haswell \

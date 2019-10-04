@@ -50,7 +50,7 @@ prepare() {
   patch -p1 -i "$srcdir/004-Dont-link-to-libfl-as-its-unnecessary.patch"
 
   # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
-  # sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
+  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
 }
 
 build() {
