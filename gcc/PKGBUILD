@@ -79,7 +79,7 @@ prepare() {
   patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
 
   # link isl for in-tree build
-  #ln -s ../isl-${_islver} isl
+  ln -s ../isl-${_islver} isl
 
   # Do not run fixincludes
   sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
@@ -111,7 +111,7 @@ build() {
       --enable-shared \
       --enable-threads=posix \
       --with-system-zlib \
-      --without-isl \
+      --with-isl \
       --enable-__cxa_atexit \
       --disable-libunwind-exceptions \
       --enable-clocale=gnu \
@@ -124,7 +124,6 @@ build() {
       --enable-install-libiberty \
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
-      --disable-vtable-verify \
       --with-headers=/usr/include \
       --disable-multilib \
       --disable-werror \
@@ -132,7 +131,7 @@ build() {
       --with-tune=haswell \
       --with-arch=haswell \
       --with-diagnostics-color=always \
-      --disable-cet
+      --enable-cet=no
 
   noti make
 }
