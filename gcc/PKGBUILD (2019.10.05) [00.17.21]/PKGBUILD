@@ -20,8 +20,8 @@ checkdepends=(dejagnu inetutils)
 options=(!emptydirs)
 #source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
 source=(ftp://gcc.gnu.org/pub/gcc/snapshots/LATEST-9/gcc-${_majorver}-${_snapshot}.tar.xz
-#source=(gcc::svn://gcc.gnu.org/svn/gcc/branches/gcc-${_majorver}-branch
         http://isl.gforge.inria.fr/isl-${_islver}.tar.xz
+        c89 c99
         010-documentation.patch
         0001-Always-use-z-now-when-linking-with-pie.patch
         0001-Fix-stack-protection-issues.patch
@@ -41,8 +41,7 @@ source=(ftp://gcc.gnu.org/pub/gcc/snapshots/LATEST-9/gcc-${_majorver}-${_snapsho
         gcc-allow-newer-autoconf.patch
         gcc-4.8.2-disable_multilib_i386_linux64.patch
         0018-isl-0.20.patch
-        zero-regs-gcc8.patch
-        c89 c99)
+        zero-regs-gcc8.patch)
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
               86CFFCA918CF3AF47147588051E8B148A9999C34  # evangelos@foutrelis.com
               13975A70E63C361C73AE69EF6EEB81F8981C74C7  # richard.guenther@gmail.com
@@ -79,11 +78,12 @@ prepare() {
   [[ ! -d gcc ]] && ln -s gcc-${_majorver}-${_snapshot} gcc
   cd gcc
 
-  patch -p1 -i "$srcdir/010-documentation.patch"
+#  patch -p1 -i "$srcdir/010-documentation.patch"
 #  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
   patch -p1 -i "$srcdir/0018-isl-0.20.patch"
   patch -p1 -i "$srcdir/gcc-allow-newer-autoconf.patch"
   patch -p1 -i "$srcdir/gcc-4.8.2-disable_multilib_i386_linux64.patch"
+
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
@@ -134,13 +134,14 @@ build() {
       --enable-install-libiberty \
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
-      --disable-multilib \
+      --enable-multilib \
       --disable-werror \
       --enable-checking=release \
+      --disable-libmpx \
       --with-tune=haswell \
       --with-arch=haswell \
       --with-diagnostics-color=always \
-      --disable-libmpx \
+      --with-headers=/usr/include
 
   noti nice -n 19 make V=1 all
 }
@@ -215,7 +216,6 @@ package_gcc() {
   mv "$pkgdir"/usr/lib/libstdc++.so.6.*-gdb.py \
     "$pkgdir/usr/share/gdb/auto-load/usr/lib/"
   rm "$pkgdir"/usr/lib/libstdc++.so*
-  rm "$pkgdir"/usr/lib/libstdc++.a
 
   make DESTDIR="$pkgdir" install-fixincludes
   make -C gcc DESTDIR="$pkgdir" install-mkheaders
