@@ -9,7 +9,7 @@ pkgver=9.2.1
 _majorver=${pkgver:0:1}
 _islver=0.21
 _sourcedir=gcc-${_majorver}-${_snapshot}
-pkgrel=25
+pkgrel=26
 _snapshot=20190928
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
@@ -75,21 +75,8 @@ prepare() {
   [[ ! -d gcc ]] && ln -s gcc-${_majorver}-${_snapshot} gcc
   cd gcc
 
-  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90397
   patch -p1 -i "$srcdir/010-documentation.patch"
-  patch -p1 -i "$srcdir/openmp-vectorize-v2.patch"
-  patch -p1 -i "$srcdir/fortran-vector-v2.patch"
-  patch -p1 -i "$srcdir/optimize.patch"
-  patch -p1 -i "$srcdir/ipa-cp.patch"
-  patch -p1 -i "$srcdir/optimize-at-least-some.patch"
-  patch -p1 -i "$srcdir/gomp-relax.patch"
-  patch -p1 -i "$srcdir/avx512-when-we-ask-for-it.patch"
-  patch -p1 -i "$srcdir/arch-native-override.patch"
-  patch -p1 -i "$srcdir/0001-Ignore-Werror-if-GCC_IGNORE_WERROR-environment-varia.patch"
-  patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
-  patch -p1 -i "$srcdir/icelake.patch"
   patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
-#  patch -p1 -i "$srcdir/gcc-4.8.2-disable_multilib_i386_linux64.patch"
 
   # link isl for in-tree build
   #ln -s ../isl-${_islver} isl
@@ -101,7 +88,7 @@ prepare() {
   sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
 
   # hack! - some configure tests for header files using "$CPP $CPPFLAGS"
-  #sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
+  # sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
 
   mkdir -p "$srcdir/gcc-build"
 }
@@ -138,12 +125,11 @@ build() {
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
       --disable-vtable-verify \
-      --disable-multilib \
+      --enable-multilib \
       --disable-werror \
       --enable-checking=release \
       --with-tune=haswell \
       --with-arch=haswell \
-      --disable-libmpx \
       --with-diagnostics-color=always \
       --disable-cet
 
