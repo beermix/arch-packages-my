@@ -7,7 +7,7 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.29
-pkgrel=58
+pkgrel=59
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
