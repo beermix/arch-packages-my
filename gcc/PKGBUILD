@@ -84,7 +84,6 @@ prepare() {
   patch -p1 -i "$srcdir/gcc-allow-newer-autoconf.patch"
   patch -p1 -i "$srcdir/gcc-4.8.2-disable_multilib_i386_linux64.patch"
 
-
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
 
@@ -134,7 +133,7 @@ build() {
       --enable-install-libiberty \
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
-      --enable-multilib \
+      --disable-multilib \
       --disable-werror \
       --enable-checking=release \
       --with-tune=haswell \
