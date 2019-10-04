@@ -20,8 +20,8 @@ checkdepends=(dejagnu inetutils)
 options=(!emptydirs)
 #source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
 source=(ftp://gcc.gnu.org/pub/gcc/snapshots/LATEST-9/gcc-${_majorver}-${_snapshot}.tar.xz
+#source=(gcc::svn://gcc.gnu.org/svn/gcc/branches/gcc-${_majorver}-branch
         http://isl.gforge.inria.fr/isl-${_islver}.tar.xz
-        c89 c99
         010-documentation.patch
         0001-Always-use-z-now-when-linking-with-pie.patch
         0001-Fix-stack-protection-issues.patch
@@ -41,7 +41,8 @@ source=(ftp://gcc.gnu.org/pub/gcc/snapshots/LATEST-9/gcc-${_majorver}-${_snapsho
         gcc-allow-newer-autoconf.patch
         gcc-4.8.2-disable_multilib_i386_linux64.patch
         0018-isl-0.20.patch
-        zero-regs-gcc8.patch)
+        zero-regs-gcc8.patch
+        c89 c99)
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
               86CFFCA918CF3AF47147588051E8B148A9999C34  # evangelos@foutrelis.com
               13975A70E63C361C73AE69EF6EEB81F8981C74C7  # richard.guenther@gmail.com

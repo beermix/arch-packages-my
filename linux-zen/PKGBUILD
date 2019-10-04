@@ -110,7 +110,11 @@ prepare() {
 
 build() {
   cd $_srcname
-  noti make bzImage modules
+
+  export CC='ccache gcc'
+  export CXX='ccache g++'
+
+  noti nice -n 19 make bzImage modules
 }
 
 _package() {
