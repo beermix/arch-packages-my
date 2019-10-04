@@ -140,7 +140,6 @@ build() {
       --with-tune=haswell \
       --with-arch=haswell \
       --with-diagnostics-color=always \
-      --with-headers=/usr/include \
       --disable-libmpx \
 
   noti nice -n 19 make V=1 all
