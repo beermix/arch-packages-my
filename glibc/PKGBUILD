@@ -7,7 +7,7 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.29
-pkgrel=59
+pkgrel=60
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -48,14 +48,20 @@ build() {
   local _configure_flags=(
       --prefix=/usr
       --with-headers=/usr/include
-      --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
       --enable-bind-now
       --disable-cet
       --disable-lock-elision
       --disable-multi-arch
+      --without-cvs
+      --without-gd
+      --enable-add-ons
+      --enable-bind-now
+      --with-elf
+      --with-tls
+      --with-__thread
+      --disable-sanity-checks
       --enable-kernel=5.3
-      --enable-stack-protector=strong
       --disable-profile
       --disable-werror
   )

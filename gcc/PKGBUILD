@@ -124,13 +124,13 @@ build() {
       --enable-install-libiberty \
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
-      --with-headers=/usr/include \
       --disable-multilib \
       --disable-werror \
       --enable-checking=release \
       --with-tune=haswell \
       --with-arch=haswell \
       --with-diagnostics-color=always \
+      --with-headers=/usr/include
       --enable-cet=no
 
   noti make
