@@ -75,6 +75,35 @@ prepare() {
   cp ../config .config
   make olddefconfig
 
+    ### Optionally disable NUMA for 64-bit kernels only
+        # (x86 kernels do not support NUMA)
+        if [ -n "$_NUMAdisable" ]; then
+            msg2 "Disabling NUMA from kernel config..."
+            sed -i -e 's/CONFIG_NUMA=y/# CONFIG_NUMA is not set/' \
+                -i -e '/CONFIG_AMD_NUMA=y/d' \
+                -i -e '/CONFIG_X86_64_ACPI_NUMA=y/d' \
+                -i -e '/CONFIG_NODES_SPAN_OTHER_NODES=y/d' \
+                -i -e '/# CONFIG_NUMA_EMU is not set/d' \
+                -i -e '/CONFIG_NODES_SHIFT=6/d' \
+                -i -e '/CONFIG_NEED_MULTIPLE_NODES=y/d' \
+                -i -e '/# CONFIG_MOVABLE_NODE is not set/d' \
+                -i -e '/CONFIG_USE_PERCPU_NUMA_NODE_ID=y/d' \
+                -i -e '/CONFIG_ACPI_NUMA=y/d' ./.config
+        fi
+
+    ### Optionally load needed modules for the make localmodconfig
+        # See https://aur.archlinux.org/packages/modprobed-db
+        if [ -n "$_localmodcfg" ]; then
+            if [ -f $HOME/.config/modprobed.db ]; then
+            msg2 "Running Steven Rostedt's make localmodconfig now"
+            make LSMOD=$HOME/.config/modprobed.db localmodconfig
+        else
+            msg2 "No modprobed.db data found"
+            exit
+            fi
+        fi
+
+
   make -s kernelrelease > ../version
   msg2 "Prepared %s version %s" "$pkgbase" "$(<../version)"
 }
