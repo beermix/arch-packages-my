@@ -55,6 +55,9 @@ prepare() {
 build() {
   cd $_srcname
 
+  export CC="ccache gcc"
+  export CXX="ccache g++"
+
   noti make bzImage modules
 }
 
