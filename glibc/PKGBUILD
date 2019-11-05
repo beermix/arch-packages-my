@@ -6,18 +6,20 @@
 
 pkgbase=glibc
 pkgname=(glibc)
-pkgver=2.29
-pkgrel=60
+pkgver=2.30
+pkgrel=5
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git gd python automake autoconf flex bison)
 options=(!strip staticlibs)
-_commit=afbf970
-source=(git+https://github.com/bminor/glibc.git#commit=$_commit
+_commit=fca2d6186af873cb8355e216c07f4b4874ec5d3a
+source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
         lib32-glibc.conf
+        sdt.h sdt-config.h
+        bz20338.patch
         file-truncated-while-reading-soname-after-patchelf.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
@@ -25,6 +27,8 @@ md5sums=('SKIP'
          '07ac979b6ab5eeb778d55f041529d623'
          '476e9113489f93b348b21e144b6a8fcf'
          '6e052f1cb693d5d3203f50f9d4e8c33b'
+         '91fec3b7e75510ae2ac42533aa2e695e'
+         '680df504c683640b02ed4a805797c0b2'
          '430673eccc78e52c249aa4b0f1786450'
          '0820504d2e83ee15f74a656771361872')
 
@@ -48,20 +52,14 @@ build() {
   local _configure_flags=(
       --prefix=/usr
       --with-headers=/usr/include
+      --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
       --enable-bind-now
-      --disable-cet
-      --disable-lock-elision
-      --disable-multi-arch
-      --without-cvs
-      --without-gd
-      --enable-add-ons
-      --enable-bind-now
-      --with-elf
-      --with-tls
-      --with-__thread
-      --disable-sanity-checks
+      --enable-cet
+      --enable-lock-elision
+      --enable-multi-arch
       --enable-kernel=5.3
+      --enable-static-pie
       --disable-profile
       --disable-werror
   )
@@ -147,4 +145,9 @@ package_glibc() {
       -not -name 'libthread_db-*.so' \
       -name '*-*.so' -type f -exec strip $STRIP_SHARED {} + 2> /dev/null || true
   fi
+
+  # Provide tracing probes to libstdc++ for exceptions, possibly for other
+  # libraries too. Useful for gdb's catch command.
+  install -Dm644 "$srcdir/sdt.h" "$pkgdir/usr/include/sys/sdt.h"
+  install -Dm644 "$srcdir/sdt-config.h" "$pkgdir/usr/include/sys/sdt-config.h"
 }
