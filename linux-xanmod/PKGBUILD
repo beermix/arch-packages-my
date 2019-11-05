@@ -50,6 +50,9 @@ prepare() {
 
   make -s kernelrelease > version
   msg2 "Prepared %s version %s" "$pkgbase" "$(<version)"
+
+  export CC="ccache gcc"
+  export CXX="ccache g++"
 }
 
 build() {
