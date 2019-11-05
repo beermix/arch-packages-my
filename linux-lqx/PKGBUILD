@@ -1,6 +1,6 @@
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 
-pkgbase=linux-zen
+pkgbase=linux-lqx
 pkgver=5.3.8.2
 pkgrel=1
 _srcver=${pkgver%.*}-lqx${pkgver##*.}
@@ -10,7 +10,7 @@ license=(GPL2)
 makedepends=(
   kmod inetutils bc libelf git flex bison)
 options=('!strip')
-_srcname=zen-kernel
+_srcname=lqx-kernel
 source=(
   "$_srcname::git+https://github.com/zen-kernel/zen-kernel?signed#tag=v$_srcver"
   config         # the main kernel config file
