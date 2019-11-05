@@ -4,7 +4,7 @@ pkgbase=linux-xanmod
 pkgver=5.3.8.6
 pkgrel=1
 _srcver=${pkgver%.*}-xanmod${pkgver##*.}
-url="https://github.com/xanmod/linux/commits/v$_srcver"
+url="https://github.com/xanmod/linux/commits/$_srcver"
 arch=(x86_64)
 license=(GPL2)
 makedepends=(
@@ -12,7 +12,7 @@ makedepends=(
 options=('!strip')
 _srcname=xanmod-kernel
 source=(
-  "$_srcname::git+https://github.com/xanmod/linux?signed#tag=v$_srcver"
+  "$_srcname::git+https://github.com/xanmod/linux?signed#tag=$_srcver"
   config         # the main kernel config file
 )
 validpgpkeys=(
