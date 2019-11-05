@@ -55,7 +55,7 @@ prepare() {
 build() {
   cd $_srcname
 
-  noti nice -n19 make bzImage modules
+  noti make bzImage modules
 }
 
 _package() {
