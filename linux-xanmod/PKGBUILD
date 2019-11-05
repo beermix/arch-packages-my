@@ -1,18 +1,18 @@
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 
-pkgbase=linux-zen
-pkgver=5.3.8.2
+pkgbase=linux-xanmod
+pkgver=5.3.8.6
 pkgrel=1
-_srcver=${pkgver%.*}-lqx${pkgver##*.}
-url="https://github.com/zen-kernel/zen-kernel/commits/v$_srcver"
+_srcver=${pkgver%.*}-xanmod${pkgver##*.}
+url="https://github.com/xanmod/linux/commits/v$_srcver"
 arch=(x86_64)
 license=(GPL2)
 makedepends=(
   kmod inetutils bc libelf git flex bison)
 options=('!strip')
-_srcname=zen-kernel
+_srcname=xanmod-kernel
 source=(
-  "$_srcname::git+https://github.com/zen-kernel/zen-kernel?signed#tag=v$_srcver"
+  "$_srcname::git+https://github.com/xanmod/linux?signed#tag=v$_srcver"
   config         # the main kernel config file
 )
 validpgpkeys=(
