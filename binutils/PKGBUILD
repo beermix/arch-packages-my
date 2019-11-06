@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.33.1
-pkgrel=47
+pkgrel=48
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='https://www.gnu.org/software/binutils/'
@@ -41,6 +41,11 @@ prepare() {
 build() {
   cd binutils-build
 
+#  export CFLAGS="$CFLAGS -O3 -fcf-protection=full -ffat-lto-objects -flto=4 -fstack-protector-strong "
+#  export FCFLAGS="$CFLAGS -O3 -fcf-protection=full -ffat-lto-objects -flto=4 -fstack-protector-strong "
+#  export FFLAGS="$CFLAGS -O3 -fcf-protection=full -ffat-lto-objects -flto=4 -fstack-protector-strong "
+#  export CXXFLAGS="$CXXFLAGS -O3 -fcf-protection=full -ffat-lto-objects -flto=4 -fstack-protector-strong "
+
   "$srcdir/binutils-$pkgver/configure" \
     --prefix=/usr \
     --with-lib-path=/usr/lib:/usr/local/lib \
@@ -58,6 +63,7 @@ build() {
     --disable-gdb \
     --disable-werror \
     --with-pic \
+    --enable-64-bit-bfd \
     --enable-secureplt \
     --with-system-zlib
 
