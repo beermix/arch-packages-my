@@ -159,9 +159,8 @@ package_gcc-libs() {
   groups=(base)
   depends=('glibc>=2.27')
   options+=(!strip)
-  provides=($pkgname-multilib libgfortran.so libgphobos.so
-            libubsan.so libasan.so libtsan.so liblsan.so)
-  replaces=($pkgname-multilib libgphobos)
+  provides=($pkgname-multilib libgfortran.so libubsan.so libasan.so libtsan.so liblsan.so)
+  replaces=($pkgname-multilib)
 
   cd gcc-build
   make -C $CHOST/libgcc DESTDIR="$pkgdir" install-shared
@@ -178,10 +177,10 @@ package_gcc-libs() {
     make -C $CHOST/$lib DESTDIR="$pkgdir" install-toolexeclibLTLIBRARIES
   done
 
-  make -C $CHOST/libobjc DESTDIR="$pkgdir" install-libs
+#  make -C $CHOST/libobjc DESTDIR="$pkgdir" install-libs
   make -C $CHOST/libstdc++-v3/po DESTDIR="$pkgdir" install
 
-  make -C $CHOST/libphobos DESTDIR="$pkgdir" install
+#  make -C $CHOST/libphobos DESTDIR="$pkgdir" install
   rm -rf "$pkgdir"/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include/d/
   rm -f "$pkgdir"/usr/lib/libgphobos.spec
 
@@ -243,10 +242,10 @@ package_gcc() {
   make -C $CHOST/libsanitizer/asan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
   make -C $CHOST/libsanitizer/tsan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
   make -C $CHOST/libsanitizer/lsan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
-  make -C $CHOST/32/libgomp DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
-  make -C $CHOST/32/libitm DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
-  make -C $CHOST/32/libsanitizer DESTDIR="$pkgdir" install-nodist_{saninclude,toolexeclib}HEADERS
-  make -C $CHOST/32/libsanitizer/asan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
+#  make -C $CHOST/32/libgomp DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
+#  make -C $CHOST/32/libitm DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
+#  make -C $CHOST/32/libsanitizer DESTDIR="$pkgdir" install-nodist_{saninclude,toolexeclib}HEADERS
+#  make -C $CHOST/32/libsanitizer/asan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
 
   make -C libiberty DESTDIR="$pkgdir" install
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
@@ -280,12 +279,13 @@ package_gcc-fortran() {
   cd gcc-build
   make -C $CHOST/libgfortran DESTDIR="$pkgdir" install-cafexeclibLTLIBRARIES \
     install-{toolexeclibDATA,nodist_fincludeHEADERS,gfor_cHEADERS}
-  make -C $CHOST/32/libgfortran DESTDIR=$pkgdir install-cafexeclibLTLIBRARIES \
-    install-{toolexeclibDATA,nodist_fincludeHEADERS,gfor_cHEADERS}
+#  make -C $CHOST/32/libgfortran DESTDIR=$pkgdir install-cafexeclibLTLIBRARIES \
+#    install-{toolexeclibDATA,nodist_fincludeHEADERS,gfor_cHEADERS}
   make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_fincludeHEADERS
-  make -C gcc DESTDIR="$pkgdir" fortran.install-{common,man,info}
+#  make -C gcc DESTDIR="$pkgdir" fortran.install-{common,man,info}
   install -Dm755 gcc/f951 "$pkgdir/${_libdir}/f951"
 
+  mkdir -p $pkgdir/usr/bin/
   ln -s gfortran "$pkgdir/usr/bin/f95"
 
   # Install Runtime Library Exception
