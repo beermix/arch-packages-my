@@ -59,6 +59,7 @@ build() {
     --disable-gdb \
     --disable-werror \
     --with-pic \
+    --enable-secureplt \
     --with-system-zlib
 
   make configure-host
