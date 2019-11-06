@@ -23,3 +23,6 @@
 */glibc/
 */gcc/
 */clearlinux/
+*/gnulib/
+*/gnulib-bootstrap/
+*/libtool/
