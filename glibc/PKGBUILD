@@ -8,7 +8,7 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.30
-pkgrel=8
+pkgrel=9
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -56,7 +56,7 @@ prepare() {
 
 build() {
 
-  export CFLAGS="-O3 -march=core-avx2 -mtune=skylake -g2 -m64  -Wl,-z,max-page-size=0x1000 -fPIC "
+  export CFLAGS="-O3 -march=core-avx2 -g2 -m64  -Wl,-z,max-page-size=0x1000 -fPIC "
   export ASFLAGS="-D__AVX__=1 -D__AVX2__=1 -msse2avx -D__FMA__=1"
   unset LDFLAGS
   export LDFLAGS="-Wl,-z,max-page-size=0x1000 "
@@ -67,7 +67,6 @@ build() {
       ac_cv_prog_MAKEINFO= \
       --prefix=/usr
       --with-headers=/usr/include
-      --disable-dependency-tracking
       --enable-add-ons
       --enable-bind-now
       --enable-cet
