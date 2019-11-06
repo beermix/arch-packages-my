@@ -14,7 +14,48 @@ _srcname=xanmod-kernel
 source=(
   "$_srcname::git+https://github.com/xanmod/linux?signed#tag=$_srcver"
   config         # the main kernel config file
-)
+  0051-staging-exfat-add-exfat-filesystem-code-to-staging.patch
+  0052-fpga-altera-cvp-Fix-function-definition-argument.patch
+  0053-fpga-altera-pr-ip-Make-alt_pr_unregister-function-vo.patch
+  0054-fpga-dfl-use-driver-core-functions-not-sysfs-ones.patch
+  0055-fpga-dfl-fme-add-DFL_FPGA_FME_PORT_RELEASE-ASSIGN-io.patch
+  0056-fpga-dfl-pci-enable-SRIOV-support.patch
+  0057-fpga-dfl-afu-add-AFU-state-related-sysfs-interfaces.patch
+  0058-fpga-dfl-add-id_table-for-dfl-private-feature-driver.patch
+  0059-fpga-dfl-make-uinit-callback-optional.patch
+  0060-fpga-dfl-fme-add-capability-sysfs-interfaces.patch
+  0061-fpga-altera-cvp-Discover-Vendor-Specific-offset.patch
+  0062-fpga-altera-cvp-Preparation-for-V2-parts.patch
+  0063-fpga-altera-cvp-Add-Stratix10-V2-Support.patch
+  0064-fpga-dfl-make-init-callback-optional.patch
+  0065-fpga-dfl-fme-convert-platform_driver-to-use-dev_grou.patch
+  0066-fpga-dfl-afu-convert-platform_driver-to-use-dev_grou.patch
+  0067-fpga-dfl-afu-add-userclock-sysfs-interfaces.patch
+  0068-fpga-dfl-afu-expose-__afu_port_enable-disable-functi.patch
+  0069-fpga-dfl-afu-add-error-reporting-support.patch
+  0070-fpga-dfl-afu-add-STP-SignalTap-support.patch
+  0071-fpga-dfl-fme-add-global-error-reporting-support.patch
+  0072-driver-core-add-dev_groups-to-all-drivers.patch
+  0102-Increase-the-ext4-default-commit-age.patch
+  0104-pci-pme-wakeups.patch
+  0105-ksm-wakeups.patch
+  0106-intel_idle-tweak-cpuidle-cstates.patch
+  0107-bootstats-add-printk-s-to-measure-boot-time-in-more-.patch
+  0108-smpboot-reuse-timer-calibration.patch
+  0111-give-rdrand-some-credit.patch
+  0112-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
+  0113-kernel-time-reduce-ntp-wakeups.patch
+  0114-init-wait-for-partition-and-retry-scan.patch
+  0115-print-fsync-count-for-bootchart.patch
+  0118-Migrate-some-systemd-defaults-to-the-kernel-defaults.patch
+  0119-xattr-allow-setting-user.-attributes-on-symlinks-by-.patch
+  0121-use-lfence-instead-of-rep-and-nop.patch
+  0122-do-accept-in-LIFO-order-for-cache-efficiency.patch
+  0123-zero-extra-registers.patch
+  0124-locking-rwsem-spin-faster.patch
+  0125-ata-libahci-ignore-staggered-spin-up.patch
+  0126-print-CPU-that-faults.patch)
+
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
   '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
