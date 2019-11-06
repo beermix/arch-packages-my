@@ -5,8 +5,8 @@
 # NOTE: requires rebuilt with each new gcc version
 
 pkgname=libtool
-pkgver=2.4.6+42+gb88cebd5
-pkgrel=10
+pkgver=2.4.6+44+gb9b44533
+pkgrel=1
 _gccver=9.2.0
 pkgdesc='A generic library support script'
 arch=(x86_64)
@@ -14,7 +14,7 @@ url='https://www.gnu.org/software/libtool'
 license=(GPL)
 groups=(base-devel)
 depends=(sh tar glibc)
-makedepends=("gcc>=$_gccver" git help2man)
+makedepends=("gcc>=$_gccver" git help2man autoconf automake bison flex m4)
 checkdepends=(gcc-fortran)
 provides=("libltdl=$pkgver" "libtool-multilib=$pkgver")
 conflicts=(libltdl libtool-multilib)
