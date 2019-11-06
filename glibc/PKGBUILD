@@ -14,14 +14,13 @@ url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git gd python automake autoconf flex bison)
 options=(!strip staticlibs)
-_commit=fca2d6186af873cb8355e216c07f4b4874ec5d3a
+_commit=f2e30cc0f89f348a154c5c09d21a1de561c7b2f8
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
         lib32-glibc.conf
         sdt.h sdt-config.h
-        bz20338.patch
-        file-truncated-while-reading-soname-after-patchelf.patch)
+        bz20338.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 md5sums=('SKIP'
