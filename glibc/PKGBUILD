@@ -8,7 +8,7 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.30
-pkgrel=7
+pkgrel=8
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -20,7 +20,8 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale-gen
         lib32-glibc.conf
         sdt.h sdt-config.h
-        bz20338.patch)
+        bz20338.patch
+        file-truncated-while-reading-soname-after-patchelf.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 md5sums=('SKIP'
