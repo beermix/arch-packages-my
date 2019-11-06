@@ -24,7 +24,6 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         file-truncated-while-reading-soname-after-patchelf.patch
         0001-misc-Support-fallback-stateless-shells-path-in-absen.patch
         vzeroupper-2.27.patch
-        0001-x86-64-Remove-sysdeps-x86_64-fpu-s_sinf.S.patch
         0001-Compile-branred.c-with-mprefer-vector-width-128.patch
         0001-Set-vector-width-and-alignment-to-fix-GCC-AVX-issue.patch
         0001-Force-ffsll-to-be-64-bytes-aligned.patch)
