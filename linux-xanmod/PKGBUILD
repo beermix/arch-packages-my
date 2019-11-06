@@ -2,7 +2,7 @@
 
 pkgbase=linux-xanmod
 pkgver=5.3.8.6
-pkgrel=10
+pkgrel=11
 _srcver=${pkgver%.*}-xanmod${pkgver##*.}
 url="https://github.com/xanmod/linux/commits/$_srcver"
 arch=(x86_64)
