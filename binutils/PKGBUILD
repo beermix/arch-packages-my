@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.33.1
-pkgrel=48
+pkgrel=50
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='https://www.gnu.org/software/binutils/'
@@ -19,7 +19,11 @@ options=(staticlibs !distcc !ccache)
 source=(https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz{,.sig}
       binutils-stable-branch.patch
       CVE-2019-17450.patch
-      CVE-2019-17451.patch)
+      CVE-2019-17451.patch
+      0003-i386-Align-branches-within-a-fixed-boundary.patch
+      0004-i386-Add-mbranches-within-32B-boundaries.patch
+      0002-gas-Add-md_generic_table_relax_frag.patch
+      0001-gas-Add-md_cons_worker.patch)
 validpgpkeys=(3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F)
 md5sums=('9406231b7d9dd93731c2d06cefe8aaf1'
          'SKIP')
@@ -33,6 +37,10 @@ prepare() {
   patch -p1 -i "$srcdir/binutils-stable-branch.patch"
   patch -p1 -i "$srcdir/CVE-2019-17450.patch"
   patch -p1 -i "$srcdir/CVE-2019-17451.patch"
+  patch -p1 -i "$srcdir/0003-i386-Align-branches-within-a-fixed-boundary.patch"
+  patch -p1 -i "$srcdir/0004-i386-Add-mbranches-within-32B-boundaries.patch"
+  patch -p1 -i "$srcdir/0002-gas-Add-md_generic_table_relax_frag.patch"
+  patch -p1 -i "$srcdir/0001-gas-Add-md_cons_worker.patch"
 
   # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
   sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
@@ -40,11 +48,6 @@ prepare() {
 
 build() {
   cd binutils-build
-
-#  export CFLAGS="$CFLAGS -O3 -fcf-protection=full -ffat-lto-objects -flto=4 -fstack-protector-strong "
-#  export FCFLAGS="$CFLAGS -O3 -fcf-protection=full -ffat-lto-objects -flto=4 -fstack-protector-strong "
-#  export FFLAGS="$CFLAGS -O3 -fcf-protection=full -ffat-lto-objects -flto=4 -fstack-protector-strong "
-#  export CXXFLAGS="$CXXFLAGS -O3 -fcf-protection=full -ffat-lto-objects -flto=4 -fstack-protector-strong "
 
   "$srcdir/binutils-$pkgver/configure" \
     --prefix=/usr \
@@ -68,7 +71,7 @@ build() {
     --with-system-zlib
 
   make configure-host
-  make tooldir=/usr
+  make MAKEINFO=true
 }
 
 check() {
@@ -81,7 +84,7 @@ check() {
 
 package() {
   cd binutils-build
-  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
+  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" MAKEINFO=true install
 
   # Remove unwanted files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
