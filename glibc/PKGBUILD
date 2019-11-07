@@ -7,25 +7,38 @@
 
 pkgbase=glibc
 pkgname=(glibc)
-pkgver=2.30.9000
+pkgver=2.30
 pkgrel=20
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git gd python automake autoconf flex bison)
 options=(!strip staticlibs)
-_commit=dae7bf38978294f7d1aeece7f31c738281a3ba04
+#source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
+_commit=a6aaabd036d735a1b412f441bf6c706832655598
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
         lib32-glibc.conf
         sdt.h sdt-config.h
         bz20338.patch
+        file-truncated-while-reading-soname-after-patchelf.patch
         0001-misc-Support-fallback-stateless-shells-path-in-absen.patch
+        alternate_trim.patch
+        madvise-bss.patch
+        spinaphore.patch
+        large-page-huge-page.patch
+        use_madv_free.patch
+        malloc_tune.patch
+        mathlto.patch
+        vzeroupper-2.27.patch
+        pause.patch
+        gcc-8-fix.patch
+        spin-smarter.patch
+        nostackshrink.patch
         0001-Compile-branred.c-with-mprefer-vector-width-128.patch
         0001-Set-vector-width-and-alignment-to-fix-GCC-AVX-issue.patch
         0001-Force-ffsll-to-be-64-bytes-aligned.patch)
-
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 md5sums=('SKIP'
@@ -63,6 +76,7 @@ build() {
       --with-headers=/usr/include
       --enable-add-ons
       --enable-bind-now
+      --enable-cet
       --enable-multi-arch
       --disable-werror
       --disable-silent-rules
@@ -77,7 +91,6 @@ build() {
       --enable-lock-elision=yes
       --enable-tunables
       --enable-stack-protector=strong
-      --enable-cet
   )
 
   cd "$srcdir/glibc-build"
