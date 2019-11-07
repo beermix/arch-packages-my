@@ -71,14 +71,12 @@ build() {
       --without-cvs
       --disable-profile
       --disable-debug
-      --without-gd 
+      --without-gd
       --enable-clocale=gnu
       --without-selinux
-      --enable-obsolete-rpc
       --enable-lock-elision=yes
       --enable-tunables
       --enable-stack-protector=strong
-      --enable-obsolete-nsl
       --enable-cet
   )
 
