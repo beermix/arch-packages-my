@@ -67,7 +67,6 @@ build() {
     --disable-werror \
     --with-pic \
     --enable-64-bit-bfd \
-    --enable-secureplt \
     --with-system-zlib
 
   make configure-host
