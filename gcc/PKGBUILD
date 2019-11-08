@@ -113,7 +113,7 @@ build() {
       --mandir=/usr/share/man \
       --infodir=/usr/share/info \
       --with-bugurl=https://bugs.archlinux.org/ \
-      --enable-languages=c,c++,lto,fortran \
+      --enable-languages=c,c++,lto \
       --enable-shared \
       --enable-threads=posix \
       --with-system-zlib \
@@ -130,7 +130,7 @@ build() {
       --enable-install-libiberty \
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
-      --disable-multilib \
+      --enable-multilib \
       --disable-werror \
       --disable-vtable-verify \
       --enable-default-pie \
@@ -140,7 +140,7 @@ build() {
       --with-diagnostics-color=always \
       gdc_include_dir=/usr/include/dlang/gdc
 
-  ionice -c 3 nice -n 19 noti make V=1 all
+  ionice -c 3 nice -n 19 noti make
 }
 
 check() {
@@ -270,26 +270,23 @@ package_gcc() {
     "$pkgdir/usr/share/licenses/$pkgname/"
 }
 
-package_gcc-fortran() {
-  pkgdesc='Fortran front-end for GCC'
-  depends=("gcc=$pkgver-$pkgrel")
-  provides=($pkgname-multilib)
-  replaces=($pkgname-multilib)
+#package_gcc-fortran() {
+#  pkgdesc='Fortran front-end for GCC'
+#  depends=("gcc=$pkgver-$pkgrel")
+#  provides=($pkgname-multilib)
+#  replaces=($pkgname-multilib)
 
-  cd gcc-build
-  make -C $CHOST/libgfortran DESTDIR="$pkgdir" install-cafexeclibLTLIBRARIES \
-    install-{toolexeclibDATA,nodist_fincludeHEADERS,gfor_cHEADERS}
-#  make -C $CHOST/32/libgfortran DESTDIR=$pkgdir install-cafexeclibLTLIBRARIES \
+#  cd gcc-build
+#  make -C $CHOST/libgfortran DESTDIR="$pkgdir" install-cafexeclibLTLIBRARIES \
 #    install-{toolexeclibDATA,nodist_fincludeHEADERS,gfor_cHEADERS}
-  make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_fincludeHEADERS
-#  make -C gcc DESTDIR="$pkgdir" fortran.install-{common,man,info}
-  install -Dm755 gcc/f951 "$pkgdir/${_libdir}/f951"
+#  make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_fincludeHEADERS
+#  install -Dm755 gcc/f951 "$pkgdir/${_libdir}/f951"
 
-  mkdir -p $pkgdir/usr/bin/
-  ln -s gfortran "$pkgdir/usr/bin/f95"
+#  mkdir -p $pkgdir/usr/bin/
+#  ln -s gfortran "$pkgdir/usr/bin/f95"
 
   # Install Runtime Library Exception
-  install -d "$pkgdir/usr/share/licenses/$pkgname/"
-  ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
-    "$pkgdir/usr/share/licenses/$pkgname/"
-}
+#  install -d "$pkgdir/usr/share/licenses/$pkgname/"
+#  ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
+#    "$pkgdir/usr/share/licenses/$pkgname/"
+#}
