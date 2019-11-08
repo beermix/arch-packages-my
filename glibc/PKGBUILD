@@ -8,14 +8,14 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.30
-pkgrel=20
+pkgrel=21
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git gd python automake autoconf flex bison)
 options=(!strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-_commit=a6aaabd036d735a1b412f441bf6c706832655598
+_commit=c347431fb5fd3f124c05e82fb7a661b396e86f82
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
@@ -76,7 +76,6 @@ build() {
       --with-headers=/usr/include
       --enable-add-ons
       --enable-bind-now
-      --enable-cet
       --enable-multi-arch
       --disable-werror
       --disable-silent-rules
