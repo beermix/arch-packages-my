@@ -8,7 +8,7 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.30
-pkgrel=22
+pkgrel=23
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -77,10 +77,7 @@ build() {
       --enable-add-ons
       --enable-bind-now
       --enable-lock-elision
-      --enable-multi-arch
       --disable-werror
-      --disable-silent-rules
-      --disable-dependency-tracking
       --enable-kernel=3.10
       --without-cvs
       --disable-profile
