@@ -26,8 +26,6 @@ source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         gdc_artificial_decl.patch
         gcc-stable-branch.patch
         010-documentation.patch
-        gcc-4.8.2-disable_multilib_i386_linux64.patch
-        0018-isl-0.20.patch
         gdc_thunk_weak_ref.patch)
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
               86CFFCA918CF3AF47147588051E8B148A9999C34  # evangelos@foutrelis.com
