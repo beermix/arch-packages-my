@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.33.1
-pkgrel=51
+pkgrel=52
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='https://www.gnu.org/software/binutils/'
@@ -17,13 +17,7 @@ conflicts=(binutils-multilib)
 replaces=(binutils-multilib)
 options=(staticlibs !distcc !ccache)
 source=(https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz{,.sig}
-      binutils-stable-branch.patch
-      CVE-2019-17450.patch
-      CVE-2019-17451.patch
-      0003-i386-Align-branches-within-a-fixed-boundary.patch
-      0004-i386-Add-mbranches-within-32B-boundaries.patch
-      0002-gas-Add-md_generic_table_relax_frag.patch
-      0001-gas-Add-md_cons_worker.patch)
+      binutils-stable-branch.patch)
 validpgpkeys=(3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F)
 md5sums=('9406231b7d9dd93731c2d06cefe8aaf1'
          'SKIP')
@@ -35,12 +29,12 @@ prepare() {
   cd binutils-$pkgver
 
   patch -p1 -i "$srcdir/binutils-stable-branch.patch"
-  patch -p1 -i "$srcdir/CVE-2019-17450.patch"
-  patch -p1 -i "$srcdir/CVE-2019-17451.patch"
-  patch -p1 -i "$srcdir/0003-i386-Align-branches-within-a-fixed-boundary.patch"
-  patch -p1 -i "$srcdir/0004-i386-Add-mbranches-within-32B-boundaries.patch"
-  patch -p1 -i "$srcdir/0002-gas-Add-md_generic_table_relax_frag.patch"
-  patch -p1 -i "$srcdir/0001-gas-Add-md_cons_worker.patch"
+#  patch -p1 -i "$srcdir/CVE-2019-17450.patch"
+#  patch -p1 -i "$srcdir/CVE-2019-17451.patch"
+#  patch -p1 -i "$srcdir/0003-i386-Align-branches-within-a-fixed-boundary.patch"
+#  patch -p1 -i "$srcdir/0004-i386-Add-mbranches-within-32B-boundaries.patch"
+#  patch -p1 -i "$srcdir/0002-gas-Add-md_generic_table_relax_frag.patch"
+#  patch -p1 -i "$srcdir/0001-gas-Add-md_cons_worker.patch"
 
   # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
   sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure

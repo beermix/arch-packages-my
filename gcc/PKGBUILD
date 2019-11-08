@@ -85,7 +85,6 @@ prepare() {
   patch -p1 -i "$srcdir/fortran-vector-v2.patch"
   patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
   patch -p1 -i "$srcdir/optimize-at-least-some.patch"
-  patch -p1 -i "$srcdir/gcc-stable-branch.patch"
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
