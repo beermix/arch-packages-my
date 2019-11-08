@@ -117,9 +117,6 @@ build() {
   CFLAGS=${CFLAGS/-pipe/}
   CXXFLAGS=${CXXFLAGS/-pipe/}
 
-#  export CC='ccache gcc'
-#  export CXX='ccache g++'
-
   "$srcdir/gcc/configure" --prefix=/usr \
       --libdir=/usr/lib \
       --libexecdir=/usr/lib \
@@ -143,7 +140,7 @@ build() {
       --enable-install-libiberty \
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
-      --enable-multilib \
+      --disable-multilib \
       --disable-werror \
       --disable-vtable-verify \
       --enable-default-pie \
