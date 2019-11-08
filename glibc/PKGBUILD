@@ -8,7 +8,7 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.30
-pkgrel=23
+pkgrel=24
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -76,7 +76,7 @@ build() {
       --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
       --enable-bind-now
-      --enable-lock-elision
+      --enable-lock-elision=yes
       --disable-werror
       --enable-kernel=3.10
       --without-cvs
