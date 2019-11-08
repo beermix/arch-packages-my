@@ -1,7 +1,7 @@
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 
 pkgbase=linux-lqx
-pkgver=5.3.8.2
+pkgver=5.3.9.1
 pkgrel=1
 _srcver=${pkgver%.*}-lqx${pkgver##*.}
 url="https://github.com/zen-kernel/zen-kernel/commits/v$_srcver"
