@@ -24,9 +24,16 @@ source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         c89 c99
         gdc_phobos_path.patch
         gdc_artificial_decl.patch
-        gcc-stable-branch.patch
         010-documentation.patch
-        gdc_thunk_weak_ref.patch)
+        gdc_thunk_weak_ref.patch
+        optimize.patch
+        ipa-cp.patch
+        gomp-relax.patch
+        zero-regs-gcc8.patch
+        fortran-vector-v2.patch
+        0001-Fix-stack-protection-issues.patch
+        optimize-at-least-some.patch
+        gcc-stable-branch.patch)
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
               86CFFCA918CF3AF47147588051E8B148A9999C34  # evangelos@foutrelis.com
               13975A70E63C361C73AE69EF6EEB81F8981C74C7  # richard.guenther@gmail.com
@@ -70,6 +77,14 @@ prepare() {
   patch -p1 -i "$srcdir/gcc-stable-branch.patch"
 #  patch -p1 -i "$srcdir/gcc-4.8.2-disable_multilib_i386_linux64.patch"
   patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
+  patch -p1 -i "$srcdir/optimize.patch"
+  patch -p1 -i "$srcdir/ipa-cp.patch"
+  patch -p1 -i "$srcdir/gomp-relax.patch"
+  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
+  patch -p1 -i "$srcdir/fortran-vector-v2.patch"
+  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
+  patch -p1 -i "$srcdir/optimize-at-least-some.patch"
+  patch -p1 -i "$srcdir/gcc-stable-branch.patch"
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
