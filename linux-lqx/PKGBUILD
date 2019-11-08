@@ -3,16 +3,16 @@
 pkgbase=linux-lqx
 pkgver=5.3.9.1
 pkgrel=1
-_srcver=${pkgver%.*}-lqx${pkgver##*.}
-url="https://github.com/zen-kernel/zen-kernel/commits/v$_srcver"
+pkgdesc='Linux lqx'
+_srctag=v${pkgver%.*}-lqx${pkgver##*.}
+url="https://github.com/zen-kernel/zen-kernel/commits/$_srctag"
 arch=(x86_64)
 license=(GPL2)
-makedepends=(
-  kmod inetutils bc libelf git flex bison)
+makedepends=(kmod inetutils bc libelf git flex bison)
 options=('!strip')
 _srcname=lqx-kernel
 source=(
-  "$_srcname::git+https://github.com/zen-kernel/zen-kernel?signed#tag=v$_srcver"
+  "$_srcname::git+https://github.com/zen-kernel/zen-kernel?signed#tag=$_srctag"
   config         # the main kernel config file
 )
 validpgpkeys=(
@@ -25,7 +25,7 @@ sha256sums=('SKIP'
 
 export KBUILD_BUILD_HOST=archlinux
 export KBUILD_BUILD_USER=$pkgbase
-export KBUILD_BUILD_TIMESTAMP="@${SOURCE_DATE_EPOCH:-$(date +%s)}"
+export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
 
 prepare() {
   cd $_srcname
@@ -54,12 +54,11 @@ prepare() {
 
 build() {
   cd $_srcname
-
-  make bzImage modules
+  noti make bzImage modules
 }
 
 _package() {
-  pkgdesc="The ${pkgbase/linux/Linux} kernel and modules"
+  pkgdesc="The $pkgdesc kernel and modules"
   depends=(coreutils kmod initramfs)
   optdepends=('crda: to set the correct wireless channels of your country'
               'linux-firmware: firmware images needed for some devices')
@@ -87,7 +86,7 @@ _package() {
 }
 
 _package-headers() {
-  pkgdesc="Header files and scripts for building modules for ${pkgbase/linux/Linux} kernel"
+  pkgdesc="Headers and scripts for building modules for the $pkgdesc kernel"
 
   cd $_srcname
   local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
