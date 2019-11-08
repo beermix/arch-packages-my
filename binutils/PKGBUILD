@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.33.1
-pkgrel=52
+pkgrel=55
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='https://www.gnu.org/software/binutils/'
@@ -29,12 +29,12 @@ prepare() {
   cd binutils-$pkgver
 
   patch -p1 -i "$srcdir/binutils-stable-branch.patch"
-#  patch -p1 -i "$srcdir/CVE-2019-17450.patch"
-#  patch -p1 -i "$srcdir/CVE-2019-17451.patch"
-#  patch -p1 -i "$srcdir/0003-i386-Align-branches-within-a-fixed-boundary.patch"
-#  patch -p1 -i "$srcdir/0004-i386-Add-mbranches-within-32B-boundaries.patch"
-#  patch -p1 -i "$srcdir/0002-gas-Add-md_generic_table_relax_frag.patch"
-#  patch -p1 -i "$srcdir/0001-gas-Add-md_cons_worker.patch"
+  patch -p1 -i "$srcdir/CVE-2019-17450.patch"
+  patch -p1 -i "$srcdir/CVE-2019-17451.patch"
+  patch -p1 -i "$srcdir/0003-i386-Align-branches-within-a-fixed-boundary.patch"
+  patch -p1 -i "$srcdir/0004-i386-Add-mbranches-within-32B-boundaries.patch"
+  patch -p1 -i "$srcdir/0002-gas-Add-md_generic_table_relax_frag.patch"
+  patch -p1 -i "$srcdir/0001-gas-Add-md_cons_worker.patch"
 
   # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
   sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
@@ -55,7 +55,7 @@ build() {
     --enable-plugins \
     --enable-relro \
     --enable-shared \
-    --enable-targets=x86_64-pep \
+    --enable-targets=x86_64-linux \
     --enable-threads \
     --disable-gdb \
     --disable-werror \
