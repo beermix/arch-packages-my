@@ -13,8 +13,7 @@ makedepends=(gettext git autoconf automake bison flex)
 optdepends=('git: for autopoint infrastructure updates')
 options=(!docs)
 source=(https://ftp.gnu.org/pub/gnu/gettext/$pkgname-$pkgver.tar.gz{,.sig}
-        fix-empty-po.patch
-        gettext-dont_build_docs_and_examples.patch)
+        fix-empty-po.patch)
 sha256sums=('66415634c6e8c3fa8b71362879ec7575e27da43da562c798a8a2f223e6e47f5c'
             'SKIP'
             '8d0773334af935060762a3dfc756c997d216df04b8875df508a9598195b60dbe')
@@ -23,6 +22,9 @@ validpgpkeys=('462225C3B46F34879FC8496CD605848ED7E69871'  # Daiki Ueno
 
 prepare() {
   cd $pkgname-$pkgver
+
+  sed '/^SUBDIRS/s/ doc //;/^SUBDIRS/s/examples$$//' gettext-tools/Makefile.in
+  sed '/^SUBDIRS/s/ doc //;/^SUBDIRS/s/tests$$//' gettext-runtime/Makefile.in
 
   # Get GCR 3.33.4 to build: https://gitlab.gnome.org/GNOME/gcr/issues/25
   patch -Np1 -i ../fix-empty-po.patch
