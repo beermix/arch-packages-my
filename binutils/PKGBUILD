@@ -17,7 +17,13 @@ conflicts=(binutils-multilib)
 replaces=(binutils-multilib)
 options=(staticlibs !distcc !ccache)
 source=(https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz{,.sig}
-      binutils-stable-branch.patch)
+      binutils-stable-branch.patch
+      0001-gas-Add-md_cons_worker.patch
+      CVE-2019-17450.patch
+      CVE-2019-17451.patch
+      0002-gas-Add-md_generic_table_relax_frag.patch
+      0003-i386-Align-branches-within-a-fixed-boundary.patch
+      0004-i386-Add-mbranches-within-32B-boundaries.patch)
 validpgpkeys=(3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F)
 md5sums=('9406231b7d9dd93731c2d06cefe8aaf1'
          'SKIP')
