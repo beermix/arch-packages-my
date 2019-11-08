@@ -5,7 +5,7 @@
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: libtool requires rebuilt with each new gcc version
 
-pkgname=(gcc gcc-libs gcc-fortran)
+pkgname=(gcc gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 _islver=0.16.1
