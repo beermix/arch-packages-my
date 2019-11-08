@@ -26,6 +26,7 @@ source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         gdc_artificial_decl.patch
         010-documentation.patch
         gdc_thunk_weak_ref.patch
+        0001-Always-use-z-now-when-linking-with-pie.patch
         optimize.patch
         ipa-cp.patch
         gomp-relax.patch
