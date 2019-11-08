@@ -9,7 +9,7 @@ pkgname=(gcc gcc-libs gcc-fortran)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 _islver=0.21
-pkgrel=5
+pkgrel=6
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -105,8 +105,8 @@ build() {
   CFLAGS=${CFLAGS/-pipe/}
   CXXFLAGS=${CXXFLAGS/-pipe/}
 
-  export CC='ccache gcc'
-  export CXX='ccache g++'
+#  export CC='ccache gcc'
+#  export CXX='ccache g++'
 
   "$srcdir/gcc/configure" --prefix=/usr \
       --libdir=/usr/lib \
@@ -133,6 +133,7 @@ build() {
       --enable-gnu-indirect-function \
       --disable-multilib \
       --disable-werror \
+      --disable-vtable-verify \
       --enable-checking=release \
       --with-tune=core-avx2 \
       --with-arch=core-avx2 \
@@ -140,7 +141,7 @@ build() {
       --enable-cet=auto \
       gdc_include_dir=/usr/include/dlang/gdc
 
-  noti nice -n 19 make V=1 all
+  ionice -c 3 nice -n 19 noti make V=1 all
 }
 
 check() {
