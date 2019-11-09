@@ -5,11 +5,11 @@
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: libtool requires rebuilt with each new gcc version
 
-pkgname=(gcc gcc-libs)
+pkgname=(gcc gcc-libs gcc-fortran)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
-_islver=0.16.1
-pkgrel=7
+_islver=0.21
+pkgrel=80
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -18,14 +18,13 @@ makedepends=(binutils libmpc python subversion automake autoconf flex bison)
 checkdepends=(dejagnu inetutils)
 options=(!emptydirs)
 #source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
-source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
-#source=(gcc::svn://gcc.gnu.org/svn/gcc/branches/gcc-${_majorver}-branch
+source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz
         http://isl.gforge.inria.fr/isl-${_islver}.tar.xz
         c89 c99
         gdc_phobos_path.patch
         gdc_artificial_decl.patch
-        010-documentation.patch
         gdc_thunk_weak_ref.patch
+        010-documentation.patch
         0001-Always-use-z-now-when-linking-with-pie.patch
         optimize.patch
         ipa-cp.patch
@@ -77,13 +76,8 @@ prepare() {
   patch -p1 -i "$srcdir/010-documentation.patch"
   patch -p1 -i "$srcdir/gcc-stable-branch.patch"
   patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
-  patch -p1 -i "$srcdir/optimize.patch"
-  patch -p1 -i "$srcdir/ipa-cp.patch"
-  patch -p1 -i "$srcdir/gomp-relax.patch"
   patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
   patch -p1 -i "$srcdir/fortran-vector-v2.patch"
-  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
-  patch -p1 -i "$srcdir/optimize-at-least-some.patch"
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
@@ -122,7 +116,7 @@ build() {
       --mandir=/usr/share/man \
       --infodir=/usr/share/info \
       --with-bugurl=https://bugs.archlinux.org/ \
-      --enable-languages=c,c++,lto \
+      --enable-languages=c,c++,fortran,lto \
       --enable-shared \
       --enable-threads=posix \
       --with-system-zlib \
@@ -141,14 +135,13 @@ build() {
       --enable-gnu-indirect-function \
       --disable-multilib \
       --disable-werror \
-      --enable-default-pie \
       --enable-checking=release \
       --with-tune=core-avx2 \
       --with-arch=core-avx2 \
       --with-diagnostics-color=always \
       gdc_include_dir=/usr/include/dlang/gdc
 
-  ionice -c 3 nice -n 19 noti make
+  ionice -c1 nice -n19 noti make -j7
 }
 
 check() {
@@ -167,14 +160,15 @@ package_gcc-libs() {
   groups=(base)
   depends=('glibc>=2.27')
   options+=(!strip)
-  provides=($pkgname-multilib libubsan.so libasan.so libtsan.so liblsan.so)
-  replaces=($pkgname-multilib)
+  provides=($pkgname libgfortran.so libubsan.so libasan.so libtsan.so liblsan.so)
+  replaces=($pkgname)
 
   cd gcc-build
   make -C $CHOST/libgcc DESTDIR="$pkgdir" install-shared
   rm -f "$pkgdir/$_libdir/libgcc_eh.a"
 
   for lib in libatomic \
+             libgfortran \
              libgomp \
              libitm \
              libquadmath \
@@ -184,11 +178,25 @@ package_gcc-libs() {
     make -C $CHOST/$lib DESTDIR="$pkgdir" install-toolexeclibLTLIBRARIES
   done
 
-#  for lib in libgomp \
-#             libitm \
-#             libquadmath; do
-#    make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
-#  done
+#  make -C $CHOST/libobjc DESTDIR="$pkgdir" install-libs
+  make -C $CHOST/libstdc++-v3/po DESTDIR="$pkgdir" install
+
+#  make -C $CHOST/libphobos DESTDIR="$pkgdir" install
+  rm -rf "$pkgdir"/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include/d/
+  rm -f "$pkgdir"/usr/lib/libgphobos.spec
+
+  for lib in libgomp \
+             libitm \
+             libquadmath; do
+    make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
+  done
+
+  # remove files provided by lib32-gcc-libs
+  rm -rf "$pkgdir"/usr/lib32/
+
+  # Install Runtime Library Exception
+  install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
+    "$pkgdir/usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION"
 }
 
 package_gcc() {
@@ -196,8 +204,8 @@ package_gcc() {
   depends=("gcc-libs=$pkgver-$pkgrel" 'binutils>=2.28' libmpc)
   groups=('base-devel')
   optdepends=('lib32-gcc-libs: for generating code for 32-bit ABI')
-  provides=($pkgname-multilib)
-  replaces=($pkgname-multilib)
+  provides=($pkgname)
+  replaces=($pkgname)
   options+=(staticlibs)
 
   cd gcc-build
@@ -220,7 +228,7 @@ package_gcc() {
   install -d "$pkgdir/usr/share/gdb/auto-load/usr/lib"
   mv "$pkgdir"/usr/lib/libstdc++.so.6.*-gdb.py \
     "$pkgdir/usr/share/gdb/auto-load/usr/lib/"
-  rm "$pkgdir"/usr/lib/libstdc++.*
+  rm "$pkgdir"/usr/lib/libstdc++.so*
 
   make DESTDIR="$pkgdir" install-fixincludes
   make -C gcc DESTDIR="$pkgdir" install-mkheaders
@@ -255,20 +263,32 @@ package_gcc() {
   python -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
   python -O -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
 
+  # Install Runtime Library Exception
+  install -d "$pkgdir/usr/share/licenses/$pkgname/"
+  ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
+    "$pkgdir/usr/share/licenses/$pkgname/"
 }
 
-#package_gcc-fortran() {
-#  pkgdesc='Fortran front-end for GCC'
-#  depends=("gcc=$pkgver-$pkgrel")
-#  provides=($pkgname-multilib)
-#  replaces=($pkgname-multilib)
+package_gcc-fortran() {
+  pkgdesc='Fortran front-end for GCC'
+  depends=("gcc=$pkgver-$pkgrel")
+  provides=($pkgname)
+  replaces=($pkgname)
 
-#  cd gcc-build
-#  make -C $CHOST/libgfortran DESTDIR="$pkgdir" install-cafexeclibLTLIBRARIES \
-#    install-{toolexeclibDATA,nodist_fincludeHEADERS,gfor_cHEADERS}
-#  make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_fincludeHEADERS
-#  install -Dm755 gcc/f951 "$pkgdir/${_libdir}/f951"
+  cd gcc-build
+  make -C $CHOST/libgfortran DESTDIR="$pkgdir" install-cafexeclibLTLIBRARIES \
+    install-{toolexeclibDATA,nodist_fincludeHEADERS,gfor_cHEADERS}
+  make -C $CHOST/32/libgfortran DESTDIR=$pkgdir install-cafexeclibLTLIBRARIES \
+    install-{toolexeclibDATA,nodist_fincludeHEADERS,gfor_cHEADERS}
+  make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_fincludeHEADERS
+  make -C gcc DESTDIR="$pkgdir" fortran.install-common
+  install -Dm755 gcc/f951 "$pkgdir/${_libdir}/f951"
 
-#  mkdir -p $pkgdir/usr/bin/
-#  ln -s gfortran "$pkgdir/usr/bin/f95"
-#}
+  mkdir -p $pkgdir/usr/bin/
+  ln -s gfortran "$pkgdir/usr/bin/f95"
+
+  # Install Runtime Library Exception
+  install -d "$pkgdir/usr/share/licenses/$pkgname/"
+  ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
+    "$pkgdir/usr/share/licenses/$pkgname/"
+}

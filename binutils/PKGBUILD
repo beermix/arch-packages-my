@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.33.1
-pkgrel=56
+pkgrel=57
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='https://www.gnu.org/software/binutils/'
@@ -13,10 +13,11 @@ license=(GPL)
 groups=(base-devel)
 depends=(glibc zlib)
 checkdepends=(bc)
+makedepends=(automake autoconf flex bison)
 conflicts=(binutils-multilib)
 replaces=(binutils-multilib)
 options=(staticlibs !distcc !ccache)
-source=(https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz{,.sig}
+source=(https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz
       binutils-stable-branch.patch
       0001-gas-Add-md_cons_worker.patch
       CVE-2019-17450.patch
@@ -61,7 +62,7 @@ build() {
     --enable-plugins \
     --enable-relro \
     --enable-shared \
-    --enable-targets=x86_64-pep \
+    --enable-targets=x86_64-linux \
     --enable-threads \
     --disable-gdb \
     --disable-werror \
@@ -69,15 +70,7 @@ build() {
     --enable-64-bit-bfd
 
   make configure-host
-  make tooldir=/usr
-}
-
-check() {
-  cd binutils-build
-
-  # unset LDFLAGS as testsuite makes assumptions about which ones are active
-  # ignore failures in gold testsuite...
-  make -k LDFLAGS="" check || true
+  make tooldir=/usr MAKEINFO=true
 }
 
 package() {
