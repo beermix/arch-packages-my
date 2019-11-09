@@ -141,7 +141,7 @@ build() {
       --with-diagnostics-color=always \
       gdc_include_dir=/usr/include/dlang/gdc
 
-  ionice -c1 nice -n19 noti make -j7
+  ionice -c3 nice -n19 noti make
 }
 
 check() {
