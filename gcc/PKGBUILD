@@ -251,7 +251,7 @@ package_gcc() {
   make -C libiberty DESTDIR="$pkgdir" install
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
 
-  make -C gcc DESTDIR="$pkgdir" install-man install-info
+  make -C gcc DESTDIR="$pkgdir" install-info
   rm "$pkgdir"/usr/share/info/gfortran.info
 
   make -C libcpp DESTDIR="$pkgdir" install
@@ -263,9 +263,6 @@ package_gcc() {
   # POSIX conformance launcher scripts for c89 and c99
   install -Dm755 "$srcdir/c89" "$pkgdir/usr/bin/c89"
   install -Dm755 "$srcdir/c99" "$pkgdir/usr/bin/c99"
-
-  # install the libstdc++ man pages
-  make -C $CHOST/libstdc++-v3/doc DESTDIR="$pkgdir" doc-install-man
 
   # remove files provided by lib32-gcc-libs
   rm -f "$pkgdir"/usr/lib32/lib{stdc++,gcc_s}.so
