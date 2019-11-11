@@ -75,7 +75,7 @@ build() {
       --enable-bind-now
       --enable-lock-elision=yes
       --disable-werror
-      --enable-kernel=3.10
+      --enable-kernel=5.3
       --without-cvs
       --disable-profile
       --disable-debug
