@@ -2,8 +2,8 @@
 
 pkgbase=linux-lqx
 pkgver=5.3.10.1
-pkgrel=2
-pkgdesc='Linux lqx'
+pkgrel=3
+pkgdesc='Linux lqxxx'
 _srctag=v${pkgver%.*}-lqx${pkgver##*.}
 url="https://github.com/zen-kernel/zen-kernel/commits/$_srctag"
 arch=(x86_64)
@@ -36,21 +36,16 @@ source=(
   0070-fpga-dfl-afu-add-STP-SignalTap-support.patch
   0071-fpga-dfl-fme-add-global-error-reporting-support.patch
   0102-Increase-the-ext4-default-commit-age.patch
-  0103-silence-rapl.patch
   0104-pci-pme-wakeups.patch
-  0105-ksm-wakeups.patch
   0106-intel_idle-tweak-cpuidle-cstates.patch
   0108-smpboot-reuse-timer-calibration.patch
   0112-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
-  0113-kernel-time-reduce-ntp-wakeups.patch
   0114-init-wait-for-partition-and-retry-scan.patch
-  0118-Migrate-some-systemd-defaults-to-the-kernel-defaults.patch
   0119-xattr-allow-setting-user.-attributes-on-symlinks-by-.patch
   0121-use-lfence-instead-of-rep-and-nop.patch
   0122-do-accept-in-LIFO-order-for-cache-efficiency.patch
   0123-zero-extra-registers.patch
   0124-locking-rwsem-spin-faster.patch
-  0126-print-CPU-that-faults.patch
   0129-fix-ucode-revcheck.patch
   0130-add-workaround-for-binutils-optimization.patch
   0127-x86-microcode-Force-update-a-uCode-even-if-the-rev-i.patch
@@ -95,7 +90,7 @@ prepare() {
 
 build() {
   cd $_srcname
-  noti make bzImage modules
+  ionice -c 3 nice -n 19 noti make bzImage modules
 }
 
 _package() {
