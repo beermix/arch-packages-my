@@ -122,7 +122,7 @@ build() {
       --with-system-zlib \
       --with-isl \
       --enable-__cxa_atexit \
-      15:22 11.11.2019 \
+      --disable-libunwind-exceptions \
       --enable-clocale=gnu \
       --disable-libstdcxx-pch \
       --disable-libssp \
@@ -134,7 +134,7 @@ build() {
       --disable-vtable-verify \
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
-      --disable-multilib \
+      --enable-multilib \
       --disable-werror \
       --enable-checking=release \
       --with-tune=core-avx2 \
