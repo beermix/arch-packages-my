@@ -8,8 +8,8 @@
 pkgname=(gcc gcc-libs gcc-fortran)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
-_islver=0.16.1
-pkgrel=81
+_islver=0.22
+pkgrel=82
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
