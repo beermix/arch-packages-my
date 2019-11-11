@@ -8,8 +8,8 @@
 pkgname=(gcc gcc-libs gcc-fortran)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
-_islver=0.21
-pkgrel=82
+_islver=0.16.1
+pkgrel=83
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -134,6 +134,8 @@ build() {
       --disable-vtable-verify \
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
+      --with-default-libstdcxx-abi=gcc4-compatible \
+      --enable-default-pie \
       --disable-multilib \
       --disable-werror \
       --enable-checking=release \
