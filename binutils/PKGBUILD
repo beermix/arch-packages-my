@@ -44,7 +44,7 @@ prepare() {
   patch -p1 -i "$srcdir/0001-gas-Add-md_cons_worker.patch"
 
   # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
-  # sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
+  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
 }
 
 build() {
@@ -55,19 +55,18 @@ build() {
     --with-lib-path=/usr/lib:/usr/local/lib \
     --with-bugurl=https://bugs.archlinux.org/ \
     --enable-deterministic-archives \
-    --enable-silent-rules \
     --enable-gold \
     --enable-ld=default \
     --enable-lto \
     --enable-plugins \
     --enable-relro \
     --enable-shared \
-    --enable-targets=x86_64-linux \
+    --enable-targets=x86_64-pep \
     --enable-threads \
     --disable-gdb \
     --disable-werror \
     --with-pic \
-    --enable-64-bit-bfd
+    --with-system-zlib
 
   make configure-host
   make tooldir=/usr MAKEINFO=true
