@@ -5,11 +5,11 @@
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: libtool requires rebuilt with each new gcc version
 
-pkgname=(gcc gcc-libs)
+pkgname=(gcc gcc-libs gcc-fortran)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 _islver=0.16.1
-pkgrel=90
+pkgrel=83
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -77,6 +77,7 @@ prepare() {
   patch -p1 -i "$srcdir/gcc-stable-branch.patch"
   patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
   patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
+  patch -p1 -i "$srcdir/fortran-vector-v2.patch"
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
@@ -115,7 +116,7 @@ build() {
       --mandir=/usr/share/man \
       --infodir=/usr/share/info \
       --with-bugurl=https://bugs.archlinux.org/ \
-      --enable-languages=c,c++,lto \
+      --enable-languages=c,c++,fortran,lto \
       --enable-shared \
       --enable-threads=posix \
       --with-system-zlib \
@@ -162,7 +163,7 @@ package_gcc-libs() {
   groups=(base)
   depends=('glibc>=2.27')
   options+=(!strip)
-  provides=($pkgname libubsan.so libasan.so libtsan.so liblsan.so)
+  provides=($pkgname libgfortran.so libubsan.so libasan.so libtsan.so liblsan.so)
   replaces=($pkgname)
 
   cd gcc-build
@@ -170,6 +171,7 @@ package_gcc-libs() {
   rm -f "$pkgdir/$_libdir/libgcc_eh.a"
 
   for lib in libatomic \
+             libgfortran \
              libgomp \
              libitm \
              libquadmath \
@@ -252,7 +254,7 @@ package_gcc() {
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
 
   make -C gcc DESTDIR="$pkgdir" install-info
-  #rm "$pkgdir"/usr/share/info/gfortran.info
+  rm "$pkgdir"/usr/share/info/gfortran.info
 
   make -C libcpp DESTDIR="$pkgdir" install
   make -C gcc DESTDIR="$pkgdir" install-po
@@ -277,23 +279,23 @@ package_gcc() {
     "$pkgdir/usr/share/licenses/$pkgname/"
 }
 
-#package_gcc-fortran() {
-#  pkgdesc='Fortran front-end for GCC'
-#  depends=("gcc=$pkgver-$pkgrel")
-#  provides=($pkgname)
-#  replaces=($pkgname)
+package_gcc-fortran() {
+  pkgdesc='Fortran front-end for GCC'
+  depends=("gcc=$pkgver-$pkgrel")
+  provides=($pkgname)
+  replaces=($pkgname)
 
-#  cd gcc-build
-#  make -C $CHOST/libgfortran DESTDIR="$pkgdir" install-cafexeclibLTLIBRARIES \
-#    install-{toolexeclibDATA,nodist_fincludeHEADERS,gfor_cHEADERS}
-#  make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_fincludeHEADERS
-#  make -C gcc DESTDIR="$pkgdir" fortran.install-{common,info}
-#  install -Dm755 gcc/f951 "$pkgdir/${_libdir}/f951"
+  cd gcc-build
+  make -C $CHOST/libgfortran DESTDIR="$pkgdir" install-cafexeclibLTLIBRARIES \
+    install-{toolexeclibDATA,nodist_fincludeHEADERS,gfor_cHEADERS}
+  make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_fincludeHEADERS
+  make -C gcc DESTDIR="$pkgdir" fortran.install-{common,info}
+  install -Dm755 gcc/f951 "$pkgdir/${_libdir}/f951"
 
-#  mkdir -p $pkgdir/usr/bin/
+  mkdir -p $pkgdir/usr/bin/
 
   # Install Runtime Library Exception
-#  install -d "$pkgdir/usr/share/licenses/$pkgname/"
-#  ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
-#    "$pkgdir/usr/share/licenses/$pkgname/"
-#}
+  install -d "$pkgdir/usr/share/licenses/$pkgname/"
+  ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
+    "$pkgdir/usr/share/licenses/$pkgname/"
+}
