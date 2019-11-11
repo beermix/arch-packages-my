@@ -122,7 +122,7 @@ build() {
       --with-system-zlib \
       --with-isl \
       --enable-__cxa_atexit \
-      --disable-libunwind-exceptions \
+      15:22 11.11.2019 \
       --enable-clocale=gnu \
       --disable-libstdcxx-pch \
       --disable-libssp \
@@ -250,7 +250,7 @@ package_gcc() {
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
 
   make -C gcc DESTDIR="$pkgdir" install-man install-info
-  rm "$pkgdir"/usr/share/info/{gfortran,gnat-style,gnat_rm,gnat_ugn}.info
+  rm "$pkgdir"/usr/share/info/gfortran.info
 
   make -C libcpp DESTDIR="$pkgdir" install
   make -C gcc DESTDIR="$pkgdir" install-po
@@ -280,8 +280,6 @@ package_gcc-fortran() {
 
   cd gcc-build
   make -C $CHOST/libgfortran DESTDIR="$pkgdir" install-cafexeclibLTLIBRARIES \
-    install-{toolexeclibDATA,nodist_fincludeHEADERS,gfor_cHEADERS}
-  make -C $CHOST/32/libgfortran DESTDIR=$pkgdir install-cafexeclibLTLIBRARIES \
     install-{toolexeclibDATA,nodist_fincludeHEADERS,gfor_cHEADERS}
   make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_fincludeHEADERS
   make -C gcc DESTDIR="$pkgdir" fortran.install-{common,info}
