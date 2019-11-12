@@ -1,7 +1,7 @@
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 
 pkgbase=linux-lqx
-pkgver=5.3.10.1
+pkgver=5.3.11.1
 pkgrel=3
 pkgdesc='Linux lqxxx'
 _srctag=v${pkgver%.*}-lqx${pkgver##*.}
