@@ -184,18 +184,7 @@ package_gcc-libs() {
   rm -rf "$pkgdir"/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include/d/
   rm -f "$pkgdir"/usr/lib/libgphobos.spec
 
-#  for lib in libgomp \
-#             libitm \
-#             libquadmath; do
-#    make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
-#  done
-
-  # remove files provided by lib32-gcc-libs
-  rm -rf "$pkgdir"/usr/lib32/
-
-  # Install Runtime Library Exception
-  install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
-    "$pkgdir/usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION"
+  rm -f "$pkgdir"/usr/lib/libstdc++.a
 }
 
 package_gcc() {
@@ -228,7 +217,6 @@ package_gcc() {
   mv "$pkgdir"/usr/lib/libstdc++.so.6.*-gdb.py \
     "$pkgdir/usr/share/gdb/auto-load/usr/lib/"
   rm "$pkgdir"/usr/lib/libstdc++.so*
-  rm "$pkgdir"/usr/lib/libstdc++.a
 
   make DESTDIR="$pkgdir" install-fixincludes
   make -C gcc DESTDIR="$pkgdir" install-mkheaders
