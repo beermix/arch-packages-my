@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.33.1
-pkgrel=59
+pkgrel=60
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='https://www.gnu.org/software/binutils/'
@@ -61,19 +61,19 @@ build() {
     --enable-plugins \
     --enable-relro \
     --enable-shared \
-    --enable-targets=x86_64-pep \
+    --enable-targets=x86_64-linux \
     --enable-threads \
     --disable-gdb \
     --disable-werror \
     --with-pic
 
   make configure-host
-  make tooldir=/usr MAKEINFO=true
+  make tooldir=/usr
 }
 
 package() {
   cd binutils-build
-  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" MAKEINFO=true install
+  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
 
   # Remove unwanted files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
