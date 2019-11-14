@@ -131,7 +131,6 @@ build() {
       --enable-plugin \
       --enable-install-libiberty \
       --with-linker-hash-style=gnu \
-      --with-default-libstdcxx-abi=gcc4-compatible \
       --enable-gnu-indirect-function \
       --disable-multilib \
       --disable-werror \
