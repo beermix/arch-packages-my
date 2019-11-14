@@ -9,7 +9,7 @@ pkgname=(gcc gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 #_islver=0.16.1
-pkgrel=92
+pkgrel=93
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -88,7 +88,7 @@ prepare() {
   sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
 
   # hack! - some configure tests for header files using "$CPP $CPPFLAGS"
-  # sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
+  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
 
   # D hacks
   patch -p1 -i "$srcdir/gdc_phobos_path.patch"
@@ -119,7 +119,7 @@ build() {
       --enable-shared \
       --enable-threads=posix \
       --with-system-zlib \
-      --with-isl \
+      --with-isl=no \
       --enable-__cxa_atexit \
       --disable-libunwind-exceptions \
       --enable-clocale=gnu \
@@ -131,13 +131,12 @@ build() {
       --enable-plugin \
       --enable-install-libiberty \
       --with-linker-hash-style=gnu \
+      --with-default-libstdcxx-abi=gcc4-compatible \
       --enable-gnu-indirect-function \
-      --enable-default-pie \
       --disable-multilib \
       --disable-werror \
       --enable-checking=release \
       --with-tune=core-avx2 \
-      --with-arch=core-avx2 \
       --with-diagnostics-color=always \
       gdc_include_dir=/usr/include/dlang/gdc
 
