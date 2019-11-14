@@ -56,7 +56,7 @@ build() {
     --prefix=/usr \
     --with-lib-path=/usr/lib:/usr/local/lib \
     --with-bugurl=https://bugs.archlinux.org/ \
-    --enable-deterministic-archives \
+    --disable-deterministic-archives \
     --enable-gold \
     --enable-ld=default \
     --enable-lto \
@@ -64,10 +64,9 @@ build() {
     --enable-relro \
     --enable-shared \
     --enable-targets=x86_64-linux \
-    --enable-threads \
     --disable-gdb \
     --disable-werror \
-    --with-pic
+    --enable-silent-rules
 
   make configure-host
   make tooldir=/usr
