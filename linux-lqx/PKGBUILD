@@ -2,7 +2,7 @@
 
 pkgbase=linux-lqx
 pkgver=5.3.11.1
-pkgrel=4
+pkgrel=5
 pkgdesc='Linux lqxxx'
 _srctag=v${pkgver%.*}-lqx${pkgver##*.}
 url="https://github.com/zen-kernel/zen-kernel/commits/$_srctag"
