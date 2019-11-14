@@ -9,7 +9,7 @@ pkgname=(gcc gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 #_islver=0.16.1
-pkgrel=93
+pkgrel=94
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -119,7 +119,7 @@ build() {
       --enable-shared \
       --enable-threads=posix \
       --with-system-zlib \
-      --with-isl=no \
+      --with-isl \
       --enable-__cxa_atexit \
       --disable-libunwind-exceptions \
       --enable-clocale=gnu \
@@ -155,7 +155,6 @@ check() {
 
 package_gcc-libs() {
   pkgdesc='Runtime libraries shipped by GCC'
-  groups=(base)
   depends=('glibc>=2.27')
   options+=(!strip)
   provides=($pkgname libubsan.so libasan.so libtsan.so liblsan.so)
@@ -182,11 +181,11 @@ package_gcc-libs() {
   rm -rf "$pkgdir"/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include/d/
   rm -f "$pkgdir"/usr/lib/libgphobos.spec
 
-  for lib in libgomp \
-             libitm \
-             libquadmath; do
-    make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
-  done
+#  for lib in libgomp \
+#             libitm \
+#             libquadmath; do
+#    make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
+#  done
 
   # remove files provided by lib32-gcc-libs
   rm -rf "$pkgdir"/usr/lib32/
@@ -247,7 +246,7 @@ package_gcc() {
   make -C libiberty DESTDIR="$pkgdir" install
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
 
-  make -C gcc DESTDIR="$pkgdir" install-info
+  #make -C gcc DESTDIR="$pkgdir" install-info
   #rm "$pkgdir"/usr/share/info/gfortran.info
 
   make -C libcpp DESTDIR="$pkgdir" install
