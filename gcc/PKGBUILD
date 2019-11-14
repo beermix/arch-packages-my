@@ -228,7 +228,7 @@ package_gcc() {
   mv "$pkgdir"/usr/lib/libstdc++.so.6.*-gdb.py \
     "$pkgdir/usr/share/gdb/auto-load/usr/lib/"
   rm "$pkgdir"/usr/lib/libstdc++.so*
-#  rm "$pkgdir"/usr/lib/libstdc++.a
+  rm "$pkgdir"/usr/lib/libstdc++.a
 
   make DESTDIR="$pkgdir" install-fixincludes
   make -C gcc DESTDIR="$pkgdir" install-mkheaders
