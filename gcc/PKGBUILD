@@ -109,6 +109,9 @@ build() {
   CFLAGS=${CFLAGS/-pipe/}
   CXXFLAGS=${CXXFLAGS/-pipe/}
 
+  export CC='/home/user/.bin/ccache gcc'
+  export CXX='/home/user/.bin/ccache g++'
+
   "$srcdir/gcc/configure" --prefix=/usr \
       --libdir=/usr/lib \
       --libexecdir=/usr/lib \
