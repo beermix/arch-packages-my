@@ -73,7 +73,7 @@ prepare() {
   [[ ! -d gcc ]] && ln -s gcc-${pkgver/+/-} gcc
   cd gcc
 
-  patch -p1 -i "$srcdir/010-documentation.patch"
+#  patch -p1 -i "$srcdir/010-documentation.patch"
   patch -p1 -i "$srcdir/gcc-stable-branch.patch"
   patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
   patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
@@ -225,7 +225,7 @@ package_gcc() {
   mv "$pkgdir"/usr/lib/libstdc++.so.6.*-gdb.py \
     "$pkgdir/usr/share/gdb/auto-load/usr/lib/"
   rm "$pkgdir"/usr/lib/libstdc++.so*
-  rm "$pkgdir"/usr/lib/libstdc++.a
+#  rm "$pkgdir"/usr/lib/libstdc++.a
 
   make DESTDIR="$pkgdir" install-fixincludes
   make -C gcc DESTDIR="$pkgdir" install-mkheaders
