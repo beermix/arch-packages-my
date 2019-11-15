@@ -1,10 +1,11 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgbase=zlib
-pkgname=(zlib minizip)
+pkgname=(zlib)
 epoch=2
 pkgver=1.2.11.1_jtkv6.3
 pkgrel=4
+makedepends=(automake autoconf flex bison)
 arch=('x86_64')
 license=('custom')
 url="https://www.zlib.net/"
