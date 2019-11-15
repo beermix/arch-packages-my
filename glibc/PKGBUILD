@@ -8,7 +8,7 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.30
-pkgrel=30
+pkgrel=31
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -37,6 +37,7 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         spin-smarter.patch
         nostackshrink.patch
         fix-ld-audit-performance.patch
+        glibc-Set-vector-width-and-alignment-to-fix-GCC-AVX-issue.patch.txt
         0001-Compile-branred.c-with-mprefer-vector-width-128.patch
         0001-Set-vector-width-and-alignment-to-fix-GCC-AVX-issue.patch
         0001-Force-ffsll-to-be-64-bytes-aligned.patch)
@@ -71,6 +72,7 @@ build() {
   local _configure_flags=(
       BASH_SHELL=/bin/bash
       ac_cv_prog_MAKEINFO=
+      ac_cv_path_PERL=no
       --prefix=/usr
       --with-headers=/usr/include
       --with-bugurl=https://bugs.archlinux.org/
@@ -79,7 +81,6 @@ build() {
       --enable-lock-elision
       --disable-multi-arch
       --enable-kernel=5.3
-      --enable-static-pie
       --disable-profile
       --disable-werror
       --enable-stack-protector=strong
