@@ -25,7 +25,7 @@ source=(https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz
       0002-gas-Add-md_generic_table_relax_frag.patch
       0003-i386-Align-branches-within-a-fixed-boundary.patch
       0004-i386-Add-mbranches-within-32B-boundaries.patch
-0005-Don-t-add-prefix-to-instructions-with-TLS-relocation.patch)
+      0005-Don-t-add-prefix-to-instructions-with-TLS-relocation.patch)
 validpgpkeys=(3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F)
 md5sums=('9406231b7d9dd93731c2d06cefe8aaf1'
          'SKIP')
@@ -56,7 +56,7 @@ build() {
     --prefix=/usr \
     --with-lib-path=/usr/lib:/usr/local/lib \
     --with-bugurl=https://bugs.archlinux.org/ \
-    --disable-deterministic-archives \
+    --enable-deterministic-archives \
     --enable-gold \
     --enable-ld=default \
     --enable-lto \
@@ -64,12 +64,23 @@ build() {
     --enable-relro \
     --enable-shared \
     --enable-targets=x86_64-linux \
+    --enable-threads \
     --disable-gdb \
     --disable-werror \
-    --enable-silent-rules
+    --enable-silent-rules \
+    --with-pic \
+    --with-system-zlib
 
   make configure-host
   make tooldir=/usr
+}
+
+check() {
+  cd binutils-build
+
+  # unset LDFLAGS as testsuite makes assumptions about which ones are active
+  # ignore failures in gold testsuite...
+  make -k LDFLAGS="" check || true
 }
 
 package() {
