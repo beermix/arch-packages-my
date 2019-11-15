@@ -8,14 +8,14 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.30
-pkgrel=28
+pkgrel=30
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git python automake autoconf flex bison)
 options=(!strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-_commit=0c08d8e57584d520a718073d27c192aeff3ef094
+_commit=c347431fb5fd3f124c05e82fb7a661b396e86f82
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
@@ -36,6 +36,7 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         gcc-8-fix.patch
         spin-smarter.patch
         nostackshrink.patch
+        fix-ld-audit-performance.patch
         0001-Compile-branred.c-with-mprefer-vector-width-128.patch
         0001-Set-vector-width-and-alignment-to-fix-GCC-AVX-issue.patch
         0001-Force-ffsll-to-be-64-bytes-aligned.patch)
