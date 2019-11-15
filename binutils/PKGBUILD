@@ -69,6 +69,7 @@ build() {
     --disable-werror \
     --enable-silent-rules \
     --with-pic \
+    --enable-64-bit-bfd \
     --with-system-zlib
 
   make configure-host
