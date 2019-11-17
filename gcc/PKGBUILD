@@ -201,8 +201,6 @@ package_gcc-libs() {
     make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
   done
 
-#  rm -f "$pkgdir"/usr/lib/libstdc++.a
-
   # remove files provided by lib32-gcc-libs
   rm -rf "$pkgdir"/usr/lib32/
 
@@ -293,6 +291,9 @@ package_gcc() {
   install -d "$pkgdir/usr/share/licenses/$pkgname/"
   ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
     "$pkgdir/usr/share/licenses/$pkgname/"
+
+  rm -f "$pkgdir"/usr/lib32/libstdc++.a
+  rm -f "$pkgdir"/usr/lib/libstdc++.a
 }
 
 package_gcc-fortran() {
