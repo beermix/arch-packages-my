@@ -36,6 +36,7 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         pause.patch
         gcc-8-fix.patch
         spin-smarter.patch
+        ldconfig-format-new.patch
         nostackshrink.patch
         c-utf8-locale.patch
         fix-ld-audit-performance.patch
@@ -71,6 +72,9 @@ prepare() {
 }
 
 build() {
+
+  export ASFLAGS="-D__AVX__=1 -D__AVX2__=1 -msse2avx -D__FMA__=1"
+
   local _configure_flags=(
       --prefix=/usr
       --with-headers=/usr/include
@@ -84,6 +88,9 @@ build() {
       --enable-kernel=5.3
       --enable-static-pie
       --disable-profile
+      --disable-debug
+      --enable-clocale=gnu
+      --without-selinux
       --disable-werror
   )
 
