@@ -14,7 +14,7 @@ pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
 url='https://gcc.gnu.org'
-makedepends=(binutils libmpc python subversion automake autoconf flex bison lib32-glibc lib32-gcc-libs)
+makedepends=(binutils libmpc python subversion automake autoconf flex bison makeinfo help2man xmlto lib32-glibc lib32-gcc-libs)
 checkdepends=(dejagnu inetutils)
 options=(!emptydirs)
 #source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
@@ -100,7 +100,6 @@ prepare() {
   patch -p1 -i "$srcdir/gdc_phobos_path.patch"
   patch -p1 -i "$srcdir/gdc_artificial_decl.patch"
   patch -p1 -i "$srcdir/gdc_thunk_weak_ref.patch"
-
   #sed -i "/GDCFLAGSX=/s/-Wall/-shared-libphobos -Wall/" libphobos/configure
 
   echo ${pkgver} > gcc/BASE-VER
