@@ -42,14 +42,14 @@ build() {
     --with-pkg-config-libdir=/usr/lib/pkgconfig \
     --with-shared --with-normal --without-debug --without-ada \
     --enable-widec --enable-pc-files --with-cxx-binding --with-cxx-shared \
-    --with-manpage-format=normal --disable-manpages
+    --with-manpage-format=normal --disable-manpages --with-build-cppflags=-D_GNU_SOURCE
   make
 }
 
 package() {
   cd $pkgname-$pkgver
-  make DESTDIR="$pkgdir" install
-  install -Dm644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  make DESTDIR="$pkgdir" install -j1
+#  install -Dm644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   # fool packages looking to link to non-wide-character ncurses libraries
   for lib in ncurses ncurses++ form panel menu; do

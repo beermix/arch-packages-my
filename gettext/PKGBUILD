@@ -2,7 +2,7 @@
 
 pkgname=gettext
 pkgver=0.20.1
-pkgrel=3
+pkgrel=4
 pkgdesc="GNU internationalization library"
 url="https://www.gnu.org/software/gettext/"
 arch=(x86_64)
@@ -43,11 +43,6 @@ build() {
       -i gettext-{tools,runtime,runtime/libasprintf}/libtool
 
   make
-}
-
-check() {
-  cd $pkgname-$pkgver
-  make check
 }
 
 package() {
