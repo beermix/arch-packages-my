@@ -12,15 +12,16 @@ pkgrel=35
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
-makedepends=(git python automake autoconf flex bison)
+makedepends=(git python automake autoconf flex bison m4)
 options=(!strip staticlibs)
-#source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
 _commit=c347431fb5fd3f124c05e82fb7a661b396e86f82
-source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
+source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz
+        #git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
         lib32-glibc.conf
         sdt.h sdt-config.h
+        glibc-stable-branch.patch
         bz20338.patch
         file-truncated-while-reading-soname-after-patchelf.patch
         alternate_trim.patch
@@ -30,7 +31,6 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         use_madv_free.patch
         malloc_tune.patch
         mathlto.patch
-        0001-x86-64-Remove-sysdeps-x86_64-fpu-s_sinf.S.patch
         stateless.patch
         vzeroupper-2.27.patch
         pause.patch
@@ -40,7 +40,6 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         nostackshrink.patch
         c-utf8-locale.patch
         fix-ld-audit-performance.patch
-        elf.readelflib.c_Fix_resolving_of_loadaddr_for_.dynstr_vaddr.patch
         0001-Compile-branred.c-with-mprefer-vector-width-128.patch
         0001-Set-vector-width-and-alignment-to-fix-GCC-AVX-issue.patch
         0001-Force-ffsll-to-be-64-bytes-aligned.patch)
