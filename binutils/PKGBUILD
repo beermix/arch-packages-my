@@ -73,8 +73,8 @@ build() {
     --enable-64-bit-bfd \
     --with-system-zlib
 
-  make configure-host
-  make tooldir=/usr
+  make MAKEINFO=true configure-host
+  make tooldir=/usr MAKEINFO=true
 }
 
 check() {
@@ -87,7 +87,7 @@ check() {
 
 package() {
   cd binutils-build
-  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
+  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" MAKEINFO=true install
 
   # Remove unwanted files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
