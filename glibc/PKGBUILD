@@ -75,6 +75,9 @@ build() {
   export ASFLAGS="-D__AVX__=1 -D__AVX2__=1 -msse2avx -D__FMA__=1"
 
   local _configure_flags=(
+      BASH_SHELL=/bin/bash
+      ac_cv_path_PERL=no
+      ac_cv_prog_MAKEINFO=
       --prefix=/usr
       --with-headers=/usr/include
       --with-bugurl=https://bugs.archlinux.org/
