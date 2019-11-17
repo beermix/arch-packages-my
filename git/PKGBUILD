@@ -8,8 +8,8 @@ pkgdesc='the fast distributed version control system'
 arch=(x86_64)
 url='https://git-scm.com/'
 license=('GPL2')
-depends=('curl' 'expat' 'perl' 'perl-error' 'perl-mailtools' 'openssl' 'pcre2' 'grep' 'shadow' 'autoconf' 'automake' 'bison' 'flex' 'm4')
-makedepends=('python2' 'libgnome-keyring')
+depends=('curl' 'expat' 'perl' 'perl-error' 'perl-mailtools' 'openssl' 'pcre2' 'grep' 'shadow')
+makedepends=('python2' 'libgnome-keyring' 'autoconf' 'automake' 'bison' 'flex' 'm4' 'pcre2')
 optdepends=('tk: gitk and git gui'
             'perl-libwww: git svn'
             'perl-term-readkey: git svn and interactive.singlekey setting'
