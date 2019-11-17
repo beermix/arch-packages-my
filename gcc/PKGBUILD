@@ -5,11 +5,11 @@
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: libtool requires rebuilt with each new gcc version
 
-pkgname=(gcc gcc-libs)
+pkgname=(gcc gcc-libs gcc-fortran lib32-gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 _islver=0.16.1
-pkgrel=96
+pkgrel=100
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -76,7 +76,7 @@ prepare() {
 #  patch -p1 -i "$srcdir/010-documentation.patch"
   patch -p1 -i "$srcdir/gcc-stable-branch.patch"
   patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
-  patch -p1 -i "$srcdir/zero-regs-gcc8.patch""
+  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
   patch -p1 -i "$srcdir/optimize.patch"
   patch -p1 -i "$srcdir/ipa-cp.patch"
   patch -p1 -i "$srcdir/gomp-relax.patch"
@@ -100,6 +100,7 @@ prepare() {
   patch -p1 -i "$srcdir/gdc_phobos_path.patch"
   patch -p1 -i "$srcdir/gdc_artificial_decl.patch"
   patch -p1 -i "$srcdir/gdc_thunk_weak_ref.patch"
+
   #sed -i "/GDCFLAGSX=/s/-Wall/-shared-libphobos -Wall/" libphobos/configure
 
   echo ${pkgver} > gcc/BASE-VER
@@ -317,4 +318,40 @@ package_gcc-fortran() {
   install -d "$pkgdir/usr/share/licenses/$pkgname/"
   ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
     "$pkgdir/usr/share/licenses/$pkgname/"
+}
+
+package_lib32-gcc-libs() {
+  pkgdesc='32-bit runtime libraries shipped by GCC'
+  depends=('lib32-glibc>=2.27')
+  provides=(libgo.so libgfortran.so libubsan.so libasan.so)
+  groups=(multilib-devel)
+  options=(!emptydirs !strip)
+
+  cd gcc-build
+
+  make -C $CHOST/32/libgcc DESTDIR="$pkgdir" install-shared
+  rm -f "$pkgdir/$_libdir/32/libgcc_eh.a"
+
+  for lib in libatomic \
+             libgfortran \
+             libgomp \
+             libitm \
+             libquadmath \
+             libsanitizer/{a,l,ub}san \
+             libstdc++-v3/src \
+             libvtv; do
+    make -C $CHOST/32/$lib DESTDIR="$pkgdir" install-toolexeclibLTLIBRARIES
+  done
+
+  make -C $CHOST/32/libobjc DESTDIR="$pkgdir" install-libs
+
+  make -C $CHOST/libphobos DESTDIR="$pkgdir" install
+  rm -f "$pkgdir"/usr/lib32/libgphobos.spec
+
+  # remove files provided by gcc-libs
+  rm -rf "$pkgdir"/usr/lib
+
+  # Install Runtime Library Exception
+  install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
+    "$pkgdir/usr/share/licenses/lib32-gcc-libs/RUNTIME.LIBRARY.EXCEPTION"
 }
