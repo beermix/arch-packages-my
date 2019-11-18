@@ -81,7 +81,7 @@ prepare() {
   patch -p1 -i "$srcdir/ipa-cp.patch"
   patch -p1 -i "$srcdir/gomp-relax.patch"
   patch -p1 -i "$srcdir/fortran-vector-v2.patch"
-  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
+#  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
   patch -p1 -i "$srcdir/optimize-at-least-some.patch"
 
   # link isl for in-tree build
@@ -102,7 +102,7 @@ prepare() {
   patch -p1 -i "$srcdir/gdc_thunk_weak_ref.patch"
   #sed -i "/GDCFLAGSX=/s/-Wall/-shared-libphobos -Wall/" libphobos/configure
 
-  echo ${pkgver} > gcc/BASE-VER
+#  echo ${pkgver} > gcc/BASE-VER
 
   mkdir -p "$srcdir/gcc-build"
 }
@@ -115,8 +115,8 @@ build() {
   CFLAGS=${CFLAGS/-pipe/}
   CXXFLAGS=${CXXFLAGS/-pipe/}
 
-#  export CC='/home/user/.bin/ccache /usr/bin/gcc'
-#  export CXX='/home/user/.bin/ccache /usr/bin/g++'
+  export CC='/home/user/.bin/ccache /usr/bin/gcc'
+  export CXX='/home/user/.bin/ccache /usr/bin/g++'
 
   "$srcdir/gcc/configure" --prefix=/usr \
       --libdir=/usr/lib \
