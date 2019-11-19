@@ -4,7 +4,7 @@
 
 pkgname=ncurses
 pkgver=6.0
-pkgrel=15
+pkgrel=16
 pkgdesc='System V Release 4.0 curses emulation library'
 arch=(x86_64)
 url='https://invisible-island.net/ncurses/ncurses.html'
@@ -30,7 +30,7 @@ prepare() {
 
   patch -p1 -i "$srcdir/ncurses-100-ncurses-5.6-20080112-urxvt.patch"
   patch -p1 -i "$srcdir/ncurses-101-ncurses-5.6-20080628-kbs.patch"
-  patch -p1 -i "$srcdir/ncurses-102-ncurses-5.9-gcc-5.patch"
+ # patch -p1 -i "$srcdir/ncurses-102-ncurses-5.9-gcc-5.patch"
   patch -p1 -i "$srcdir/ncurses-200-fix_missing_include.patch"
   patch -p1 -i "$srcdir/ncurses-900-terminfo.patch"
 }
@@ -42,7 +42,7 @@ build() {
     --with-pkg-config-libdir=/usr/lib/pkgconfig \
     --with-shared --with-normal --without-debug --without-ada \
     --enable-widec --enable-pc-files --with-cxx-binding --with-cxx-shared \
-    --with-manpage-format=normal --disable-manpages --with-build-cppflags=-D_GNU_SOURCE
+    --disable-manpages --with-ticlib --without-debug
   make
 }
 
