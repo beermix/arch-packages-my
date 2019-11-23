@@ -134,7 +134,6 @@ build() {
       --enable-clocale=gnu \
       --disable-libstdcxx-pch \
       --disable-libssp \
-      --disable-nls \
       --enable-gnu-unique-object \
       --enable-linker-build-id \
       --enable-lto \
