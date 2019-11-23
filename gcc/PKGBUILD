@@ -14,12 +14,12 @@ pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
 url='https://gcc.gnu.org'
-makedepends=(binutils libmpc python subversion automake autoconf flex bison help2man xmlto lib32-glibc lib32-gcc-libs)
+makedepends=(binutils libmpc python subversion automake autoconf flex bison xmlto lib32-glibc lib32-gcc-libs)
 checkdepends=(dejagnu inetutils)
 options=(!emptydirs)
 #source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
 source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz
-        #http://isl.gforge.inria.fr/isl-${_islver}.tar.xz
+        http://isl.gforge.inria.fr/isl-${_islver}.tar.xz
         c89 c99
         gdc_phobos_path.patch
         gdc_artificial_decl.patch
@@ -75,17 +75,17 @@ prepare() {
 
 #  patch -p1 -i "$srcdir/010-documentation.patch"
   patch -p1 -i "$srcdir/gcc-stable-branch.patch"
-  patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
-  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
-  patch -p1 -i "$srcdir/optimize.patch"
-  patch -p1 -i "$srcdir/ipa-cp.patch"
-  patch -p1 -i "$srcdir/gomp-relax.patch"
-  patch -p1 -i "$srcdir/fortran-vector-v2.patch"
+# patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
+#  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
+# patch -p1 -i "$srcdir/optimize.patch"
+# patch -p1 -i "$srcdir/ipa-cp.patch"
+# patch -p1 -i "$srcdir/gomp-relax.patch"
+# patch -p1 -i "$srcdir/fortran-vector-v2.patch"
 #  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
-  patch -p1 -i "$srcdir/optimize-at-least-some.patch"
+#  patch -p1 -i "$srcdir/optimize-at-least-some.patch"
 
   # link isl for in-tree build
-  # ln -s ../isl-${_islver} isl
+  ln -s ../isl-${_islver} isl
 
   # Do not run fixincludes
   sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
@@ -102,7 +102,7 @@ prepare() {
   patch -p1 -i "$srcdir/gdc_thunk_weak_ref.patch"
   #sed -i "/GDCFLAGSX=/s/-Wall/-shared-libphobos -Wall/" libphobos/configure
 
-#  echo ${pkgver} > gcc/BASE-VER
+  echo ${pkgver} > gcc/BASE-VER
 
   mkdir -p "$srcdir/gcc-build"
 }
@@ -115,8 +115,8 @@ build() {
   CFLAGS=${CFLAGS/-pipe/}
   CXXFLAGS=${CXXFLAGS/-pipe/}
 
-  export CC='/home/user/.bin/ccache /usr/bin/gcc'
-  export CXX='/home/user/.bin/ccache /usr/bin/g++'
+#  export CC='/home/user/.bin/ccache /usr/bin/gcc'
+#  export CXX='/home/user/.bin/ccache /usr/bin/g++'
 
   "$srcdir/gcc/configure" --prefix=/usr \
       --libdir=/usr/lib \
