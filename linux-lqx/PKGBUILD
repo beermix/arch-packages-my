@@ -1,8 +1,8 @@
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 
 pkgbase=linux-lqxx
-pkgver=5.3.11.2
-pkgrel=12
+pkgver=5.3.12.1
+pkgrel=10
 pkgdesc='Linux lqxx'
 _srctag=v${pkgver%.*}-lqx${pkgver##*.}
 url="https://github.com/zen-kernel/zen-kernel/commits/$_srctag"
@@ -24,10 +24,6 @@ source=(
   0122-do-accept-in-LIFO-order-for-cache-efficiency.patch
   0123-zero-extra-registers.patch
   0124-locking-rwsem-spin-faster.patch
-  0130-add-workaround-for-binutils-optimization.patch
-  0129-fix-ucode-revcheck.patch
-  0127-x86-microcode-Force-update-a-uCode-even-if-the-rev-i.patch
-  0128-x86-microcode-echo-2-reload-to-force-load-ucode.patch
   CVE-2019-12379.patch)
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
