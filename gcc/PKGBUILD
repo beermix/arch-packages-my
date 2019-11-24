@@ -9,7 +9,7 @@ pkgname=(gcc gcc-libs gcc-fortran lib32-gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 _islver=0.16.1
-pkgrel=101
+pkgrel=105
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -128,7 +128,7 @@ build() {
       --enable-shared \
       --enable-threads=posix \
       --with-system-zlib \
-      --with-isl=no \
+      --with-isl \
       --enable-__cxa_atexit \
       --disable-libunwind-exceptions \
       --enable-clocale=gnu \
@@ -144,10 +144,12 @@ build() {
       --enable-multilib \
       --disable-werror \
       --enable-checking=release \
+      --enable-default-pie \
+      --enable-default-ssp \
       --with-tune=core-avx2 \
       --with-arch=core-avx2 \
       --enable-cet=auto \
-      --with-diagnostics-color=always \
+      --with-diagnostics-color=auto \
       gdc_include_dir=/usr/include/dlang/gdc
 
   ionice -c3 nice -n19 noti make
