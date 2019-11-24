@@ -8,11 +8,11 @@
 pkgbase=glibc
 pkgname=(glibc lib32-glibc)
 pkgver=2.30
-pkgrel=43
+pkgrel=44
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
-makedepends=(git gd lib32-gcc-libs python automake autoconf flex bison m4)
+makedepends=(git lib32-gcc-libs python automake autoconf flex bison m4)
 options=(!strip staticlibs)
 _commit=37c90e117310728a4ad1eb998c0bbe7d79c4a398
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz
