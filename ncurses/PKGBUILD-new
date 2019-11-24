@@ -1,0 +1,69 @@
+# Maintainer:  Bartłomiej Piotrowski <bpiotrowski@archlinux.org>
+# Contributor: Allan McRae <allan@archlinux.org>
+# Contributor: judd <jvinet@zeroflux.org>
+
+pkgname=ncurses
+pkgver=6.1
+pkgrel=20
+pkgdesc='System V Release 4.0 curses emulation library'
+arch=(x86_64)
+url='https://invisible-island.net/ncurses/ncurses.html'
+license=(MIT)
+depends=(glibc gcc-libs)
+provides=(libncurses++w.so libformw.so libmenuw.so libpanelw.so libncursesw.so)
+#source=(http://invisible-mirror.net/archives/ncurses/current/ncurses-${_pkgver}.tgz{,.asc})
+source=(https://dl.dropboxusercontent.com/s/t30phz1j2yxkauc/ncurses-6.1-20190803.tar.xz
+         ncurses-100-ncurses-5.6-20080112-urxvt.patch
+         ncurses-101-ncurses-5.6-20080628-kbs.patch
+         ncurses-102-ncurses-5.9-gcc-5.patch
+         ncurses-200-fix_missing_include.patch
+         ncurses-900-terminfo.patch)
+
+md5sums=('98c889aaf8d23910d2b92d65be2e737a'
+         'SKIP')
+validpgpkeys=('C52048C0C0748FEE227D47A2702353E0F7E48EDB')  # Thomas Dickey
+
+prepare() {
+  mkdir -p ncurses-build
+
+  cd ncurses-6.1-20190803
+
+#  patch -p1 -i "$srcdir/ncurses-100-ncurses-5.6-20080112-urxvt.patch"
+#  patch -p1 -i "$srcdir/ncurses-101-ncurses-5.6-20080628-kbs.patch"
+ # patch -p1 -i "$srcdir/ncurses-102-ncurses-5.9-gcc-5.patch"
+#  patch -p1 -i "$srcdir/ncurses-200-fix_missing_include.patch"
+ # patch -p1 -i "$srcdir/ncurses-900-terminfo.patch"
+}
+
+build() {
+  cd ncurses-6.1-20190803
+
+  ./configure --prefix=/usr --mandir=/usr/share/man \
+    --with-pkg-config-libdir=/usr/lib/pkgconfig \
+    --with-shared --with-normal --without-debug --without-ada \
+    --enable-widec --enable-pc-files --with-cxx-binding --with-cxx-shared \
+    --disable-manpages --with-ticlib --without-debug
+  make
+}
+
+package() {
+  cd ncurses-6.1-20190803
+  make DESTDIR="$pkgdir" install -j1
+#  install -Dm644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+  # fool packages looking to link to non-wide-character ncurses libraries
+  for lib in ncurses ncurses++ form panel menu; do
+    echo "INPUT(-l${lib}w)" > "$pkgdir/usr/lib/lib${lib}.so"
+    ln -s ${lib}w.pc "$pkgdir/usr/lib/pkgconfig/${lib}.pc"
+  done
+
+  for lib in tic tinfo; do
+    echo "INPUT(libncursesw.so.${pkgver:0:1})" > "$pkgdir/usr/lib/lib${lib}.so"
+    ln -s libncursesw.so.${pkgver:0:1} "$pkgdir/usr/lib/lib${lib}.so.${pkgver:0:1}"
+    ln -s ncursesw.pc "$pkgdir/usr/lib/pkgconfig/${lib}.pc"
+  done
+
+  # some packages look for -lcurses during build
+  echo 'INPUT(-lncursesw)' > "$pkgdir/usr/lib/libcursesw.so"
+  ln -s libncurses.so "$pkgdir/usr/lib/libcurses.so"
+}
