@@ -7,20 +7,23 @@
 
 pkgbase=glibc
 pkgname=(glibc)
-pkgver=2.30.9000
-pkgrel=51
+pkgver=2.30
+pkgrel=50
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git python automake autoconf flex bison m4)
 options=(!strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-_commit=cc0e0b097c3e2176b51c32c09a76766e890cd2d4
+_commit=0a8262a1b269f8f1602933248e69dfb041aab7a2
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
+        lib32-glibc.conf
         sdt.h sdt-config.h
         bz20338.patch
+        file-truncated-while-reading-soname-after-patchelf.patch
+        glibc-stable-branch.patch
         0001-Set-host.conf-multi-to-on-by-default.patch
         skip-error-msg-ld.so.conf.patch
         alternate_trim.patch
