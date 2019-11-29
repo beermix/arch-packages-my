@@ -8,21 +8,40 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.30
-pkgrel=53
+pkgrel=52
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git python automake autoconf flex bison m4)
 options=(!strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-_commit=f4419b0d0181da28f18cba40068f2e75300f5020
+_commit=37c90e117310728a4ad1eb998c0bbe7d79c4a398
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
         lib32-glibc.conf
         sdt.h sdt-config.h
         bz20338.patch
-        file-truncated-while-reading-soname-after-patchelf.patch)
+        file-truncated-while-reading-soname-after-patchelf.patch
+        0001-Set-host.conf-multi-to-on-by-default.patch
+        skip-error-msg-ld.so.conf.patch
+        alternate_trim.patch
+        madvise-bss.patch
+        spinaphore.patch
+        large-page-huge-page.patch
+        use_madv_free.patch
+        malloc_tune.patch
+        mathlto.patch
+        vzeroupper-2.27.patch
+        pause.patch
+        gcc-8-fix.patch
+        spin-smarter.patch
+        nostackshrink.patch
+        0001-Compile-branred.c-with-mprefer-vector-width-128.patch
+        0001-Set-vector-width-and-alignment-to-fix-GCC-AVX-issue.patch
+        0001-Force-ffsll-to-be-64-bytes-aligned.patch
+        fix-ld-audit-performance.patch
+        c-utf8-locale.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 md5sums=('SKIP'
@@ -51,7 +70,11 @@ prepare() {
 }
 
 build() {
+
+  export ASFLAGS="-D__AVX__=1 -D__AVX2__=1 -msse2avx -D__FMA__=1"
+
   local _configure_flags=(
+      BASH_SHELL=/bin/bash
       ac_cv_prog_MAKEINFO=
       --prefix=/usr
       --with-headers=/usr/include
@@ -63,6 +86,7 @@ build() {
       --enable-multi-arch
       --enable-kernel=5.3
       --enable-stack-protector=strong
+      --enable-stackguard-randomization
       --enable-static-pie
       --disable-profile
       --disable-debug
