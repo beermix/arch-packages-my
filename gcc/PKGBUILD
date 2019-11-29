@@ -8,7 +8,7 @@
 pkgname=(gcc gcc-libs lib32-gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
-_islver=0.22
+_islver=0.21
 pkgrel=107
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
@@ -288,8 +288,8 @@ package_gcc() {
   ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
     "$pkgdir/usr/share/licenses/$pkgname/"
 
-  rm -f "$pkgdir"/usr/lib32/libstdc++.a
-  rm -f "$pkgdir"/usr/lib/libstdc++.a
+#  rm -f "$pkgdir"/usr/lib32/libstdc++.a
+#  rm -f "$pkgdir"/usr/lib/libstdc++.a
 }
 
 package_lib32-gcc-libs() {
