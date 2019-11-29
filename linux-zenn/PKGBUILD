@@ -2,7 +2,7 @@
 
 pkgbase=linux-zenx
 pkgver=5.4.1.2
-pkgrel=10
+pkgrel=11
 pkgdesc='Linux ZENx'
 _srctag=v${pkgver%.*}-zen${pkgver##*.}
 url="https://github.com/zen-kernel/zen-kernel/commits/$_srctag"
@@ -43,7 +43,6 @@ source=(
 0127-x86-microcode-Force-update-a-uCode-even-if-the-rev-i.patch
 0128-x86-microcode-echo-2-reload-to-force-load-ucode.patch
 0129-fix-ucode-revcheck.patch
-0130-add-workaround-for-binutils-optimization.patch
 0131-nvme-workaround.patch)
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
