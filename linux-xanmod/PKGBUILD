@@ -3,16 +3,16 @@
 pkgbase=linux-xanmod
 pkgver=5.4.1.1
 pkgrel=1
-pkgdesc='Linux xanmod'
-_srctag=v${pkgver%.*}-${pkgver##*.}
-url="https://github.com/xanmod/linux/commits/$_srctag"
+_srcver=${pkgver%.*}-xanmod${pkgver##*.}
+url="https://github.com/xanmod/linux/commits/$_srcver"
 arch=(x86_64)
 license=(GPL2)
-makedepends=(bc kmod inetutils libelf git flex bison)
+makedepends=(
+  kmod inetutils bc libelf git flex bison)
 options=('!strip')
 _srcname=xanmod-kernel
 source=(
-  "$_srcname::git+https://github.com/xanmod/linux?signed#tag=$_srctag"
+  "$_srcname::git+https://github.com/xanmod/linux?signed#tag=$_srcver"
   config         # the main kernel config file
 0101-i8042-decrease-debug-message-level-to-info.patch
 0102-Increase-the-ext4-default-commit-age.patch
