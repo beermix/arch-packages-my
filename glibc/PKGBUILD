@@ -52,7 +52,6 @@ prepare() {
 
 build() {
   local _configure_flags=(
-      ac_cv_prog_MAKEINFO=
       --prefix=/usr
       --with-headers=/usr/include
       --with-bugurl=https://bugs.archlinux.org/
