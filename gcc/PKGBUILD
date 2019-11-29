@@ -145,8 +145,8 @@ build() {
       --disable-werror \
       --enable-checking=release \
       --enable-default-pie \
-      --with-tune=core-avx2 \
-      --with-arch=core-avx2 \
+      --with-tune=haswell \
+      --with-arch=haswell \
       --enable-cet=auto \
       --with-diagnostics-color=always \
       gdc_include_dir=/usr/include/dlang/gdc
