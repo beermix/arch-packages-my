@@ -148,7 +148,7 @@ build() {
       --with-tune=core-avx2 \
       --with-arch=core-avx2 \
       --enable-cet=auto \
-      --with-diagnostics-color=auto \
+      --with-diagnostics-color=always \
       gdc_include_dir=/usr/include/dlang/gdc
 
   ionice -c3 nice -n19 noti make
