@@ -9,7 +9,7 @@ pkgname=(gcc gcc-libs lib32-gcc-libs)
 pkgver=9.2.0
 _majorver=${pkgver:0:1}
 _islver=0.21
-pkgrel=107
+pkgrel=108
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -75,7 +75,7 @@ prepare() {
 
 #  patch -p1 -i "$srcdir/010-documentation.patch"
   patch -p1 -i "$srcdir/gcc-stable-branch.patch"
-  patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
+#  patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
   patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
 #  patch -p1 -i "$srcdir/optimize.patch"
 #  patch -p1 -i "$srcdir/ipa-cp.patch"
@@ -145,6 +145,7 @@ build() {
       --disable-werror \
       --enable-checking=release \
       --enable-default-pie \
+      --enable-default-ssp \
       --with-tune=haswell \
       --with-arch=haswell \
       --enable-cet=auto \
