@@ -145,6 +145,8 @@ build() {
       --disable-multilib \
       --disable-werror \
       --enable-checking=release \
+      --disable-nls \
+      --with-default-libstdcxx-abi=gcc4-compatible \
       --disable-libunwind-exceptions \
       --disable-vtable-verify \
       --enable-default-pie \
