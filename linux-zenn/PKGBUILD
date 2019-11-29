@@ -36,7 +36,6 @@ source=(
 0120-add-scheduler-turbo3-patch.patch
 0121-use-lfence-instead-of-rep-and-nop.patch
 0122-do-accept-in-LIFO-order-for-cache-efficiency.patch
-0123-zero-extra-registers.patch
 0124-locking-rwsem-spin-faster.patch
 0125-ata-libahci-ignore-staggered-spin-up.patch
 0126-print-CPU-that-faults.patch
