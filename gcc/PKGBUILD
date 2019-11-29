@@ -75,7 +75,7 @@ prepare() {
 
 #  patch -p1 -i "$srcdir/010-documentation.patch"
   patch -p1 -i "$srcdir/gcc-stable-branch.patch"
-#  patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
+  patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
   patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
   patch -p1 -i "$srcdir/optimize.patch"
   patch -p1 -i "$srcdir/ipa-cp.patch"
@@ -142,7 +142,7 @@ build() {
       --disable-vtable-verify \
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
-      --enable-multilib \
+      --disable-multilib \
       --disable-werror \
       --enable-checking=release \
       --disable-libunwind-exceptions \
