@@ -144,6 +144,8 @@ build() {
       --enable-multilib \
       --disable-werror \
       --enable-checking=release \
+      --disable-libunwind-exceptions \
+      --disable-vtable-verify \
       --enable-default-pie \
       --enable-default-ssp \
       --with-tune=haswell \
