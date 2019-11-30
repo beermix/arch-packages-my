@@ -42,7 +42,8 @@ CVE-2019-19066.patch
 CVE-2019-19068.patch
 CVE-2019-19070.patch
 CVE-2019-19071.patch
-CVE-2019-19078.patch)
+CVE-2019-19078.patch
+ca38fe22b0eb1adf435cb64d97418c265f0e4a4e.patch)
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
   '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
@@ -129,7 +130,7 @@ prepare() {
 
 build() {
   cd $_srcname
-  noti make bzImage modules
+  noti ionice -c3 nice -n19 make -j8 bzImage modules
 }
 
 _package() {
