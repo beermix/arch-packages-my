@@ -75,14 +75,14 @@ prepare() {
 
 #  patch -p1 -i "$srcdir/010-documentation.patch"
   patch -p1 -i "$srcdir/gcc-stable-branch.patch"
-  patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
-  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
-  patch -p1 -i "$srcdir/optimize.patch"
-  patch -p1 -i "$srcdir/ipa-cp.patch"
+#  patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
+#  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
+#  patch -p1 -i "$srcdir/optimize.patch"
+#  patch -p1 -i "$srcdir/ipa-cp.patch"
 #  patch -p1 -i "$srcdir/gomp-relax.patch"
 #  patch -p1 -i "$srcdir/fortran-vector-v2.patch"
-  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
-  patch -p1 -i "$srcdir/optimize-at-least-some.patch"
+#  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
+#  patch -p1 -i "$srcdir/optimize-at-least-some.patch"
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
@@ -115,8 +115,8 @@ build() {
   CFLAGS=${CFLAGS/-pipe/}
   CXXFLAGS=${CXXFLAGS/-pipe/}
 
-  export CC='ccache gcc'
-  export CXX='ccache g++'
+#  export CC='ccache gcc'
+#  export CXX='ccache g++'
 
   "$srcdir/gcc/configure" --prefix=/usr \
       --libdir=/usr/lib \
@@ -139,16 +139,11 @@ build() {
       --enable-lto \
       --enable-plugin \
       --enable-install-libiberty \
-      --disable-vtable-verify \
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
       --disable-multilib \
       --disable-werror \
       --enable-checking=release \
-      --disable-nls \
-      --with-default-libstdcxx-abi=gcc4-compatible \
-      --disable-libunwind-exceptions \
-      --disable-vtable-verify \
       --enable-default-pie \
       --enable-default-ssp \
       --with-tune=haswell \
@@ -157,7 +152,7 @@ build() {
       --with-diagnostics-color=always \
       gdc_include_dir=/usr/include/dlang/gdc
 
-  noti ionice -c3 nice -n19 make
+  noti make
 }
 
 check() {
