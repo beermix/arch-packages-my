@@ -48,11 +48,11 @@ _make_options=(
   NO_PERL_CPAN_FALLBACKS=1
   USE_LIBPCRE2=1
 
-  NO_MKSTEMPS="YesPlease"
-  NO_GETTEXT="YesPlease"
-  NO_UNIX_SOCKETS="YesPlease"
+#  NO_MKSTEMPS="YesPlease"
+#  NO_GETTEXT="YesPlease"
+#  NO_UNIX_SOCKETS="YesPlease"
 #  NO_NSEC="YesPlease"
-  NO_TCLTK="YesPlease"
+#  NO_TCLTK="YesPlease"
 #  NO_INSTALL_HARDLINKS="yes"
 )
 
