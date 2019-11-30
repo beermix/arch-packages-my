@@ -156,7 +156,6 @@ build() {
       --enable-default-pie \
       --enable-default-ssp \
       --with-tune=haswell \
-      --with-arch=haswell \
       --enable-cet=auto \
       --with-diagnostics-color=always \
       gdc_include_dir=/usr/include/dlang/gdc
