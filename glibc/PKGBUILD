@@ -8,7 +8,7 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.30
-pkgrel=55
+pkgrel=60
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -22,7 +22,26 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         lib32-glibc.conf
         sdt.h sdt-config.h
         bz20338.patch
-        file-truncated-while-reading-soname-after-patchelf.patch)
+        file-truncated-while-reading-soname-after-patchelf.patch
+        0001-Set-host.conf-multi-to-on-by-default.patch
+        skip-error-msg-ld.so.conf.patch
+        alternate_trim.patch
+        madvise-bss.patch
+        spinaphore.patch
+        large-page-huge-page.patch
+        use_madv_free.patch
+        malloc_tune.patch
+        mathlto.patch
+        vzeroupper-2.27.patch
+        pause.patch
+        gcc-8-fix.patch
+        spin-smarter.patch
+        nostackshrink.patch
+        0001-Compile-branred.c-with-mprefer-vector-width-128.patch
+        0001-Set-vector-width-and-alignment-to-fix-GCC-AVX-issue.patch
+        0001-Force-ffsll-to-be-64-bytes-aligned.patch
+        fix-ld-audit-performance.patch
+        c-utf8-locale.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 md5sums=('SKIP'
@@ -52,8 +71,8 @@ prepare() {
 
 build() {
   local _configure_flags=(
-      --prefix=/usr
       ac_cv_prog_MAKEINFO=
+      --prefix=/usr
       --with-headers=/usr/include
       --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
@@ -61,8 +80,8 @@ build() {
       --enable-cet
       --enable-lock-elision
       --enable-multi-arch
-      --enable-stack-protector=strong
       --enable-kernel=5.3
+      --enable-stack-protector=strong
       --enable-static-pie
       --disable-profile
       --disable-debug
