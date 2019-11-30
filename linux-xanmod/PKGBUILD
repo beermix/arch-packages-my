@@ -27,7 +27,6 @@ source=(
 0122-do-accept-in-LIFO-order-for-cache-efficiency.patch
 0124-locking-rwsem-spin-faster.patch
 0126-print-CPU-that-faults.patch
-0103-silence-rapl.patch
 CVE-2019-12379.patch
 CVE-2019-19043.patch
 CVE-2019-19046.patch
@@ -99,7 +98,6 @@ prepare() {
         make olddefconfig
 
         make prepare
-        fi
 
     ### Prepared version
         make -s kernelrelease > version
