@@ -73,13 +73,13 @@ build() {
     --enable-silent-rules \
     --with-system-zlib
 
-  make MAKEINFO=true configure-host
-  make tooldir=/usr MAKEINFO=true
+  make  configure-host
+  make tooldir=/usr
 }
 
 package() {
   cd binutils-build
-  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" MAKEINFO=true install
+  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
 
   # Remove unwanted files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
