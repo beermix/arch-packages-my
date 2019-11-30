@@ -2,7 +2,7 @@
 
 pkgbase=linux-xanmod
 pkgver=5.4.1.1
-pkgrel=5
+pkgrel=6
 _srcver=${pkgver%.*}-xanmod${pkgver##*.}
 url="https://github.com/xanmod/linux/commits/$_srcver"
 arch=(x86_64)
@@ -26,7 +26,24 @@ source=(
 0121-use-lfence-instead-of-rep-and-nop.patch
 0122-do-accept-in-LIFO-order-for-cache-efficiency.patch
 0124-locking-rwsem-spin-faster.patch
-0126-print-CPU-that-faults.patch)
+0126-print-CPU-that-faults.patch
+0103-silence-rapl.patch
+CVE-2019-12379.patch
+CVE-2019-19043.patch
+CVE-2019-19046.patch
+CVE-2019-19050.patch
+CVE-2019-19053.patch
+CVE-2019-19054.patch
+CVE-2019-19056.patch
+CVE-2019-19057.patch
+CVE-2019-19062.patch
+CVE-2019-19063.patch
+CVE-2019-19064.patch
+CVE-2019-19066.patch
+CVE-2019-19068.patch
+CVE-2019-19070.patch
+CVE-2019-19071.patch
+CVE-2019-19078.patch)
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
   '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
@@ -68,29 +85,19 @@ prepare() {
                        --enable-after IKCONFIG IKCONFIG_PROC \
                        --undefine RT_GROUP_SCHED
 
-        # Power management and ACPI options
-        scripts/config --enable HIBERNATION \
-                       --enable ACPI_REV_OVERRIDE_POSSIBLE  \
-                       --enable ACPI_TABLE_UPGRADE
-
         # Enable loadable module support
         scripts/config --undefine MODULE_SIG_FORCE \
                        --enable MODULE_COMPRESS \
                        --enable-after MODULE_COMPRESS MODULE_COMPRESS_XZ
 
         # Networking support
-        scripts/config --enable NETFILTER_INGRESS \
-                       --module NET_SCH_CAKE
+        scripts/config --module NET_SCH_CAKE
 
         # Device Drivers
         scripts/config --enable FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER
 
         make olddefconfig
 
-    ### Get kernel version
-        if [ "${_enable_gcc_more_v}" = "y" ] || [ -n "${_subarch}" ]; then
-        yes "$_subarch" | make oldconfig
-        else
         make prepare
         fi
 
