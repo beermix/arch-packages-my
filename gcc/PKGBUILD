@@ -14,7 +14,7 @@ pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
 url='https://gcc.gnu.org'
-makedepends=(binutils libmpc python gcc-ada lib32-glibc lib32-gcc-libs automake autoconf flex bison m4 xmlto)
+makedepends=(binutils libmpc doxygen gcc-ada lib32-glibc lib32-gcc-libs python automake autoconf flex bison m4)
 checkdepends=(dejagnu inetutils)
 options=(!emptydirs !staticlibs)
 #source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
@@ -164,7 +164,7 @@ build() {
       --with-diagnostics-color=always \
       gdc_include_dir=/usr/include/dlang/gdc
 
-  noti nice -n 19 make
+  noti ionice -c3 nice -n19 make
 }
 
 check() {
