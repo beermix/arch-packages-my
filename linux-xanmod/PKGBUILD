@@ -7,8 +7,7 @@ _srcver=${pkgver%.*}-xanmod${pkgver##*.}
 url="https://github.com/xanmod/linux/commits/$_srcver"
 arch=(x86_64)
 license=(GPL2)
-makedepends=(
-  kmod inetutils bc libelf git flex bison)
+makedepends=(bc cpio git inetutils kmod libelf xmlto git flex bison)
 options=('!strip')
 _srcname=xanmod-kernel
 source=(
