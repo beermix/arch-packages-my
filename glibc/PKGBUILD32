@@ -6,13 +6,13 @@
 # https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=shortlog;h=refs/heads/release/2.30/master
 
 pkgbase=glibc
-pkgname=(glibc)
+pkgname=(glibc lib32-glibc)
 pkgver=2.30
-pkgrel=55
+pkgrel=61
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
-makedepends=(git python automake autoconf flex bison m4)
+makedepends=(git gd python lib32-gcc-libs automake autoconf flex bison m4)
 options=(!strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
 _commit=5a08bdb1e73e87afc1ada7b7b95d43ae470ce7e1
@@ -22,7 +22,24 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         lib32-glibc.conf
         sdt.h sdt-config.h
         bz20338.patch
-        file-truncated-while-reading-soname-after-patchelf.patch)
+        file-truncated-while-reading-soname-after-patchelf.patch
+        0001-Set-host.conf-multi-to-on-by-default.patch
+        skip-error-msg-ld.so.conf.patch
+        alternate_trim.patch
+        madvise-bss.patch
+        spinaphore.patch
+        large-page-huge-page.patch
+        use_madv_free.patch
+        malloc_tune.patch
+        mathlto.patch
+        vzeroupper-2.27.patch
+        pause.patch
+        gcc-8-fix.patch
+        spin-smarter.patch
+        nostackshrink.patch
+        0001-Force-ffsll-to-be-64-bytes-aligned.patch
+        fix-ld-audit-performance.patch
+        c-utf8-locale.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 md5sums=('SKIP'
@@ -35,7 +52,7 @@ md5sums=('SKIP'
          '0820504d2e83ee15f74a656771361872')
 
 prepare() {
-  mkdir -p glibc-build
+  mkdir -p glibc-build lib32-glibc-build
 
   [[ -d glibc-$pkgver ]] && ln -s glibc-$pkgver glibc 
   cd glibc
@@ -61,8 +78,8 @@ build() {
       --enable-cet
       --enable-lock-elision
       --enable-multi-arch
-      --enable-stack-protector=strong
       --enable-kernel=5.3
+      --enable-stack-protector=strong
       --enable-static-pie
       --disable-profile
       --disable-debug
@@ -100,6 +117,47 @@ build() {
   echo "CXX += -D_FORTIFY_SOURCE=2" >> configparms
   make
 
+  cd "$srcdir/lib32-glibc-build"
+  export CC="gcc -m32 -mstackrealign"
+  export CXX="g++ -m32 -mstackrealign"
+
+  echo "slibdir=/usr/lib32" >> configparms
+  echo "rtlddir=/usr/lib32" >> configparms
+  echo "sbindir=/usr/bin" >> configparms
+  echo "rootsbindir=/usr/bin" >> configparms
+
+  # remove fortify for building libraries
+  CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
+  CFLAGS=${CFLAGS/-fno-plt/}
+  CXXFLAGS=${CXXFLAGS/-fno-plt/}
+
+  "$srcdir/glibc/configure" \
+      --host=i686-pc-linux-gnu \
+      --libdir=/usr/lib32 \
+      --libexecdir=/usr/lib32 \
+      ${_configure_flags[@]}
+
+  # build libraries with fortify disabled
+  echo "build-programs=no" >> configparms
+  make
+
+  # re-enable fortify for programs
+  sed -i "/build-programs=/s#no#yes#" configparms
+
+  echo "CC += -D_FORTIFY_SOURCE=2" >> configparms
+  echo "CXX += -D_FORTIFY_SOURCE=2" >> configparms
+  make
+
+}
+
+check() {
+  cd glibc-build
+
+  # remove fortify in preparation to run test-suite
+  sed -i '/FORTIFY/d' configparms
+
+  # some failures are "expected"
+  make check || true
 }
 
 package_glibc() {
@@ -154,4 +212,37 @@ package_glibc() {
   # libraries too. Useful for gdb's catch command.
   install -Dm644 "$srcdir/sdt.h" "$pkgdir/usr/include/sys/sdt.h"
   install -Dm644 "$srcdir/sdt-config.h" "$pkgdir/usr/include/sys/sdt-config.h"
+}
+
+package_lib32-glibc() {
+  pkgdesc='GNU C Library (32-bit)'
+  depends=("glibc=$pkgver")
+
+  cd lib32-glibc-build
+
+  make install_root="$pkgdir" install
+  rm -rf "$pkgdir"/{etc,sbin,usr/{bin,sbin,share},var}
+
+  # We need to keep 32 bit specific header files
+  find "$pkgdir/usr/include" -type f -not -name '*-32.h' -delete
+
+  # Dynamic linker
+  install -d "$pkgdir/usr/lib"
+  ln -s ../lib32/ld-linux.so.2 "$pkgdir/usr/lib/"
+
+  # Add lib32 paths to the default library search path
+  install -Dm644 "$srcdir/lib32-glibc.conf" "$pkgdir/etc/ld.so.conf.d/lib32-glibc.conf"
+
+  # Symlink /usr/lib32/locale to /usr/lib/locale
+  ln -s ../lib/locale "$pkgdir/usr/lib32/locale"
+
+  if check_option 'debug' n; then
+    find "$pkgdir"/usr/lib32 -name '*.a' -type f -exec strip $STRIP_STATIC {} + 2> /dev/null || true
+    find "$pkgdir"/usr/lib32 \
+      -not -name 'ld-*.so' \
+      -not -name 'libc-*.so' \
+      -not -name 'libpthread-*.so' \
+      -not -name 'libthread_db-*.so' \
+      -name '*-*.so' -type f -exec strip $STRIP_SHARED {} + 2> /dev/null || true
+  fi
 }
