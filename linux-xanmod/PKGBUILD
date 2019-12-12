@@ -27,7 +27,6 @@ source=(
 0122-do-accept-in-LIFO-order-for-cache-efficiency.patch
 0124-locking-rwsem-spin-faster.patch
 0125-ata-libahci-ignore-staggered-spin-up.patch
-0129-fix-bug-in-ucode-force-reload-revision-check.patch
 0130-add-workaround-for-binutils-optimization.patch
 CVE-2019-19043.patch
 CVE-2019-19046.patch
