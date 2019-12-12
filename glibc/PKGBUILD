@@ -8,14 +8,14 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.30
-pkgrel=55
+pkgrel=56
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git gd python automake autoconf flex bison m4)
 options=(!strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-_commit=5a08bdb1e73e87afc1ada7b7b95d43ae470ce7e1
+_commit=50f20fe506abb8853641006a7b90a81af21d7b91
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
