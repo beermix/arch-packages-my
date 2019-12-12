@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.33.1
-pkgrel=74
+pkgrel=75
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='https://www.gnu.org/software/binutils/'
@@ -66,14 +66,12 @@ build() {
     --enable-relro \
     --enable-shared \
     --enable-targets=x86_64-pep \
-    --enable-threads \
     --disable-gdb \
     --disable-werror \
-    --with-pic \
     --enable-silent-rules \
     --with-system-zlib
 
-  make  configure-host
+  make configure-host
   make tooldir=/usr
 }
 
