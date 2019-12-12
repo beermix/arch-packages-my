@@ -13,21 +13,27 @@ _srcname=xanmod-kernel
 source=(
   "$_srcname::git+https://github.com/xanmod/linux?signed#tag=$_srcver"
   config         # the main kernel config file
-0102-Increase-the-ext4-default-commit-age.patch
 0104-pci-pme-wakeups.patch
 0105-ksm-wakeups.patch
+0106-intel_idle-tweak-cpuidle-cstates.patch
+0107-bootstats-add-printk-s-to-measure-boot-time-in-more-.patch
 0108-smpboot-reuse-timer-calibration.patch
+0109-raid6-add-Kconfig-option-to-skip-raid6-benchmarking.patch
+0110-Initialize-ata-before-graphics.patch
 0111-give-rdrand-some-credit.patch
 0112-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
 0113-kernel-time-reduce-ntp-wakeups.patch
 0114-init-wait-for-partition-and-retry-scan.patch
 0115-print-fsync-count-for-bootchart.patch
-0119-xattr-allow-setting-user.-attributes-on-symlinks-by-.patch
+0116-Add-boot-option-to-allow-unsigned-modules.patch
+0120-add-scheduler-turbo3-patch.patch
 0121-use-lfence-instead-of-rep-and-nop.patch
 0122-do-accept-in-LIFO-order-for-cache-efficiency.patch
 0124-locking-rwsem-spin-faster.patch
-0126-print-CPU-that-faults.patch
-CVE-2019-12379.patch
+0125-ata-libahci-ignore-staggered-spin-up.patch
+0129-fix-bug-in-ucode-force-reload-revision-check.patch
+0130-add-workaround-for-binutils-optimization.patch
+0131-nvme-workaround.patch
 CVE-2019-19043.patch
 CVE-2019-19046.patch
 CVE-2019-19050.patch
@@ -43,7 +49,9 @@ CVE-2019-19068.patch
 CVE-2019-19070.patch
 CVE-2019-19071.patch
 CVE-2019-19078.patch
-ca38fe22b0eb1adf435cb64d97418c265f0e4a4e.patch)
+0101-i8042-decrease-debug-message-level-to-info.patch
+0102-Increase-the-ext4-default-commit-age.patch
+0103-silence-rapl.patch)
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
   '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
