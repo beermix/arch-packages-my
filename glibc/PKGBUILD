@@ -78,7 +78,6 @@ build() {
       --enable-kernel=5.3
       --enable-stack-protector=strong
       --disable-profile
-      --disable-debug
       --disable-werror
   )
 
