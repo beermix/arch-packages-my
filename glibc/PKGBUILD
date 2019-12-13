@@ -35,8 +35,7 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         gcc-8-fix.patch
         spin-smarter.patch
         nostackshrink.patch
-        0001-Force-ffsll-to-be-64-bytes-aligned.patch
-        fix-ld-audit-performance.patch)
+        0001-Force-ffsll-to-be-64-bytes-aligned.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 md5sums=('SKIP'
