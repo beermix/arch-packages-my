@@ -8,6 +8,7 @@ pkgrel=4
 arch=('x86_64')
 license=('custom')
 url="https://www.zlib.net/"
+makedepends=(autoconf automake flex bison)
 depends=('glibc')
 options=('staticlibs')  # needed by binutils testsuite
 source=("https://zlib.net/zlib-${pkgver}.tar.gz"{,.asc})
