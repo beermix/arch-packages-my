@@ -14,7 +14,6 @@ _srcname=xanmod-kernel
 source=(
   "$_srcname::git+https://github.com/xanmod/linux?signed#tag=$_srctag"
   config         # the main kernel config file
-0130-add-workaround-for-binutils-optimization.patch
 )
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
