@@ -1,19 +1,16 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgbase=zlib
-pkgname=(zlib)
+pkgname=(zlib minizip)
 epoch=2
-pkgver=1.2.11.1_jtkv6.3
+pkgver=1.2.11
 pkgrel=4
-makedepends=(automake autoconf flex bison)
 arch=('x86_64')
 license=('custom')
 url="https://www.zlib.net/"
 depends=('glibc')
 options=('staticlibs')  # needed by binutils testsuite
-source=("https://github.com/jtkukunas/zlib/archive/v${pkgver}.tar.gz"
-         configure.patch
-         lto.patch)
+source=("https://zlib.net/zlib-${pkgver}.tar.gz"{,.asc})
 md5sums=('1c9f62f0778697a09d36121ead88e08e'
          'SKIP')
 validpgpkeys=('5ED46A6721D365587791E2AA783FCD8E58BCAFBA')
@@ -21,31 +18,20 @@ validpgpkeys=('5ED46A6721D365587791E2AA783FCD8E58BCAFBA')
 prepare() {
 	cd ${srcdir}/zlib-$pkgver
 	grep -A 24 '^  Copyright' zlib.h > LICENSE
-
-	patch -p1 -i ${srcdir}/lto.patch
-	patch -p1 -i ${srcdir}/configure.patch
 }
 
 build() {
 	cd ${srcdir}/zlib-$pkgver
-	export CFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto=4 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
-	export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto=4 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
-	export FFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto=4 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
-	export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto=4 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "export CFLAGS_GENERATE="$CFLAGS -fprofile-generate -fprofile-dir=/var/tmp/pgo -fprofile-update=atomic "	export FCFLAGS_GENERATE="$FCFLAGS -fprofile-generate -fprofile-dir=/var/tmp/pgo -fprofile-update=atomic "
-	export FFLAGS_GENERATE="$FFLAGS -fprofile-generate -fprofile-dir=/var/tmp/pgo -fprofile-update=atomic "
-	export CXXFLAGS_GENERATE="$CXXFLAGS -fprofile-generate -fprofile-dir=/var/tmp/pgo -fprofile-update=atomic "
-	export CFLAGS_USE="$CFLAGS -fprofile-use -fprofile-dir=/var/tmp/pgo -fprofile-correction "
-	export FCFLAGS_USE="$FCFLAGS -fprofile-use -fprofile-dir=/var/tmp/pgo -fprofile-correction "
-	export FFLAGS_USE="$FFLAGS -fprofile-use -fprofile-dir=/var/tmp/pgo -fprofile-correction "
-	export CXXFLAGS_USE="$CXXFLAGS -fprofile-use -fprofile-dir=/var/tmp/pgo -fprofile-correction "
-	CFLAGS="${CFLAGS_GENERATE}" CXXFLAGS="${CXXFLAGS_GENERATE}" FFLAGS="${FFLAGS_GENERATE}" FCFLAGS="${FCFLAGS_GENERATE}" ./configure --prefix=/usr
+	CFLAGS=${CFLAGS/-O2/-O3}
+	CXXFLAGS=${CXXFLAGS/-O2/-O3}
+	./configure --prefix=/usr
 	make
 
 	cd contrib/minizip
 	cp Makefile Makefile.orig
 	cp ../README.contrib readme.txt
 	autoreconf --install
-	./configure --prefix=/usr --enable-static=no
+	./configure --prefix=/usr --enable-static
 	make
 }
 
