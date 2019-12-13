@@ -2,30 +2,26 @@
 
 pkgbase=linux-xanmod
 pkgver=5.4.2.2
-pkgrel=1
+pkgrel=2
 pkgdesc='Linux xanmod'
-_srcver=${pkgver%.*}-xanmod${pkgver##*.}
-url="https://github.com/xanmod/linux/commits/$_srcver"
+_srctag=${pkgver%.*}-xanmod${pkgver##*.}
+url="https://github.com/xanmod/linux/commits/$_srctag"
 arch=(x86_64)
 license=(GPL2)
-makedepends=(
-  bc kmod libelf
-  xmlto python-sphinx python-sphinx_rtd_theme graphviz imagemagick
-  git flex bison
-)
+makedepends=(bc kmod libelf xmlto python-sphinx git flex bison)
 options=('!strip')
 _srcname=xanmod-kernel
 source=(
-  "$_srcname::git+https://github.com/xanmod/linux?signed#tag=$_srcver"
+  "$_srcname::git+https://github.com/xanmod/linux?signed#tag=$_srctag"
   config         # the main kernel config file
+0130-add-workaround-for-binutils-optimization.patch
+0102-Increase-the-ext4-default-commit-age.patch
 )
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
   '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
   '8218F88849AAC522E94CF470A5E9288C4FA415FA'  # Jan Alexander Steffens (heftig)
 )
-sha256sums=('SKIP'
-            '0f54f8053a3b150ba0484b4a2663bb58e51bfb628523042aaee762f49496db67')
 
 export KBUILD_BUILD_HOST=archlinux
 export KBUILD_BUILD_USER=$pkgbase
@@ -58,7 +54,7 @@ prepare() {
 
 build() {
   cd $_srcname
-  make bzImage modules
+  noti make bzImage modules 
 }
 
 _package() {
@@ -166,3 +162,13 @@ _package-headers() {
   msg2 "Fixing permissions..."
   chmod -Rc u=rwX,go=rX "$pkgdir"
 }
+
+pkgname=("$pkgbase" "$pkgbase-headers")
+for _p in "${pkgname[@]}"; do
+  eval "package_$_p() {
+    $(declare -f "_package${_p#$pkgbase}")
+    _package${_p#$pkgbase}
+  }"
+done
+
+# vim:set ts=8 sts=2 sw=2 et:
