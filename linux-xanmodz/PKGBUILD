@@ -2,7 +2,7 @@
 
 pkgbase=linux-xanmod
 pkgver=5.4.2.2
-pkgrel=6
+pkgrel=7
 pkgdesc='Linux xanmod'
 _srctag=${pkgver%.*}-xanmod${pkgver##*.}
 url="https://github.com/xanmod/linux/commits/$_srctag"
@@ -52,7 +52,7 @@ prepare() {
 
 build() {
   cd $_srcname
-  noti ionice -c 2 nice -n -20 make bzImage modules
+  noti ionice -c 3 nice -n 20 make bzImage modules
 }
 
 _package() {
