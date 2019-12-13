@@ -52,7 +52,7 @@ prepare() {
 
 build() {
   cd $_srcname
-  noti ionice -c3 nice -n19 make bzImage modules
+  noti ionice -c 1 nice -n -20 make bzImage modules
 }
 
 _package() {
