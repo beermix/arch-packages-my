@@ -2,7 +2,7 @@
 
 pkgbase=linux-xanmod
 pkgver=5.4.2.2
-pkgrel=3
+pkgrel=4
 pkgdesc='Linux xanmod'
 _srctag=${pkgver%.*}-xanmod${pkgver##*.}
 url="https://github.com/xanmod/linux/commits/$_srctag"
