@@ -3,12 +3,12 @@
 pkgbase=zsh
 pkgname=('zsh')
 pkgver=5.7.1
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 url='https://www.zsh.org/'
 license=('custom')
 makedepends=('pcre' 'libcap' 'gdbm')
-source=("https://www.zsh.org/pub/zsh-${pkgver}"{,-doc}".tar.xz"{,.asc}
+source=("https://www.zsh.org/pub/zsh-${pkgver}.tar.xz"
         'zprofile')
 sha512sums=('a6aa88e1955a80229a4784a128866e325f79a8b5f73c922ab480048411036f1835cbb31daa30ab38bd16ab2a50040eda8f4f1f64704b21b6acc3051b1dbf18d0'
             'SKIP'
@@ -57,6 +57,8 @@ build() {
 		--with-tcsetpgrp \
 		--enable-pcre \
 		--enable-cap \
+		--disable-zsh-debug \
+		--disable-ansi2knr \
 		--enable-zsh-secure-free
 	make
 }
@@ -77,12 +79,3 @@ package_zsh() {
 	install -D -m644 "${srcdir}/zprofile" "${pkgdir}/etc/zsh/zprofile"
 	install -D -m644 LICENCE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
-
-#package_zsh-doc() {
-#	pkgdesc='Info, HTML and PDF format of the ZSH documentation'
-#
-#	cd "${srcdir}/${pkgbase}-${pkgver}"
-#	make DESTDIR="${pkgdir}/" install.info install.html
-#	install -D -m644 Doc/zsh.pdf "${pkgdir}/usr/share/doc/zsh/zsh.pdf"
-#	install -D -m644 LICENCE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
-#}
