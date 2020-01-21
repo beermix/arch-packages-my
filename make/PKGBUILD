@@ -2,7 +2,7 @@
 # Contributor: judd <jvinet@zeroflux.org>
 
 pkgname=make
-pkgver=4.2.1
+pkgver=4.3
 pkgrel=27
 pkgdesc="GNU make utility to maintain groups of programs"
 arch=('x86_64')
@@ -10,7 +10,7 @@ url="https://www.gnu.org/software/make"
 license=('GPL3')
 makedepends=(automake autoconf flex bison automake m4)
 depends=('glibc')
-source=(https://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.bz2{,.sig}
+source=(https://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz
         guile-2.2.patch
         make-4.2.1-glob1.patch
         make-4.2.1-glob2.patch
@@ -38,12 +38,12 @@ prepare() {
   #https://git.savannah.gnu.org/cgit/make.git/patch/?id=48c8a116a914a325a0497721f5d8b58d5bba34d4
 #  patch -p1 -i ${srcdir}/make-4.2.1-glob2.patch
 
-  patch -p1 -i ${srcdir}/make-4.2.1-test-driver.patch
+#  patch -p1 -i ${srcdir}/make-4.2.1-test-driver.patch
 
   patch -p1 -i ${srcdir}/make-3.82-011-noclock_gettime.patch
-  patch -p1 -i ${srcdir}/make-3.82-016-weird-shell.patch
-  patch -p1 -i ${srcdir}/make-4.2-j8k.patch
-  patch -p1 -i ${srcdir}/make-glibc_alloc_fix.patch
+#  patch -p1 -i ${srcdir}/make-3.82-016-weird-shell.patch
+#  patch -p1 -i ${srcdir}/make-4.2-j8k.patch
+#  patch -p1 -i ${srcdir}/make-glibc_alloc_fix.patch
 
 #  autoreconf -fi
 #  autoreconf --verbose --install --force -I m4
