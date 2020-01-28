@@ -65,7 +65,6 @@ prepare() {
 
 build() {
   local _configure_flags=(
-      ac_cv_path_PERL=no
       ac_cv_prog_MAKEINFO=
       --prefix=/usr
       --with-headers=/usr/include
@@ -74,7 +73,7 @@ build() {
       --enable-cet
       --enable-lock-elision
       --disable-multi-arch
-      --enable-kernel=5.3
+      --enable-kernel=5.4
       --enable-stack-protector=strong
       --disable-profile
       --disable-werror
