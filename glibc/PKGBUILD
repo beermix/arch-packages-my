@@ -73,7 +73,7 @@ build() {
       --enable-cet
       --enable-lock-elision
       --disable-multi-arch
-      --enable-kernel=5.4
+      --enable-kernel=5.3
       --enable-stack-protector=strong
       --disable-profile
       --disable-werror
