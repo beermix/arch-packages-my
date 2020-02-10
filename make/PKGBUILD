@@ -42,8 +42,7 @@ prepare() {
 
   patch -p1 -i ${srcdir}/make-3.82-011-noclock_gettime.patch
   patch -p1 -i ${srcdir}/make-3.82-016-weird-shell.patch
-  patch -p1 -i ${srcdir}/make-4.2-j8k.patch
-#  patch -p1 -i ${srcdir}/make-glibc_alloc_fix.patch
+#  patch -p1 -i ${srcdir}/make-4.2-j8k.patch
 
   autoreconf -fi
 #  autoreconf --verbose --install --force -I m4
