@@ -2,7 +2,7 @@
 # Contributor: judd <jvinet@zeroflux.org>
 
 pkgname=make
-pkgver=4.3
+pkgver=4.2.1
 pkgrel=1
 pkgdesc="GNU make utility to maintain groups of programs"
 arch=('x86_64')
@@ -31,22 +31,22 @@ validpgpkeys=('3D2554F0A15338AB9AF1BB9D96B047156338B6D4')   # Paul Smith
 
 prepare() {
   cd ${pkgname}-${pkgver}
-#  patch -p1 -i ${srcdir}/guile-2.2.patch
+  patch -p1 -i ${srcdir}/guile-2.2.patch
 
   #https://git.savannah.gnu.org/cgit/make.git/patch/?id=193f1e81edd6b1b56b0eb0ff8aa4b41c7b4257b4
-#  patch -p1 -i ${srcdir}/make-4.2.1-glob1.patch
+  patch -p1 -i ${srcdir}/make-4.2.1-glob1.patch
   #https://git.savannah.gnu.org/cgit/make.git/patch/?id=48c8a116a914a325a0497721f5d8b58d5bba34d4
-#  patch -p1 -i ${srcdir}/make-4.2.1-glob2.patch
+  patch -p1 -i ${srcdir}/make-4.2.1-glob2.patch
 
-#  patch -p1 -i ${srcdir}/make-4.2.1-test-driver.patch
+  patch -p1 -i ${srcdir}/make-4.2.1-test-driver.patch
 
-#  patch -p1 -i ${srcdir}/make-3.82-011-noclock_gettime.patch
-#  patch -p1 -i ${srcdir}/make-3.82-016-weird-shell.patch
-#  patch -p1 -i ${srcdir}/make-4.2-j8k.patch
+  patch -p1 -i ${srcdir}/make-3.82-011-noclock_gettime.patch
+  patch -p1 -i ${srcdir}/make-3.82-016-weird-shell.patch
+  patch -p1 -i ${srcdir}/make-4.2-j8k.patch
 #  patch -p1 -i ${srcdir}/make-glibc_alloc_fix.patch
 
-#  autoreconf -fi
-  autoreconf --verbose --install --force -I m4
+  autoreconf -fi
+#  autoreconf --verbose --install --force -I m4
 }
 
 build() {
