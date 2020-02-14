@@ -8,14 +8,14 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.31
-pkgrel=1
+pkgrel=2
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git gd python automake autoconf flex bison m4)
 options=(!strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-_commit=9ea3686266dca3f004ba874745a4087a89682617
+_commit=aa638b86b222fcc9f9cdf1d2cb49a36ea681b469
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
@@ -64,6 +64,7 @@ prepare() {
 
 build() {
   local _configure_flags=(
+      ac_cv_path_PERL=no
       ac_cv_prog_MAKEINFO=
       --prefix=/usr
       --with-headers=/usr/include
@@ -77,6 +78,7 @@ build() {
       --enable-static-pie
       --disable-profile
       --disable-werror
+      --disable-debug
   )
 
   cd "$srcdir/glibc-build"
