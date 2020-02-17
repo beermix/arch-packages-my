@@ -12,8 +12,8 @@ pkgrel=2
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
-makedepends=(git gd python automake autoconf flex bison m4)
-options=(!strip staticlibs)
+makedepends=(git python automake autoconf flex bison m4)
+options=(strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
 _commit=5d31b083e41ce2492f3c1d4061dc610cdcdcfaa9
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
@@ -37,14 +37,7 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         0001-Force-ffsll-to-be-64-bytes-aligned.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
-md5sums=('78a720f17412f3c3282be5a6f3363ec6'
-         'SKIP'
-         '07ac979b6ab5eeb778d55f041529d623'
-         '476e9113489f93b348b21e144b6a8fcf'
-         '6e052f1cb693d5d3203f50f9d4e8c33b'
-         '91fec3b7e75510ae2ac42533aa2e695e'
-         '680df504c683640b02ed4a805797c0b2'
-         '430673eccc78e52c249aa4b0f1786450')
+
 
 prepare() {
   mkdir -p glibc-build
