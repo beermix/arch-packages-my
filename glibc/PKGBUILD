@@ -15,7 +15,7 @@ license=(GPL LGPL)
 makedepends=(git python automake autoconf flex bison m4)
 options=(strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-_commit=5d31b083e41ce2492f3c1d4061dc610cdcdcfaa9
+_commit=71f2b249a28e17eac0e47c53af44d5c5b65101aa
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
