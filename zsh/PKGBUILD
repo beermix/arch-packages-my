@@ -2,8 +2,8 @@
 
 pkgbase=zsh
 pkgname=('zsh')
-pkgver=5.7.1
-pkgrel=2
+pkgver=5.8
+pkgrel=1
 arch=('x86_64')
 url='https://www.zsh.org/'
 license=('custom')
@@ -33,7 +33,7 @@ prepare() {
 		rm -rf Completion/$_fpath
 		sed "s#\s*Completion/$_fpath/\*/\*##g" -i Src/Zle/complete.mdd
 	done
-	rm Completion/Linux/Command/_{pkgtool,rpmbuild}
+	rm Completion/Linux/Command/_pkgtool
 }
 
 build() {
@@ -77,5 +77,4 @@ package_zsh() {
 	cd "${srcdir}/${pkgbase}-${pkgver}"
 	make DESTDIR="${pkgdir}/" install
 	install -D -m644 "${srcdir}/zprofile" "${pkgdir}/etc/zsh/zprofile"
-	install -D -m644 LICENCE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
