@@ -8,7 +8,7 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.31
-pkgrel=1
+pkgrel=2
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -34,7 +34,12 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         gcc-8-fix.patch
         spin-smarter.patch
         nostackshrink.patch
-        0001-Force-ffsll-to-be-64-bytes-aligned.patch)
+        0001-Force-ffsll-to-be-64-bytes-aligned.patch
+        0001-Compile-branred.c-with-mprefer-vector-width-128.patch
+        0001-Set-vector-width-and-alignment-to-fix-GCC-AVX-issue.patch
+        mathlto.patch
+        fix-ld-audit-performance.patch
+        c-utf8-locale.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 
@@ -55,6 +60,11 @@ prepare() {
 }
 
 build() {
+  export CFLAGS="-O2 -march=core-avx2 -g2 -m64  -Wl,-z,max-page-size=0x1000 -fPIC -falign-functions=32 -Wa,-mbranches-within-32B-boundaries"
+  export ASFLAGS="-Wa,-mbranches-within-32B-boundaries"
+  unset LDFLAGS
+  export LDFLAGS="-Wl,-z,max-page-size=0x1000 "
+
   local _configure_flags=(
       ac_cv_path_PERL=no
       ac_cv_prog_MAKEINFO=
