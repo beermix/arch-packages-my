@@ -3,25 +3,26 @@
 
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: valgrind requires rebuilt with each major glibc version
-# https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=shortlog;h=refs/heads/release/2.30/master
+# https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=shortlog;h=refs/heads/release/2.31/master
 
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.31
-pkgrel=2
+pkgrel=1
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git python automake autoconf flex bison m4)
 options=(strip staticlibs)
-#source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
+#source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
 _commit=71f2b249a28e17eac0e47c53af44d5c5b65101aa
-source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
+source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
         locale.gen.txt
         locale-gen
         lib32-glibc.conf
         sdt.h sdt-config.h
         bz20338.patch
+        glibc-stable-branch.patch
         alternate_trim.patch
         madvise-bss.patch
         spinaphore.patch
@@ -37,11 +38,20 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         0001-Force-ffsll-to-be-64-bytes-aligned.patch
         0001-Compile-branred.c-with-mprefer-vector-width-128.patch
         0001-Set-vector-width-and-alignment-to-fix-GCC-AVX-issue.patch
-        mathlto.patch
         fix-ld-audit-performance.patch
-        c-utf8-locale.patch)
+        c-utf8-locale.patch
+        0001-misc-Support-fallback-stateless-shells-path-in-absen.patch
+        stateless.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
+md5sums=('78a720f17412f3c3282be5a6f3363ec6'
+         'SKIP'
+         '07ac979b6ab5eeb778d55f041529d623'
+         '476e9113489f93b348b21e144b6a8fcf'
+         '6e052f1cb693d5d3203f50f9d4e8c33b'
+         '91fec3b7e75510ae2ac42533aa2e695e'
+         '680df504c683640b02ed4a805797c0b2'
+         '430673eccc78e52c249aa4b0f1786450')
 
 prepare() {
   mkdir -p glibc-build
@@ -60,10 +70,10 @@ prepare() {
 }
 
 build() {
-  export CFLAGS="-O2 -march=core-avx2 -g2 -m64  -Wl,-z,max-page-size=0x1000 -fPIC -falign-functions=32 -Wa,-mbranches-within-32B-boundaries"
-  export ASFLAGS="-Wa,-mbranches-within-32B-boundaries"
-  unset LDFLAGS
-  export LDFLAGS="-Wl,-z,max-page-size=0x1000 "
+#  export CFLAGS="-O2 -march=core-avx2 -g2 -m64  -Wl,-z,max-page-size=0x1000 -fPIC -falign-functions=32 -Wa,-mbranches-within-32B-boundaries"
+#  export ASFLAGS="-Wa,-mbranches-within-32B-boundaries"
+#  unset LDFLAGS
+#  export LDFLAGS="-Wl,-z,max-page-size=0x1000 "
 
   local _configure_flags=(
       ac_cv_path_PERL=no
