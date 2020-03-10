@@ -18,7 +18,7 @@ options=(strip staticlibs)
 _commit=e85a88e00c1cc6e299414a6cd10ce046df07f85b
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
 source=(git://sourceware.org/git/glibc.git#commit=$_commit
-        locale.gen.txta
+        locale.gen.txt
         locale-gen
         lib32-glibc.conf
         sdt.h sdt-config.h
