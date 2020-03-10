@@ -14,11 +14,11 @@ url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git python automake autoconf flex bison m4)
 options=(strip staticlibs)
-#source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
+#source=(git://sourceware.org/git/glibc.git#commit=$_commit
 _commit=e85a88e00c1cc6e299414a6cd10ce046df07f85b
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
 source=(git://sourceware.org/git/glibc.git#commit=$_commit
-        locale.gen.txt
+        locale.gen.txta
         locale-gen
         lib32-glibc.conf
         sdt.h sdt-config.h
@@ -70,10 +70,10 @@ prepare() {
 }
 
 build() {
-  export CFLAGS="-O2 -march=haswell -g2 -m64  -Wl,-z,max-page-size=0x1000 -fPIC -falign-functions=32 -Wa,-mbranches-within-32B-boundaries"
-  export ASFLAGS="-Wa,-mbranches-within-32B-boundaries"
-  unset LDFLAGS
-  export LDFLAGS="-Wl,-z,max-page-size=0x1000 "
+#  export CFLAGS="-O2 -march=haswell -g2 -m64  -Wl,-z,max-page-size=0x1000 -fPIC -falign-functions=32 -Wa,-mbranches-within-32B-boundaries"
+#  export ASFLAGS="-Wa,-mbranches-within-32B-boundaries"
+#  unset LDFLAGS
+#  export LDFLAGS="-Wl,-z,max-page-size=0x1000 "
 
   local _configure_flags=(
       ac_cv_path_PERL=no
