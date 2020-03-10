@@ -56,7 +56,7 @@ md5sums=('78a720f17412f3c3282be5a6f3363ec6'
 prepare() {
   mkdir -p glibc-build
 
-  [[ -d glibc-$pkgver ]] && ln -s glibc-$pkgver glibc 
+  [[ -d glibc-$pkgver ]] && ln -s glibc-$pkgver glibc
   cd glibc
 
   local i; for i in ${source[@]}; do
@@ -85,7 +85,7 @@ build() {
       --enable-cet
       --enable-lock-elision
       --disable-multi-arch
-      --enable-kernel=5.5
+      --enable-kernel=5.4
       --enable-stack-protector=strong
       --enable-static-pie
       --disable-profile
