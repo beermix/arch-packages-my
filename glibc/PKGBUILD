@@ -70,10 +70,10 @@ prepare() {
 }
 
 build() {
-#  export CFLAGS="-O2 -march=core-avx2 -g2 -m64  -Wl,-z,max-page-size=0x1000 -fPIC -falign-functions=32 -Wa,-mbranches-within-32B-boundaries"
-#  export ASFLAGS="-Wa,-mbranches-within-32B-boundaries"
-#  unset LDFLAGS
-#  export LDFLAGS="-Wl,-z,max-page-size=0x1000 "
+  export CFLAGS="-O2 -march=haswell -g2 -m64  -Wl,-z,max-page-size=0x1000 -fPIC -falign-functions=32 -Wa,-mbranches-within-32B-boundaries"
+  export ASFLAGS="-Wa,-mbranches-within-32B-boundaries"
+  unset LDFLAGS
+  export LDFLAGS="-Wl,-z,max-page-size=0x1000 "
 
   local _configure_flags=(
       ac_cv_path_PERL=no
@@ -85,7 +85,7 @@ build() {
       --enable-cet
       --enable-lock-elision
       --disable-multi-arch
-      --enable-kernel=5.4
+      --enable-kernel=5.5
       --enable-stack-protector=strong
       --enable-static-pie
       --disable-profile
