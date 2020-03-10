@@ -3,26 +3,26 @@
 
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: valgrind requires rebuilt with each major glibc version
-# https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=shortlog;h=refs/heads/release/2.30/master
+# https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=shortlog;h=refs/heads/release/2.31/master
 
 pkgbase=glibc
 pkgname=(glibc)
-pkgver=2.30
-pkgrel=58
+pkgver=2.31.9000
+pkgrel=1
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
-makedepends=(git gd python automake autoconf flex bison m4)
-options=(!strip staticlibs)
+makedepends=(git python automake autoconf flex bison m4)
+options=(strip staticlibs)
+#source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
+_commit=8b8f39376be81dc09560d23dbec59cd7080d54f6
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-_commit=994e529a37953a057b9e6c80afa03b03fd3724f2
-source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
+source=(git://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
         lib32-glibc.conf
         sdt.h sdt-config.h
         bz20338.patch
-        file-truncated-while-reading-soname-after-patchelf.patch
         alternate_trim.patch
         madvise-bss.patch
         spinaphore.patch
@@ -30,27 +30,32 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         use_madv_free.patch
         malloc_tune.patch
         mathlto.patch
-        vzeroupper-2.27.patch
         pause.patch
         gcc-8-fix.patch
         spin-smarter.patch
         nostackshrink.patch
-        0001-Force-ffsll-to-be-64-bytes-aligned.patch)
+        0001-Force-ffsll-to-be-64-bytes-aligned.patch
+        0001-Compile-branred.c-with-mprefer-vector-width-128.patch
+        0001-Set-vector-width-and-alignment-to-fix-GCC-AVX-issue.patch
+        fix-ld-audit-performance.patch
+        c-utf8-locale.patch
+        0001-misc-Support-fallback-stateless-shells-path-in-absen.patch
+        stateless.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
-md5sums=('SKIP'
+md5sums=('78a720f17412f3c3282be5a6f3363ec6'
+         'SKIP'
          '07ac979b6ab5eeb778d55f041529d623'
          '476e9113489f93b348b21e144b6a8fcf'
          '6e052f1cb693d5d3203f50f9d4e8c33b'
          '91fec3b7e75510ae2ac42533aa2e695e'
          '680df504c683640b02ed4a805797c0b2'
-         '430673eccc78e52c249aa4b0f1786450'
-         '0820504d2e83ee15f74a656771361872')
+         '430673eccc78e52c249aa4b0f1786450')
 
 prepare() {
   mkdir -p glibc-build
 
-  [[ -d glibc-$pkgver ]] && ln -s glibc-$pkgver glibc 
+  [[ -d glibc-$pkgver ]] && ln -s glibc-$pkgver glibc
   cd glibc
 
   local i; for i in ${source[@]}; do
@@ -64,7 +69,13 @@ prepare() {
 }
 
 build() {
+  export CFLAGS="-O2 -march=haswell -g2 -m64  -Wl,-z,max-page-size=0x1000 -fPIC -falign-functions=32 -Wa,-mbranches-within-32B-boundaries"
+  export ASFLAGS="-Wa,-mbranches-within-32B-boundaries"
+  unset LDFLAGS
+  export LDFLAGS="-Wl,-z,max-page-size=0x1000 "
+
   local _configure_flags=(
+      ac_cv_path_PERL=no
       ac_cv_prog_MAKEINFO=
       --prefix=/usr
       --with-headers=/usr/include
@@ -73,10 +84,12 @@ build() {
       --enable-cet
       --enable-lock-elision
       --disable-multi-arch
-      --enable-kernel=5.3
+      --enable-kernel=5.4
       --enable-stack-protector=strong
+      --enable-static-pie
       --disable-profile
       --disable-werror
+      --disable-debug
   )
 
   cd "$srcdir/glibc-build"
