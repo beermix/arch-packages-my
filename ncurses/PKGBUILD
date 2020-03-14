@@ -18,17 +18,17 @@ source=(http://invisible-mirror.net/archives/ncurses/ncurses-${pkgver/_/-}.tar.g
          ncurses-200-fix_missing_include.patch
          ncurses-900-terminfo.patch)
 
-#prepare() {
-#  mkdir -p ncurses-build
+prepare() {
+  mkdir -p ncurses-build
 
-#    cd $pkgname-$pkgver
+    cd $pkgname-$pkgver
 
-#  patch -p1 -i "$srcdir/ncurses-100-ncurses-5.6-20080112-urxvt.patch"
-#  patch -p1 -i "$srcdir/ncurses-101-ncurses-5.6-20080628-kbs.patch"
-#  patch -p1 -i "$srcdir/ncurses-102-ncurses-5.9-gcc-5.patch"
-#  patch -p1 -i "$srcdir/ncurses-200-fix_missing_include.patch"
-#  patch -p1 -i "$srcdir/ncurses-900-terminfo.patch"
-#}
+  patch -p1 -i "$srcdir/ncurses-100-ncurses-5.6-20080112-urxvt.patch"
+  patch -p1 -i "$srcdir/ncurses-101-ncurses-5.6-20080628-kbs.patch"
+  patch -p1 -i "$srcdir/ncurses-102-ncurses-5.9-gcc-5.patch"
+  patch -p1 -i "$srcdir/ncurses-200-fix_missing_include.patch"
+  patch -p1 -i "$srcdir/ncurses-900-terminfo.patch"
+}
 
 build() {
   cd $pkgname-$pkgver
