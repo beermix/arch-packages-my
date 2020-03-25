@@ -86,8 +86,6 @@ build() {
       --enable-lock-elision
       --enable-multi-arch
       --enable-kernel=5.4
-      --enable-stack-protector=strong
-      --enable-static-pie
       --disable-profile
       --disable-werror
       --disable-debug
