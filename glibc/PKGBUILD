@@ -75,7 +75,6 @@ build() {
       --enable-bind-now
       --enable-cet
       --enable-lock-elision
-      --enable-multi-arch
       --enable-stack-protector=strong
       --enable-kernel=5.4
       --enable-static-pie
