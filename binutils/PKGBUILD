@@ -4,30 +4,34 @@
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 
 pkgname=binutils
-pkgver=2.33.1
-pkgrel=75
+pkgver=2.34
+pkgrel=2
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='https://www.gnu.org/software/binutils/'
 license=(GPL)
 groups=(base-devel)
-depends=(glibc zlib)
-checkdepends=(bc)
-makedepends=(automake autoconf flex bison)
+depends=(glibc zlib elfutils)
+makedepends=('elfutils' 'automake' 'autoconf' 'flex' 'bison')
 conflicts=(binutils-multilib)
 replaces=(binutils-multilib)
 options=(staticlibs !distcc !ccache)
-source=(https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz
-      binutils-stable-branch.patch
-      0001-gas-Add-md_cons_worker.patch
-      CVE-2019-17450.patch
-      CVE-2019-17451.patch
-      0002-gas-Add-md_generic_table_relax_frag.patch
-      0003-i386-Align-branches-within-a-fixed-boundary.patch
-      0004-i386-Add-mbranches-within-32B-boundaries.patch
-      0005-Don-t-add-prefix-to-instructions-with-TLS-relocation.patch)
+source=(https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz{,.sig}
+	binutils-2.22.52.0.4-no-config-h-check.patch
+	binutils-2.29-filename-in-error-messages.patch
+	binutils-2.29-revert-PLT-elision.patch
+	binutils-attach-to-group.patch
+	binutils-CVE-2019-1010204.patch
+	binutils-do-not-link-with-static-libstdc++.patch
+	binutils-export-demangle.h.patch
+	binutils-fix-testsuite-failures.patch
+	binutils-gold-ignore-discarded-note-relocs.patch
+	binutils-gold-mismatched-section-flags.patch
+	binutils-nm-lto-plugin.patch
+	binutils-readelf-other-sym-info.patch
+	binutils-special-sections-in-groups.patch)
 validpgpkeys=(3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F)
-md5sums=('9406231b7d9dd93731c2d06cefe8aaf1'
+md5sums=('664ec3a2df7805ed3464639aaae332d6'
          'SKIP')
 
 prepare() {
@@ -36,19 +40,22 @@ prepare() {
   #cd binutils-gdb
   cd binutils-$pkgver
 
-  patch -p1 -i "$srcdir/binutils-stable-branch.patch"
-  patch -p1 -i "$srcdir/0001-gas-Add-md_cons_worker.patch"
-  patch -p1 -i "$srcdir/0002-gas-Add-md_generic_table_relax_frag.patch"
-  patch -p1 -i "$srcdir/0003-i386-Align-branches-within-a-fixed-boundary.patch"
-  patch -p1 -i "$srcdir/0004-i386-Add-mbranches-within-32B-boundaries.patch"
-  patch -p1 -i "$srcdir/0005-Don-t-add-prefix-to-instructions-with-TLS-relocation.patch"
-  patch -p1 -i "$srcdir/CVE-2019-17450.patch"
-  patch -p1 -i "$srcdir/CVE-2019-17451.patch"
+  patch -p1 -i "$srcdir/binutils-2.22.52.0.4-no-config-h-check.patch
+  patch -p1 -i "$srcdir/binutils-2.29-filename-in-error-messages.patch"
+  patch -p1 -i "$srcdir/binutils-2.29-revert-PLT-elision.patch"
+  patch -p1 -i "$srcdir/binutils-attach-to-group.patch"
+  patch -p1 -i "$srcdir/binutils-CVE-2019-1010204.patch"
+  patch -p1 -i "$srcdir/binutils-do-not-link-with-static-libstdc++.patch"
+  patch -p1 -i "$srcdir/binutils-export-demangle.h.patch"
+  patch -p1 -i "$srcdir/binutils-fix-testsuite-failures.patch"
+  patch -p1 -i "$srcdir/binutils-gold-ignore-discarded-note-relocs.patch"
+  patch -p1 -i "$srcdir/binutils-gold-mismatched-section-flags.patch"
+  patch -p1 -i "$srcdir/binutils-nm-lto-plugin.patch"
+  patch -p1 -i "$srcdir/binutils-readelf-other-sym-info.patch"
+  patch -p1 -i "$srcdir/binutils-special-sections-in-groups.patch"
 
   # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
   sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
-
-  sed -i -e "s/#define BFD_VERSION_DATE.*/#define BFD_VERSION_DATE 20190203/g" bfd/version.h
 }
 
 build() {
@@ -66,13 +73,23 @@ build() {
     --enable-relro \
     --enable-shared \
     --enable-targets=x86_64-pep \
+    --enable-threads \
     --disable-gdb \
     --disable-werror \
-    --enable-silent-rules \
+    --with-debuginfod \
+    --with-pic \
     --with-system-zlib
 
   make configure-host
   make tooldir=/usr
+}
+
+check() {
+  cd binutils-build
+
+  # unset LDFLAGS as testsuite makes assumptions about which ones are active
+  # ignore failures in gold testsuite...
+  make -k LDFLAGS="" check || true
 }
 
 package() {
