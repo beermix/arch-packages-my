@@ -17,6 +17,7 @@ conflicts=(binutils-multilib)
 replaces=(binutils-multilib)
 options=(staticlibs !distcc !ccache)
 source=(https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz{,.sig}
+	nodocs.patch
 	binutils-2.22.52.0.4-no-config-h-check.patch
 	binutils-2.29-filename-in-error-messages.patch
 	binutils-2.29-revert-PLT-elision.patch
@@ -53,6 +54,8 @@ prepare() {
   patch -p1 -i "$srcdir/binutils-nm-lto-plugin.patch"
   patch -p1 -i "$srcdir/binutils-readelf-other-sym-info.patch"
   patch -p1 -i "$srcdir/binutils-special-sections-in-groups.patch"
+
+  patch -p1 -i "$srcdir/nodocs.patch"
 
   # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
   sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
