@@ -30,7 +30,8 @@ source=(https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz{,.sig}
 	binutils-gold-mismatched-section-flags.patch
 	binutils-nm-lto-plugin.patch
 	binutils-readelf-other-sym-info.patch
-	binutils-special-sections-in-groups.patch)
+	binutils-special-sections-in-groups.patch
+	binutils-stable-branch.patch)
 validpgpkeys=(3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F)
 md5sums=('664ec3a2df7805ed3464639aaae332d6'
          'SKIP')
@@ -41,20 +42,21 @@ prepare() {
   #cd binutils-gdb
   cd binutils-$pkgver
 
-  patch -p1 -i "$srcdir/binutils-2.22.52.0.4-no-config-h-check.patch"
-  patch -p1 -i "$srcdir/binutils-2.29-filename-in-error-messages.patch"
-  patch -p1 -i "$srcdir/binutils-2.29-revert-PLT-elision.patch"
-  patch -p1 -i "$srcdir/binutils-attach-to-group.patch"
-  patch -p1 -i "$srcdir/binutils-CVE-2019-1010204.patch"
-  patch -p1 -i "$srcdir/binutils-do-not-link-with-static-libstdc++.patch"
-  patch -p1 -i "$srcdir/binutils-export-demangle.h.patch"
-  patch -p1 -i "$srcdir/binutils-fix-testsuite-failures.patch"
-  patch -p1 -i "$srcdir/binutils-gold-ignore-discarded-note-relocs.patch"
-  patch -p1 -i "$srcdir/binutils-gold-mismatched-section-flags.patch"
-  patch -p1 -i "$srcdir/binutils-nm-lto-plugin.patch"
-  patch -p1 -i "$srcdir/binutils-readelf-other-sym-info.patch"
-  patch -p1 -i "$srcdir/binutils-special-sections-in-groups.patch"
+#  patch -p1 -i "$srcdir/binutils-2.22.52.0.4-no-config-h-check.patch"
+#  patch -p1 -i "$srcdir/binutils-2.29-filename-in-error-messages.patch"
+#  patch -p1 -i "$srcdir/binutils-2.29-revert-PLT-elision.patch"
+#  patch -p1 -i "$srcdir/binutils-attach-to-group.patch"
+#  patch -p1 -i "$srcdir/binutils-CVE-2019-1010204.patch"
+#  patch -p1 -i "$srcdir/binutils-do-not-link-with-static-libstdc++.patch"
+#  patch -p1 -i "$srcdir/binutils-export-demangle.h.patch"
+#  patch -p1 -i "$srcdir/binutils-fix-testsuite-failures.patch"
+#  patch -p1 -i "$srcdir/binutils-gold-ignore-discarded-note-relocs.patch"
+#  patch -p1 -i "$srcdir/binutils-gold-mismatched-section-flags.patch"
+#  patch -p1 -i "$srcdir/binutils-nm-lto-plugin.patch"
+#  patch -p1 -i "$srcdir/binutils-readelf-other-sym-info.patch"
+#  patch -p1 -i "$srcdir/binutils-special-sections-in-groups.patch"
 
+  patch -p1 -i "$srcdir/binutils-stable-branch.patch"
   patch -p1 -i "$srcdir/nodocs.patch"
 
   # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
