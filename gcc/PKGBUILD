@@ -207,13 +207,11 @@ package_gcc-libs() {
 
   # remove files provided by lib32-gcc-libs
   rm -rf "$pkgdir"/usr/lib32/
-  rm -rf "$pkgdir"/usr/lib/libstdc++.a
+  rm "$pkgdir"/usr/lib/libstdc++.a
 
   # Install Runtime Library Exception
   install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
     "$pkgdir/usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION"
-    
-    rm 
 }
 
 package_gcc() {
@@ -274,9 +272,9 @@ package_gcc() {
   make -C libiberty DESTDIR="$pkgdir" install
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
 
-  make -C gcc DESTDIR="$pkgdir" install-man install-info
-  rm "$pkgdir"/usr/share/man/man1/{gccgo,gfortran,gdc}.1
-  rm "$pkgdir"/usr/share/info/{gccgo,gfortran,gnat-style,gnat_rm,gnat_ugn,gdc}.info
+  #make -C gcc DESTDIR="$pkgdir" install-info
+  #rm "$pkgdir"/usr/share/man/man1/{gccgo,gfortran,gdc}.1
+  #rm "$pkgdir"/usr/share/info/{gccgo,gfortran,gnat-style,gnat_rm,gnat_ugn,gdc}.info
 
   make -C libcpp DESTDIR="$pkgdir" install
   make -C gcc DESTDIR="$pkgdir" install-po
@@ -432,7 +430,7 @@ package_lib32-gcc-libs() {
 
   # remove files provided by gcc-libs
   rm -rf "$pkgdir"/usr/lib
-  rm -rf "$pkgdir"/usr/lib32/libstdc++.a
+  rm "$pkgdir"/usr/lib32/libstdc++.a
 
   # Install Runtime Library Exception
   install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
