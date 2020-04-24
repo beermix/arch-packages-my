@@ -14,7 +14,7 @@ pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
 url='https://gcc.gnu.org'
-makedepends=(binutils libmpc doxygen gcc-ada lib32-glibc lib32-gcc-libs python automake autoconf flex bison m4 git)
+makedepends=(binutils libmpc gcc-ada doxygen lib32-glibc lib32-gcc-libs python git automake autoconf flex bison m4)
 checkdepends=(dejagnu inetutils)
 options=(!emptydirs)
 _libdir=usr/lib/gcc/$CHOST/${pkgver%%+*}
@@ -286,7 +286,7 @@ package_gcc() {
   install -Dm755 "$srcdir/c99" "$pkgdir/usr/bin/c99"
 
   # install the libstdc++ man pages
-  make -C $CHOST/libstdc++-v3/doc DESTDIR="$pkgdir" doc-install-man
+  # make -C $CHOST/libstdc++-v3/doc DESTDIR="$pkgdir" doc-install-man
 
   # remove files provided by lib32-gcc-libs
   rm -f "$pkgdir"/usr/lib32/lib{stdc++,gcc_s}.so
