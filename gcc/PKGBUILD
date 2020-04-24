@@ -207,10 +207,13 @@ package_gcc-libs() {
 
   # remove files provided by lib32-gcc-libs
   rm -rf "$pkgdir"/usr/lib32/
+  rm -rf "$pkgdir"/usr/lib/libstdc++.a
 
   # Install Runtime Library Exception
   install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
     "$pkgdir/usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION"
+    
+    rm 
 }
 
 package_gcc() {
@@ -429,6 +432,7 @@ package_lib32-gcc-libs() {
 
   # remove files provided by gcc-libs
   rm -rf "$pkgdir"/usr/lib
+  rm -rf "$pkgdir"/usr/lib32/libstdc++.a
 
   # Install Runtime Library Exception
   install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
