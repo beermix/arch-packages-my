@@ -6,25 +6,27 @@
 # NOTE: libtool requires rebuilt with each new gcc version
 
 pkgname=(gcc gcc-libs gcc-fortran gcc-objc gcc-ada gcc-go lib32-gcc-libs gcc-d)
-pkgver=9.2.0
+pkgver=9.3.0
 _majorver=${pkgver:0:1}
-_islver=0.21
-pkgrel=120
+_islver=0.16.1
+pkgrel=1
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
 url='https://gcc.gnu.org'
-makedepends=(binutils libmpc doxygen gcc-ada lib32-glibc lib32-gcc-libs python automake autoconf flex bison m4)
+makedepends=(binutils libmpc doxygen gcc-ada lib32-glibc lib32-gcc-libs python automake autoconf flex bison m4 git)
 checkdepends=(dejagnu inetutils)
-options=(!emptydirs !staticlibs)
-#source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
+options=(!emptydirs)
+_libdir=usr/lib/gcc/$CHOST/${pkgver%%+*}
+# _commit=6957d3e4eef1f4243eb23ff62aea06139ef4415a
+# source=(git://gcc.gnu.org/git/gcc.git#commit=$_commit
 source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
-#source=(gcc::svn://gcc.gnu.org/svn/gcc/branches/gcc-${_majorver}-branch
         http://isl.gforge.inria.fr/isl-${_islver}.tar.xz
         c89 c99
         gdc_phobos_path.patch
         gdc_artificial_decl.patch
         gdc_thunk_weak_ref.patch
+        fs64270.patch
         010-documentation.patch
         gcc-stable-branch.patch
         0001-Always-use-z-now-when-linking-with-pie.patch
@@ -46,41 +48,21 @@ source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         gcc-4.8.2-disable_multilib_i386_linux64.patch
         0018-isl-0.20.patch
         zero-regs-gcc8.patch
+        libiberty-sync.patch
         c89 c99)
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
               86CFFCA918CF3AF47147588051E8B148A9999C34  # evangelos@foutrelis.com
               13975A70E63C361C73AE69EF6EEB81F8981C74C7  # richard.guenther@gmail.com
               33C235A34C46AA3FFB293709A328C3A2C3C45C06) # Jakub Jelinek <jakub@redhat.com>
-sha256sums=('ea6ef08f121239da5695f76c9b33637a118dcf63e24164422231917fa61fb206'
+sha256sums=('71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1'
             'SKIP'
             '777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960'
             'de48736f6e4153f03d0a5d38ceb6c6fdb7f054e8f47ddd6af0a3dbf14f27b931'
             '2513c6d9984dd0a2058557bf00f06d8d5181734e41dcfe07be7ed86f2959622a'
             'c86372c207d174c0918d4aedf1cb79f7fc093649eb1ad8d9450dccc46849d308'
             '3862757491160700ac2fb723096f6f636f30320cccc6efd9537149ed348b57d1'
-            '9699d7105375754f0dcf6abff87d09b270565bfc6578a13641770f3fc62d678a')
-
-_svnrev=820c1eb
-_svnurl=svn://gcc.gnu.org/svn/gcc/branches/gcc-${_majorver}-branch
-_libdir=usr/lib/gcc/$CHOST/${pkgver%%+*}
-
-snapshot() {
-  svn export -r${_svnrev} ${_svnurl} gcc-r${_svnrev}
-
-  local datestamp basever _pkgver
-  basever=$(< gcc-r${_svnrev}/gcc/BASE-VER)
-  datestamp=$(< gcc-r${_svnrev}/gcc/DATESTAMP)
-  _pkgver=${basever}-${datestamp}
-
-  mv gcc-r${_svnrev} gcc-${_pkgver}
-  tar cf - gcc-${_pkgver} | xz > gcc-${_pkgver}.tar.xz
-  rm -rf gcc-${_pkgver}
-  gpg -b gcc-${_pkgver}.tar.xz
-  scp gcc-${_pkgver}.tar.xz{,.sig} sources.archlinux.org:/srv/ftp/other/gcc/
-
-  echo
-  echo "pkgver=${_pkgver/-/+}"
-}
+            '9699d7105375754f0dcf6abff87d09b270565bfc6578a13641770f3fc62d678a'
+            'f45160f699501568ae9e81127562395dd95b5b4a8e4d55a1615fbb00f9e4deb2')
 
 prepare() {
   [[ ! -d gcc ]] && ln -s gcc-${pkgver/+/-} gcc
@@ -88,7 +70,7 @@ prepare() {
 
 #  patch -p1 -i "$srcdir/010-documentation.patch"
   patch -p1 -i "$srcdir/gcc-stable-branch.patch"
-#  patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
+  patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
   patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
   patch -p1 -i "$srcdir/optimize.patch"
   patch -p1 -i "$srcdir/ipa-cp.patch"
@@ -96,6 +78,7 @@ prepare() {
   patch -p1 -i "$srcdir/fortran-vector-v2.patch"
   patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
   patch -p1 -i "$srcdir/optimize-at-least-some.patch"
+  patch -p1 -i "$srcdir/libiberty-sync.patch"
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
@@ -111,11 +94,14 @@ prepare() {
 
   # D hacks
   patch -p1 -i "$srcdir/gdc_phobos_path.patch"
-  patch -p1 -i "$srcdir/gdc_artificial_decl.patch"
+  #patch -p1 -i "$srcdir/gdc_artificial_decl.patch"
   patch -p1 -i "$srcdir/gdc_thunk_weak_ref.patch"
-  #sed -i "/GDCFLAGSX=/s/-Wall/-shared-libphobos -Wall/" libphobos/configure
 
-  echo ${pkgver} > gcc/BASE-VER
+  # Turn off SSP for nostdlib|nodefaultlibs|ffreestanding
+  # https://bugs.archlinux.org/task/64270
+  patch -p1 -i "$srcdir/fs64270.patch"
+
+  echo ${pkgver/+/-} > gcc/BASE-VER
 
   mkdir -p "$srcdir/gcc-build"
 }
@@ -128,14 +114,20 @@ build() {
   CFLAGS=${CFLAGS/-pipe/}
   CXXFLAGS=${CXXFLAGS/-pipe/}
 
-#  export CC='ccache gcc'
-#  export CXX='ccache g++'
+  unset CFLAGS
+  unset CXXFLAGS
+  export CFLAGS="-march=haswell -g -O3 -fstack-protector -Wl,-z -Wl,now -Wl,-z -Wl,relro  -Wl,-z,max-page-size=0x1000"
+  export CXXFLAGS="-march=haswell -g -O3  -Wl,-z,max-page-size=0x1000"
+  export CFLAGS_FOR_TARGET="$CFLAGS -march=haswell -fno-semantic-interposition "
+  export CXXFLAGS_FOR_TARGET="$CXXFLAGS -march=haswell -fno-semantic-interposition "
+  export FFLAGS_FOR_TARGET="$FFLAGS -march=haswell -fno-semantic-interposition "
 
   "$srcdir/gcc/configure" --prefix=/usr \
       --libdir=/usr/lib \
       --libexecdir=/usr/lib \
       --mandir=/usr/share/man \
       --infodir=/usr/share/info \
+      --with-pkgversion="Arch Linux $pkgver-$pkgrel" \
       --with-bugurl=https://bugs.archlinux.org/ \
       --enable-languages=c,c++,ada,fortran,go,lto,objc,obj-c++,d \
       --enable-shared \
@@ -158,13 +150,11 @@ build() {
       --disable-werror \
       --enable-checking=release \
       --enable-default-pie \
-      --enable-default-ssp \
-      --with-tune=haswell \
       --enable-cet=auto \
       --with-diagnostics-color=always \
       gdc_include_dir=/usr/include/dlang/gdc
 
-  noti ionice -c3 nice -n19 make
+  noti ionice -c 3 nice -n 19 make
 }
 
 check() {
@@ -206,11 +196,21 @@ package_gcc-libs() {
   make -C $CHOST/libstdc++-v3/po DESTDIR="$pkgdir" install
 
   make -C $CHOST/libphobos DESTDIR="$pkgdir" install
-  rm -rf "$pkgdir"/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include/d/
+  rm -rf "$pkgdir"/$_libdir/include/d/
   rm -f "$pkgdir"/usr/lib/libgphobos.spec
+
+  for lib in libgomp \
+             libitm \
+             libquadmath; do
+    make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
+  done
 
   # remove files provided by lib32-gcc-libs
   rm -rf "$pkgdir"/usr/lib32/
+
+  # Install Runtime Library Exception
+  install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
+    "$pkgdir/usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION"
 }
 
 package_gcc() {
@@ -271,6 +271,10 @@ package_gcc() {
   make -C libiberty DESTDIR="$pkgdir" install
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
 
+  make -C gcc DESTDIR="$pkgdir" install-man install-info
+  rm "$pkgdir"/usr/share/man/man1/{gccgo,gfortran,gdc}.1
+  rm "$pkgdir"/usr/share/info/{gccgo,gfortran,gnat-style,gnat_rm,gnat_ugn,gdc}.info
+
   make -C libcpp DESTDIR="$pkgdir" install
   make -C gcc DESTDIR="$pkgdir" install-po
 
@@ -281,12 +285,20 @@ package_gcc() {
   install -Dm755 "$srcdir/c89" "$pkgdir/usr/bin/c89"
   install -Dm755 "$srcdir/c99" "$pkgdir/usr/bin/c99"
 
+  # install the libstdc++ man pages
+  make -C $CHOST/libstdc++-v3/doc DESTDIR="$pkgdir" doc-install-man
+
   # remove files provided by lib32-gcc-libs
   rm -f "$pkgdir"/usr/lib32/lib{stdc++,gcc_s}.so
 
   # byte-compile python libraries
   python -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
   python -O -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
+
+  # Install Runtime Library Exception
+  install -d "$pkgdir/usr/share/licenses/$pkgname/"
+  ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
+    "$pkgdir/usr/share/licenses/$pkgname/"
 }
 
 package_gcc-fortran() {
@@ -301,10 +313,15 @@ package_gcc-fortran() {
   make -C $CHOST/32/libgfortran DESTDIR=$pkgdir install-cafexeclibLTLIBRARIES \
     install-{toolexeclibDATA,nodist_fincludeHEADERS,gfor_cHEADERS}
   make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_fincludeHEADERS
-  make -C gcc DESTDIR="$pkgdir" fortran.install-common
+  make -C gcc DESTDIR="$pkgdir" fortran.install-{common,man,info}
   install -Dm755 gcc/f951 "$pkgdir/${_libdir}/f951"
 
   ln -s gfortran "$pkgdir/usr/bin/f95"
+
+  # Install Runtime Library Exception
+  install -d "$pkgdir/usr/share/licenses/$pkgname/"
+  ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
+    "$pkgdir/usr/share/licenses/$pkgname/"
 }
 
 package_gcc-objc() {
@@ -317,6 +334,11 @@ package_gcc-objc() {
   make DESTDIR="$pkgdir" -C $CHOST/libobjc install-headers
   install -dm755 "$pkgdir/${_libdir}"
   install -m755 gcc/cc1obj{,plus} "$pkgdir/${_libdir}/"
+
+  # Install Runtime Library Exception
+  install -d "$pkgdir/usr/share/licenses/$pkgname/"
+  ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
+    "$pkgdir/usr/share/licenses/$pkgname/"
 }
 
 package_gcc-ada() {
@@ -327,7 +349,7 @@ package_gcc-ada() {
   options+=(staticlibs)
 
   cd gcc-build/gcc
-  make DESTDIR="$pkgdir" ada.install-common
+  make DESTDIR="$pkgdir" ada.install-{common,info}
   install -m755 gnat1 "$pkgdir/${_libdir}"
 
   cd "$srcdir"/gcc-build/$CHOST/32/libada
@@ -347,6 +369,11 @@ package_gcc-ada() {
   ln -s libgnarl-${_majorver}.so "$pkgdir/usr/lib32/libgnarl.so"
   ln -s libgnat-${_majorver}.so "$pkgdir/usr/lib32/libgnat.so"
   rm -f "$pkgdir"/${_libdir}/32/adalib/libgna{rl,t}.so
+
+  # Install Runtime Library Exception
+  install -d "$pkgdir/usr/share/licenses/$pkgname/"
+  ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
+    "$pkgdir/usr/share/licenses/$pkgname/"
 }
 
 package_gcc-go() {
@@ -360,10 +387,15 @@ package_gcc-go() {
   make -C $CHOST/libgo DESTDIR="$pkgdir" install-exec-am
   make -C $CHOST/32/libgo DESTDIR="$pkgdir" install-exec-am
   make DESTDIR="$pkgdir" install-gotools
-  make -C gcc DESTDIR="$pkgdir" go.install-common
+  make -C gcc DESTDIR="$pkgdir" go.install-{common,man,info}
 
   rm -f "$pkgdir"/usr/lib{,32}/libgo.so*
   install -Dm755 gcc/go1 "$pkgdir/${_libdir}/go1"
+
+  # Install Runtime Library Exception
+  install -d "$pkgdir/usr/share/licenses/$pkgname/"
+  ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
+    "$pkgdir/usr/share/licenses/$pkgname/"
 }
 
 package_lib32-gcc-libs() {
@@ -397,6 +429,10 @@ package_lib32-gcc-libs() {
 
   # remove files provided by gcc-libs
   rm -rf "$pkgdir"/usr/lib
+
+  # Install Runtime Library Exception
+  install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
+    "$pkgdir/usr/share/licenses/lib32-gcc-libs/RUNTIME.LIBRARY.EXCEPTION"
 }
 
 package_gcc-d() {
@@ -407,7 +443,7 @@ package_gcc-d() {
   options=('staticlibs')
 
   cd gcc-build
-  make -C gcc DESTDIR="$pkgdir" d.install-common
+  make -C gcc DESTDIR="$pkgdir" d.install-{common,man,info}
 
   install -Dm755 gcc/gdc "$pkgdir"/usr/bin/gdc
   install -Dm755 gcc/d21 "$pkgdir"/"$_libdir"/d21
@@ -418,4 +454,9 @@ package_gcc-d() {
 
   install -d "$pkgdir"/usr/include/dlang
   ln -s /"${_libdir}"/include/d "$pkgdir"/usr/include/dlang/gdc
+
+  # Install Runtime Library Exception
+  install -d "$pkgdir/usr/share/licenses/$pkgname/"
+  ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
+    "$pkgdir/usr/share/licenses/$pkgname/"
 }
