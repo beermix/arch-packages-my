@@ -71,14 +71,15 @@ prepare() {
 #  patch -p1 -i "$srcdir/010-documentation.patch"
   patch -p1 -i "$srcdir/gcc-stable-branch.patch"
   patch -p1 -i "$srcdir/0001-Always-use-z-now-when-linking-with-pie.patch"
-  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
-  patch -p1 -i "$srcdir/optimize.patch"
-  patch -p1 -i "$srcdir/ipa-cp.patch"
-  patch -p1 -i "$srcdir/gomp-relax.patch"
-  patch -p1 -i "$srcdir/fortran-vector-v2.patch"
-  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
-  patch -p1 -i "$srcdir/optimize-at-least-some.patch"
+#  patch -p1 -i "$srcdir/zero-regs-gcc8.patch"
+#  patch -p1 -i "$srcdir/ipa-cp.patch"
+#  patch -p1 -i "$srcdir/gomp-relax.patch"
+#  patch -p1 -i "$srcdir/fortran-vector-v2.patch"
+#  patch -p1 -i "$srcdir/0001-Fix-stack-protection-issues.patch"
   patch -p1 -i "$srcdir/libiberty-sync.patch"
+
+  # patch -p1 -i "$srcdir/optimize-at-least-some.patch"
+  # patch -p1 -i "$srcdir/optimize.patch"
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
@@ -114,13 +115,13 @@ build() {
   CFLAGS=${CFLAGS/-pipe/}
   CXXFLAGS=${CXXFLAGS/-pipe/}
 
-  unset CFLAGS
-  unset CXXFLAGS
-  export CFLAGS="-march=haswell -g -O3 -fstack-protector -Wl,-z -Wl,now -Wl,-z -Wl,relro  -Wl,-z,max-page-size=0x1000"
-  export CXXFLAGS="-march=haswell -g -O3  -Wl,-z,max-page-size=0x1000"
-  export CFLAGS_FOR_TARGET="$CFLAGS -march=haswell -fno-semantic-interposition "
-  export CXXFLAGS_FOR_TARGET="$CXXFLAGS -march=haswell -fno-semantic-interposition "
-  export FFLAGS_FOR_TARGET="$FFLAGS -march=haswell -fno-semantic-interposition "
+#  unset CFLAGS
+#  unset CXXFLAGS
+#  export CFLAGS="-march=haswell -g -O3 -fstack-protector -Wl,-z -Wl,now -Wl,-z -Wl,relro  -Wl,-z,max-page-size=0x1000"
+#  export CXXFLAGS="-march=haswell -g -O3  -Wl,-z,max-page-size=0x1000"
+#  export CFLAGS_FOR_TARGET="$CFLAGS -march=haswell -fno-semantic-interposition "
+#  export CXXFLAGS_FOR_TARGET="$CXXFLAGS -march=haswell -fno-semantic-interposition "
+#  export FFLAGS_FOR_TARGET="$FFLAGS -march=haswell -fno-semantic-interposition "
 
   "$srcdir/gcc/configure" --prefix=/usr \
       --libdir=/usr/lib \
