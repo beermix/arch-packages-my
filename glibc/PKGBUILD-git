@@ -8,36 +8,20 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.31
-pkgrel=2
+pkgrel=3
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git python automake autoconf flex bison m4)
-options=(strip staticlibs)
-#source=(git://sourceware.org/git/glibc.git#commit=$_commit
-_commit=54ba2541b3a76441a9cbe5dd14c963bf874fd5e9
-#source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-source=(git://sourceware.org/git/glibc.git#commit=$_commit
+options=(!strip staticlibs)
+#source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
+source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
         locale.gen.txt
         locale-gen
         lib32-glibc.conf
         sdt.h sdt-config.h
         bz20338.patch
-        alternate_trim.patch
-        madvise-bss.patch
-        large-page-huge-page.patch
-        use_madv_free.patch
-        malloc_tune.patch
-        mathlto.patch
-        vzeroupper-2.27.patch
-        pause.patch
-        gcc-8-fix.patch
-        spin-smarter.patch
-        nostackshrink.patch
-        0001-Force-ffsll-to-be-64-bytes-aligned.patch
-        0001-Compile-branred.c-with-mprefer-vector-width-128.patch
-        0001-Set-vector-width-and-alignment-to-fix-GCC-AVX-issue.patch
-        fix-ld-audit-performance.patch)
+        glibc-stable-branch.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 md5sums=('78a720f17412f3c3282be5a6f3363ec6'
@@ -52,7 +36,7 @@ md5sums=('78a720f17412f3c3282be5a6f3363ec6'
 prepare() {
   mkdir -p glibc-build
 
-  [[ -d glibc-$pkgver ]] && ln -s glibc-$pkgver glibc
+  [[ -d glibc-$pkgver ]] && ln -s glibc-$pkgver glibc 
   cd glibc
 
   local i; for i in ${source[@]}; do
@@ -75,9 +59,10 @@ build() {
       --enable-bind-now
       --enable-cet
       --enable-lock-elision
+      --enable-multi-arch
       --enable-stack-protector=strong
-      --enable-kernel=5.4
       --enable-static-pie
+      --enable-kernel=5.4
       --disable-profile
       --disable-werror
       --disable-debug
