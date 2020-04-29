@@ -22,9 +22,9 @@ source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
         sdt.h sdt-config.h
         bz20338.patch
         000-glibc-31-stable-branch-ubu.patch
-	500-mathlto.patch
-	700-use_madv_free.patch
-	800-madvise-bss.patch)
+        500-mathlto.patch
+        700-use_madv_free.patch
+        800-madvise-bss.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 md5sums=('78a720f17412f3c3282be5a6f3363ec6'
