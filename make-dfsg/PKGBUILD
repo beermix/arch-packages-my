@@ -11,7 +11,7 @@ url="https://www.gnu.org/software/make"
 license=('GPL3')
 groups=('base-devel')
 depends=('glibc')
-makedepends=(automake autoconf flex bison m4)
+makedepends=(automake autoconf m4)
 _commit=bca30d5395cb15f246317dfd3fc55f5523dd75eb
 source=(git+https://salsa.debian.org/srivasta/make-dfsg.git#commit=$_commit
         guile-2.2.patch
