@@ -1,0 +1,50 @@
+# Maintainer: Lukas Fleischer <lfleischer@archlinux.org>
+# Contributor: Allan McRae <allan@archlinux.org>
+# Contributor: judd <jvinet@zeroflux.org>
+
+pkgname=make
+pkgver=4.2.1
+pkgrel=50
+pkgdesc="GNU make utility to maintain groups of programs"
+arch=('x86_64')
+url="https://www.gnu.org/software/make"
+license=('GPL3')
+groups=('base-devel')
+depends=('glibc')
+makedepends=(automake autoconf flex bison m4)
+_commit=bca30d5395cb15f246317dfd3fc55f5523dd75eb
+source=(git+https://salsa.debian.org/srivasta/make-dfsg.git#commit=$_commit
+        guile-2.2.patch
+        make-4.2.1-glob1.patch
+        make-4.2.1-glob2.patch
+        make-4.2.1-test-driver.patch)
+
+prepare() {
+	cd make-dfsg
+	#patch -p1 -i "${srcdir}"/guile-2.2.patch
+
+	#https://git.savannah.gnu.org/cgit/make.git/patch/?id=193f1e81edd6b1b56b0eb0ff8aa4b41c7b4257b4
+	patch -p1 -i "${srcdir}"/make-4.2.1-glob1.patch
+	#https://git.savannah.gnu.org/cgit/make.git/patch/?id=48c8a116a914a325a0497721f5d8b58d5bba34d4
+	patch -p1 -i "${srcdir}"/make-4.2.1-glob2.patch
+
+	patch -p1 -i "${srcdir}"/make-4.2.1-test-driver.patch
+
+	autoreconf -fi
+}
+
+build() {
+	cd make-dfsg
+	./configure --prefix=/usr
+	make
+}
+
+check() {
+	cd make-dfsg
+	make -k check
+}
+
+package() {
+	cd make-dfsg
+	make DESTDIR="${pkgdir}" install
+}
