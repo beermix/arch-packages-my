@@ -21,7 +21,8 @@ source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
         lib32-glibc.conf
         sdt.h sdt-config.h
         bz20338.patch
-        glibc-stable-branch.patch
+        000-glibc-31-stable-branch-ubu.patch
+        pause.patch
         mathlto.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
@@ -60,9 +61,8 @@ build() {
       --enable-bind-now
       --enable-cet
       --enable-lock-elision
-      --enable-multi-arch
+      --disable-multi-arch
       --enable-stack-protector=strong
-      --enable-static-pie
       --enable-kernel=5.4
       --disable-profile
       --disable-werror

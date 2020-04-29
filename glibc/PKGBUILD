@@ -8,7 +8,7 @@
 pkgbase=glibc
 pkgname=(glibc lib32-glibc)
 pkgver=2.31
-pkgrel=3
+pkgrel=2
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -21,6 +21,8 @@ source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
         lib32-glibc.conf
         sdt.h sdt-config.h
         bz20338.patch
+        pause.patch
+        mathlto.patch
         glibc-stable-branch.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
@@ -61,7 +63,6 @@ build() {
       --enable-lock-elision
       --enable-multi-arch
       --enable-stack-protector=strong
-      --enable-static-pie
       --enable-kernel=5.4
       --disable-profile
       --disable-werror
