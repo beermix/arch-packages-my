@@ -8,7 +8,7 @@
 pkgbase=glibc
 pkgname=(glibc)
 pkgver=2.31
-pkgrel=3
+pkgrel=4
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -58,7 +58,6 @@ build() {
       --with-headers=/usr/include
       --enable-add-ons
       --enable-bind-now
-      --enable-cet
       --enable-lock-elision
       --disable-multi-arch
       --enable-stack-protector=strong
