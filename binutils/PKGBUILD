@@ -31,7 +31,9 @@ source=(https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz{,.sig}
 	binutils-nm-lto-plugin.patch
 	binutils-readelf-other-sym-info.patch
 	binutils-special-sections-in-groups.patch
-	binutils-stable-branch.patch)
+	binutils-stable-branch.patch
+	000-binutils-stable-34branch-UBU.patch
+	999-branch-version.patch)
 validpgpkeys=(3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F)
 md5sums=('664ec3a2df7805ed3464639aaae332d6'
          'SKIP')
@@ -56,9 +58,9 @@ prepare() {
 #  patch -p1 -i "$srcdir/binutils-readelf-other-sym-info.patch"
 #  patch -p1 -i "$srcdir/binutils-special-sections-in-groups.patch"
 
-  patch -p1 -i "$srcdir/binutils-stable-branch.patch"
+  patch -p1 -i "$srcdir/000-binutils-stable-34branch-UBU.patch"
   patch -p1 -i "$srcdir/nodocs.patch"
-  patch -p1 -i "$srcdir/001-branch-version.patch"
+  patch -p1 -i "$srcdir/999-branch-version.patch"
 
   # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
   sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
@@ -86,8 +88,8 @@ build() {
     --with-pic \
     --with-system-zlib
 
-  make configure-host
-  make tooldir=/usr
+  make MAKEINFO=true configure-host
+  make MAKEINFO=true tooldir=/usr
 }
 
 check() {
@@ -100,7 +102,7 @@ check() {
 
 package() {
   cd binutils-build
-  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
+  make MAKEINFO=true prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
 
   # Remove unwanted files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
