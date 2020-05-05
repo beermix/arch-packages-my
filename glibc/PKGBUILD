@@ -8,11 +8,11 @@
 pkgbase=glibc
 pkgname=(glibc lib32-glibc)
 pkgver=2.31
-pkgrel=3
+pkgrel=2
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
-makedepends=(git python gd lib32-gcc-libs automake autoconf flex bison m4)
+makedepends=(git lib32-gcc-libs automake autoconf flex bison m4 python)
 options=(!strip staticlibs)
 #source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
@@ -21,9 +21,8 @@ source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
         lib32-glibc.conf
         sdt.h sdt-config.h
         bz20338.patch
-        pause.patch
         mathlto.patch
-        glibc-stable-branch.patch)
+        000-glibc-31-stable-branch-UBU.patch)
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 md5sums=('78a720f17412f3c3282be5a6f3363ec6'
@@ -57,13 +56,15 @@ build() {
       ac_cv_prog_MAKEINFO=
       --prefix=/usr
       --with-headers=/usr/include
+      --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
       --enable-bind-now
+      --enable-cet
       --enable-lock-elision
       --enable-multi-arch
       --enable-stack-protector=strong
       --enable-kernel=5.4
-      --disable-profile
+      --enable-static-pie
       --disable-werror
       --disable-debug
   )
