@@ -15,7 +15,7 @@ license=(GPL LGPL)
 makedepends=(git automake autoconf flex bison m4 python)
 options=(!strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-_commit=a98b8b221cfe732dc7c19ae1d22665002e254c96
+_commit=109474122400ca7d60782b131dc867a5c1f2fe55
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
@@ -54,7 +54,6 @@ build() {
       ac_cv_prog_MAKEINFO=
       --prefix=/usr
       --with-headers=/usr/include
-      --with-bugurl=https://bugs.archlinux.org/
       --enable-add-ons
       --enable-bind-now
       --enable-cet
