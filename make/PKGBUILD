@@ -51,7 +51,7 @@ prepare() {
 
 build() {
 	cd "${pkgname}-${pkgver}"
-	./configure --prefix=/usr --with-guile=no
+	./configure --prefix=/usr
 	make
 }
 
