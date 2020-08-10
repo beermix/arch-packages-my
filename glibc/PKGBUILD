@@ -7,15 +7,15 @@
 
 pkgbase=glibc
 pkgname=(glibc lib32-glibc)
-pkgver=2.31
-pkgrel=5
+pkgver=2.32
+pkgrel=1
 arch=(x86_64)
 url='https://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git gd lib32-gcc-libs python)
 options=(!strip staticlibs)
 #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-_commit=18fdba553dd9b907e9812b90d2cea593f776058f
+_commit=3de512be7ea6053255afed6154db9ee31d4e557a
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
@@ -35,7 +35,7 @@ md5sums=('SKIP'
 prepare() {
   mkdir -p glibc-build lib32-glibc-build
 
-  [[ -d glibc-$pkgver ]] && ln -s glibc-$pkgver glibc 
+  [[ -d glibc-$pkgver ]] && ln -s glibc-$pkgver glibc
   cd glibc
 
   local i; for i in ${source[@]}; do
