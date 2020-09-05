@@ -2,8 +2,8 @@
 # Maintainer: Dan McGee <dan@archlinux.org>
 
 pkgname=git
-pkgver=2.24.0
-pkgrel=3
+pkgver=2.27.0
+pkgrel=2
 pkgdesc='the fast distributed version control system'
 arch=(x86_64)
 url='https://git-scm.com/'
@@ -74,7 +74,7 @@ build() {
 package() {
   export PYTHON_PATH='/usr/bin/python2'
   cd "$srcdir/$pkgname-$pkgver"
-  
+
   make \
     "${_make_paths[@]}" \
     "${_make_options[@]}" \
